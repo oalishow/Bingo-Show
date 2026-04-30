@@ -47,7 +47,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
     <!-- Version Badge (Optional but nice) -->
     <g transform="translate(400, 120) scale(0.6)">
         <circle r="60" fill="#d97706" stroke="#fbbf24" stroke-width="4" filter="url(#glow)"/>
-        <text dy="15" font-family="sans-serif" font-weight="900" font-size="45" fill="#ffffff" text-anchor="middle">7.2</text>
+        <text dy="15" font-family="sans-serif" font-weight="900" font-size="45" fill="#ffffff" text-anchor="middle">7.3</text>
     </g>
 
     <!-- Decorative Stars -->

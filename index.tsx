@@ -21,7 +21,11 @@ import jsQR from 'jsqr';
                     "Espetinho - R$ 8,00", "Pastel - R$ 6,00", "Porção de Fritas - R$ 15,00"
                 ],
                 drawnPrizeNumbers: [] as number[],
-                versionHistory: `**v7.2.0 (Atual)**
+                versionHistory: `**v7.3.0 (Atual)**
+- **MELHORIAS NO PAINEL (V7.3):** Ajuste de escala e visibilidade dos prêmios no modo claro com contorno para melhor leitura. Reorganização dos botões de controle para melhor ergonomia. Adição de contorno preto (stroke) nos valores dos prêmios para destaque máximo.
+- **BUILD:** 30/04/2026 12:24
+
+**v7.2.0**
 - **LEITOR DE QR CODE:** Adição de scanner de QR Code para verificação instantânea de cartelas via câmera.
 - **VERIFICAÇÃO MANUAL:** Novo campo para digitar o número da cartela manualmente quando a câmera não estiver disponível.
 - **MELHORIAS VISUAIS (V7.2):** Inclusão de ícones nos botões para melhor identificação visual. Atualização do logotipo principal do programa. Ajuste de contraste no painel de rodadas para o tema claro.
@@ -439,7 +443,8 @@ import jsQR from 'jsqr';
         let winnerDisplayTimeout: any; 
 
         // --- Constants ---
-        const currentVersion = "7.2"; // Foco 100% Local
+        const currentVersion = "7.3"; // Foco 100% Local
+        const buildInfo = "Build: 30/04/2026 - 12:24"; // Data e hora em formato DD/MM/AAAA 
         const DYNAMIC_LETTERS = ['B', 'I', 'N', 'G', 'O'];
         const DYNAMIC_LETTERS_AJUDE = ['A', 'J', 'U', 'D', 'E'];
         const BINGO_CONFIG: { [key: string]: { min: number; max: number } } = { B: { min: 1, max: 15 }, I: { min: 16, max: 30 }, N: { min: 31, max: 45 }, G: { min: 46, max: 60 }, O: { min: 61, max: 75 },
@@ -1931,7 +1936,10 @@ function applyAuctionZoom(scale: number) {
             if (document.getElementById('version')) document.getElementById('version')!.innerText = currentVersion;
             const subtitle = document.getElementById('subtitle-version');
             if (subtitle) subtitle.innerText = `Versão ${currentVersion}`;
-            if (DOMElements.lastUpdated) DOMElements.lastUpdated.innerText = `Salvo localmente às: ${now}`;
+            if (DOMElements.lastUpdated) DOMElements.lastUpdated.innerText = `Sincronizado: ${now}`;
+            
+            const buildFooter = document.getElementById('build-footer');
+            if (buildFooter) buildFooter.innerText = buildInfo;
         }
         
         // --- Funções de Salvamento ---
@@ -2615,8 +2623,8 @@ function applyAuctionZoom(scale: number) {
             const createPrizeEl = (label: string, value: string) => {
                 if (!value) return null;
                 const p = document.createElement('p');
-                p.className = 'text-base';
-                p.innerHTML = `<span class="font-bold text-slate-300">${label}:</span> <span class="text-amber-300">${value}</span>`;
+                p.className = 'text-3xl sm:text-4xl leading-tight flex items-center justify-center gap-4 mb-3';
+                p.innerHTML = `<span class="font-bold text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest">${label}:</span> <span class="text-amber-500 dark:text-amber-400 font-black text-stroke-black drop-shadow-xl transform scale-150 origin-left inline-block">${value}</span>`;
                 return p;
             };
 

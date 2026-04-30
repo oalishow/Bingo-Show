@@ -225,6 +225,11 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+        .text-stroke-black {
+            -webkit-text-stroke: 1px #000;
+            paint-order: stroke fill;
+        }
+
         .auction-bid-display {
             -webkit-text-stroke: 2px #000;
             paint-order: stroke fill;
@@ -391,23 +396,23 @@
                     <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">🎨 Personalizar Painel</button>
 
                 <!-- 2. BOTÕES DE CONTROLE GERAIS -->
-                <div class="flex flex-col gap-2 mb-4 flex-shrink-0">
-                    <button id="show-card-scanner-btn" disabled class="bg-indigo-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-sm shadow-sm transition-all text-center">🔎 Verificar (Em breve)</button>
+                <div class="grid grid-cols-2 gap-2 mb-4 flex-shrink-0">
+                    <button id="show-card-scanner-btn" disabled class="bg-indigo-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🔎 Verificar (Em breve)</button>
+                    <button id="show-card-generator-btn" disabled class="bg-teal-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🖨️ Gerar Cartelas (Em breve)</button>
                 </div>
                 
                 <!-- AÇÕES EXTRAS -->
                 <div class="flex flex-col gap-2 mb-4 flex-shrink-0">
-                    <button id="show-card-generator-btn" disabled class="w-full bg-teal-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-sm shadow-sm transition-all text-center">🖨️ Gerar Cartelas (Em breve)</button>
                     <div class="grid grid-cols-2 gap-2">
                         <button id="save-to-file-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg transition-all text-center" data-label-key="saveToFileButton">💾 Salvar (PC)</button>
                         <label id="load-from-file-btn" for="load-from-file-input" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg transition-all text-center cursor-pointer" data-label-key="loadFromFileButton">📂 Carregar</label>
                         <input type="file" id="load-from-file-input" class="hidden" accept=".json,application/json">
                     </div>
-                    <button id="interval-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-2 rounded-lg text-sm shadow-lg transition-all text-center" data-label-key="intervalButton">⏱️ Intervalo</button>
-                    <div class="flex gap-2 items-center">
-                        <button id="edit-menu-btn" title="Editar Cardápio" class="flex-grow bg-slate-300 dark:bg-gray-600 hover:bg-slate-400 dark:hover:bg-gray-500 text-slate-800 dark:text-white font-bold p-2 rounded-lg text-sm shadow-lg transition-all flex justify-center items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
-                             Editar Cardápio
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="interval-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-2 rounded-lg text-xs shadow-lg transition-all text-center flex items-center justify-center gap-1" data-label-key="intervalButton">⏱️ Intervalo</button>
+                        <button id="edit-menu-btn" title="Editar Cardápio" class="bg-slate-300 dark:bg-gray-600 hover:bg-slate-400 dark:hover:bg-gray-500 text-slate-800 dark:text-white font-bold py-2 p-2 rounded-lg text-xs shadow-lg transition-all flex justify-center items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                             Cardápio
                         </button>
                     </div>
                     <button id="share-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-base shadow-lg transition-all" data-label-key="generateProofButton">🧾 Gerar Prova</button>
@@ -448,26 +453,29 @@
                     </div>
                     
                     <!-- NOVO PAINEL DE RODADA ATIVA -->
-                    <div id="active-round-panel" class="bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 p-6 text-center transition-all shadow-inner hidden cursor-pointer hover:bg-gray-300 dark:bg-gray-600" title="Clique para editar prêmios e descrição">
+                    <div id="active-round-panel" class="bg-white dark:bg-gray-800 rounded-2xl mb-6 p-6 text-center transition-all shadow-md border border-slate-200 dark:border-gray-700 hidden cursor-pointer hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-700 group" title="Clique para editar prêmios e descrição">
                         <div class="grid grid-cols-3 items-center gap-x-4">
                             <div id="active-round-info" class="text-left">
-                                <p id="active-round-name" class="text-3xl font-bold text-sky-400"></p>
-                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
+                                <p id="active-round-name" class="text-3xl font-black text-sky-500 dark:text-sky-400"></p>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
                             </div>
-                            <div id="active-round-prizes" class="text-center border-x border-slate-300 dark:border-gray-600 px-4 text-lg prize-highlight">
+                            <div id="active-round-prizes" class="text-center border-x border-slate-100 dark:border-gray-700 px-4 prize-highlight">
                                 <!-- Prêmios serão inseridos aqui -->
                             </div>
                             <div id="active-round-stats" class="text-right">
-                                <p class="text-sm text-slate-600 dark:text-slate-400">Números Sorteados</p>
-                                <p id="active-round-called-count" class="text-3xl font-bold text-gray-900 dark:text-white"></p>
+                                <p class="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Chamados</p>
+                                <p id="active-round-called-count" class="text-4xl font-black text-slate-800 dark:text-white"></p>
                             </div>
                         </div>
-                        <div id="active-round-description-display" class="marquee-container text-slate-800 dark:text-slate-300 text-base mt-3 pt-3 border-t border-slate-300 dark:border-gray-600 hidden text-left italic">
+                        <div id="active-round-description-display" class="marquee-container text-slate-600 dark:text-slate-300 text-sm mt-4 pt-3 border-t border-slate-100 dark:border-gray-700 hidden text-left italic">
                             <span class="marquee-text"></span>
                         </div>
                     </div>
-                    <div id="no-active-round-panel" class="text-lg font-bold text-center text-slate-600 dark:text-slate-400 bg-gray-200 dark:bg-gray-700 py-4 rounded-lg mb-4 transition-all shadow-inner">
-                        Selecione uma Rodada
+                    <div id="no-active-round-panel" class="text-xl font-bold text-center text-slate-400 dark:text-slate-500 bg-white dark:bg-gray-800 border-2 border-dashed border-slate-200 dark:border-gray-700 py-8 rounded-2xl mb-6 transition-all shadow-sm">
+                        <div class="flex flex-col items-center gap-2">
+                            <span class="text-4xl opacity-50">🎮</span>
+                            <span>Selecione uma Rodada no Menu</span>
+                        </div>
                     </div>
                     
                     <!-- NOVO: Wrapper para aplicar o zoom (com overflow-x-auto para evitar sobreposição) -->
@@ -652,9 +660,10 @@
                 <br>
                 Desenvolvido inteiramente com a Inteligência Artificial Gemini 2.5 PRO da Google, este projeto demonstra como é possível criar soluções pastorais inovadoras com criatividade e ferramentas de baixo custo ou gratuitas, mesmo sem conhecimentos prévios em programação.
             </p>
-            <p class="mt-2">
-                <button id="show-changelog-btn" class="hover:underline text-sky-600 dark:text-sky-400">Histórico de Versões</button> | Versão <span id="version">7.2</span> - <span id="last-updated">Última atualização do programa: carregando...</span>
+            <p class="mt-2 text-slate-500 dark:text-slate-400">
+                <button id="show-changelog-btn" class="hover:underline text-sky-600 dark:text-sky-400 font-medium">Histórico de Versões</button> | Versão <span id="version" class="font-bold">7.3</span> - <span id="last-updated" class="italic">Carregando...</span>
             </p>
+            <p id="build-footer" class="text-[9px] opacity-60 dark:opacity-50 mt-1 uppercase tracking-widest font-mono select-none"></p>
         </footer>
     </div>
     
