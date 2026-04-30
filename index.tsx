@@ -59,6 +59,7 @@ import jsQR from 'jsqr';
                     boardColor: 'default',
                     boardScale: 90,
                     displayScale: 100,
+                    auctionScale: 100,
                     verificationPanelZoom: 100,
                     floatingNumberZoom: 100,
                     sponsorDisplayZoom: 100,
@@ -1782,6 +1783,13 @@ function applyDisplayZoom(scale: number) {
     }
 }
 
+function applyAuctionZoom(scale: number) {
+    const wrapper = document.getElementById('auction-form') as HTMLFormElement;
+    if (wrapper) {
+        wrapper.style.zoom = `${scale}%`;
+    }
+}
+
         const fileToBase64 = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.8): Promise<string> =>
             new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -2090,6 +2098,7 @@ function applyDisplayZoom(scale: number) {
             if (displayZoomSlider) displayZoomSlider.value = appConfig.displayScale.toString();
             applyBoardZoom(appConfig.boardScale);
             applyDisplayZoom(appConfig.displayScale);
+            if (appConfig.auctionScale) applyAuctionZoom(appConfig.auctionScale);
         
             DOMElements.noRepeatPrizeDrawCheckbox.checked = true;
         
@@ -2142,7 +2151,8 @@ function applyDisplayZoom(scale: number) {
             let strokeStyle = `${strokeWidth}px ${strokeColor}`;
             
             const roundColor = gamesData[activeGameNumber]?.color;
-            currentNumberEl.style.backgroundColor = roundColor || (appConfig.boardColor !== 'default' ? appConfig.boardColor : '#f1f5f9');
+            const bgColor = roundColor || (appConfig.boardColor !== 'default' ? appConfig.boardColor : '#f1f5f9');
+            currentNumberEl.style.backgroundColor = bgColor;
             
             currentNumberEl.style.color = mainColor;
             currentNumberEl.style.webkitTextStroke = strokeStyle; 
@@ -2153,6 +2163,21 @@ function applyDisplayZoom(scale: number) {
             currentNumberEl.classList.remove('animate-bounce-in');
             void currentNumberEl.offsetWidth; 
             currentNumberEl.classList.add('animate-bounce-in');
+
+            // --- NOVO: Brilho e Confete ao sortear número ---
+            currentNumberEl.style.boxShadow = `0 0 40px 10px ${bgColor}`;
+            setTimeout(() => {
+                currentNumberEl.style.boxShadow = 'none';
+            }, 1000);
+            
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+            // ------------------------------------------------
             
             updateMasterBoardCell(number);
             updateLastNumbers(letter, number, true);
@@ -3360,11 +3385,12 @@ function applyDisplayZoom(scale: number) {
             displayContainer.innerHTML = '';
 
             const prizeDisplay = document.createElement('div');
-            prizeDisplay.className = 'font-black flex items-center justify-center w-64 h-64 sm:w-80 sm:h-80 rounded-full text-white shadow-2xl';
-            prizeDisplay.style.fontSize = 'clamp(5rem, 15vw, 10rem)';
+            prizeDisplay.className = 'font-black flex items-center justify-center rounded-3xl w-72 h-48 sm:w-full sm:max-w-md sm:h-64 text-white shadow-2xl transition-all duration-300';
+            prizeDisplay.style.fontSize = 'clamp(4rem, 15vw, 10rem)';
             prizeDisplay.style.lineHeight = '1';
             const { activeGameNumber, gamesData } = appStore.state;
-            prizeDisplay.style.backgroundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#a855f7';
+            const roundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#a855f7';
+            prizeDisplay.style.backgroundColor = roundColor;
 
             displayContainer.appendChild(prizeDisplay);
             mainDisplayLabel.textContent = "SORTEANDO BRINDE...";
@@ -3388,6 +3414,20 @@ function applyDisplayZoom(scale: number) {
                 clearInterval(shuffleInterval);
                 prizeDisplay.textContent = finalNumber.toString();
                 prizeDisplay.classList.add('animate-custom-flash', 'pulse-glow-animation');
+                
+                // --- NOVO: Efeitos de Brilho e Confete ---
+                prizeDisplay.style.boxShadow = `0 0 40px 10px ${roundColor}`;
+                setTimeout(() => prizeDisplay.style.boxShadow = 'none', 1000);
+                
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+                // ----------------------------------------
+                
                 mainDisplayLabel.textContent = "CARTELA SORTEADA!";
                 updateLastPrizesDisplay();
                 
@@ -4160,6 +4200,18 @@ function showRoundEditModal(gameNumber: string) {
                             const fsZoomValue = document.getElementById('fs-board-zoom-value');
                             if (fsZoomValue) fsZoomValue.textContent = appStore.state.appConfig.boardScale.toString();
                         }
+                        
+                        if (id === 'auction-section') {
+                            const fsAuctionControls = document.getElementById('fs-auction-controls');
+                            if (fsAuctionControls) {
+                                fsAuctionControls.classList.remove('hidden');
+                                fsAuctionControls.classList.add('flex');
+                            }
+                            const fsAuctionZoomSlider = document.getElementById('fs-auction-zoom-slider') as HTMLInputElement;
+                            if (fsAuctionZoomSlider) fsAuctionZoomSlider.value = appStore.state.appConfig.auctionScale.toString();
+                            const fsAuctionZoomValue = document.getElementById('fs-auction-zoom-value');
+                            if (fsAuctionZoomValue) fsAuctionZoomValue.textContent = appStore.state.appConfig.auctionScale.toString();
+                        }
 
                         if (isDark) {
                              section.classList.add('bg-gray-800');
@@ -4177,6 +4229,13 @@ function showRoundEditModal(gameNumber: string) {
                         if (id === 'board-section') {
                             if (fsControls) fsControls.classList.add('hidden');
                             if (fsControls) fsControls.classList.remove('flex');
+                        }
+                        if (id === 'auction-section') {
+                            const fsAuctionControls = document.getElementById('fs-auction-controls');
+                            if (fsAuctionControls) {
+                                fsAuctionControls.classList.add('hidden');
+                                fsAuctionControls.classList.remove('flex');
+                            }
                         }
                         
                         if (!document.fullscreenElement) {
@@ -4204,6 +4263,18 @@ function showRoundEditModal(gameNumber: string) {
                     if (boardZoomValue) boardZoomValue.textContent = `${scale}%`;
                 });
                 fsZoomSlider.addEventListener('change', () => appStore.debouncedSave());
+            }
+
+            const fsAuctionZoomSlider = document.getElementById('fs-auction-zoom-slider');
+            if (fsAuctionZoomSlider) {
+                fsAuctionZoomSlider.addEventListener('input', (e) => {
+                    const scale = parseInt((e.target as HTMLInputElement).value);
+                    appStore.state.appConfig.auctionScale = scale;
+                    applyAuctionZoom(scale);
+                    const fsAuctionZoomValue = document.getElementById('fs-auction-zoom-value');
+                    if (fsAuctionZoomValue) fsAuctionZoomValue.textContent = `${scale}%`;
+                });
+                fsAuctionZoomSlider.addEventListener('change', () => appStore.debouncedSave());
             }
 
             const fsNextBtn = document.getElementById('fs-next-round-btn');
