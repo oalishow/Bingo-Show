@@ -815,8 +815,8 @@ function populateSettingsShortcutsTab() {
                                     <button id="close-break-modal-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.modalBackButton}</button>
                                 </footer>
                              </div>`,
-                menuEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">${appLabels.menuEditModalTitle}</h2><p class="text-slate-600 dark:text-slate-400 mb-4">${appLabels.menuEditModalDescription}</p><textarea id="menu-textarea" class="w-full h-48 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg focus:outline-none focus:ring-2 ring-amber-500"></textarea><div class="flex justify-end gap-4 mt-4"><button id="cancel-menu-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-menu-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalSaveButton}</button></div></div>`,
-                winnerEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">${appLabels.winnerEditModalTitle}</h2><div class="space-y-4"><input type="text" id="edit-winner-name" placeholder="${appLabels.winnerEditModalNamePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"><input type="text" id="edit-winner-prize" placeholder="${appLabels.winnerEditModalPrizePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></div><div class="flex justify-between items-center mt-8 gap-4"><button id="remove-winner-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full">${appLabels.winnerEditModalRemoveButton}</button><div><button id="cancel-winner-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-winner-changes-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full ml-2">${appLabels.modalSaveButton}</button></div></div></div>`,
+                menuEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">${appLabels.menuEditModalTitle}</h2><p class="text-slate-600 dark:text-slate-400 mb-4">${appLabels.menuEditModalDescription}</p><textarea id="menu-textarea" class="w-full h-48 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-3 border border-slate-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"></textarea><div class="flex justify-end gap-4 mt-4"><button id="cancel-menu-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-menu-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalSaveButton}</button></div></div>`,
+                winnerEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">${appLabels.winnerEditModalTitle}</h2><div class="space-y-4"><input type="text" id="edit-winner-name" placeholder="${appLabels.winnerEditModalNamePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"><input type="text" id="edit-winner-prize" placeholder="${appLabels.winnerEditModalPrizePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></div><div class="flex justify-between items-center mt-8 gap-4"><button id="remove-winner-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full">${appLabels.winnerEditModalRemoveButton}</button><div><button id="cancel-winner-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-winner-changes-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full ml-2">${appLabels.modalSaveButton}</button></div></div></div>`,
                 deleteConfirm: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-yellow-400 mb-4">${appLabels.deleteConfirmModalTitle}</h2><p id="delete-confirm-message" class="text-slate-700 dark:text-slate-300 text-lg mb-8"></p><div class="flex justify-center gap-4"><button id="cancel-delete-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCancelButton}</button><button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.deleteConfirmModalDeleteButton}</button></div></div>`,
                 clearRoundConfirm: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
                                        <h2 class="text-2xl font-bold text-yellow-400 mb-4" data-label-key="clearRoundConfirmTitle">${appLabels.clearRoundConfirmTitle}</h2>
@@ -962,7 +962,7 @@ function populateSettingsShortcutsTab() {
                                    <div class="flex-grow space-y-2">
                                        <div>
                                            <label for="global-sponsor-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome do Patrocinador Global</label>
-                                           <input type="text" id="global-sponsor-name" class="block w-full text-sm p-2 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg">
+                                           <input type="text" id="global-sponsor-name" class="block w-full text-sm p-2 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg border border-slate-300 dark:border-gray-600 focus:ring-2 focus:ring-amber-500 outline-none">
                                        </div>
                                        <div>
                                             <label for="global-sponsor-upload" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Imagem do Patrocinador Global</label>
@@ -986,17 +986,17 @@ function populateSettingsShortcutsTab() {
                                 <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300">Nomenclatura dos Prêmios</h3>
                                 <div>
                                     <label for="label-prize1Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 1 (ex: Quina)</label>
-                                    <input type="text" id="label-prize1Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="label-prize1Label" class="w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm border border-slate-300 dark:border-gray-600 focus:ring-sky-500 focus:border-sky-500 outline-none">
                                     <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">O nome do primeiro prêmio a ser ganho na rodada. Geralmente uma linha ou quina.</p>
                                 </div>
                                 <div>
                                     <label for="label-prize2Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 2 (ex: Cartela Cheia)</label>
-                                    <input type="text" id="label-prize2Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="label-prize2Label" class="w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm border border-slate-300 dark:border-gray-600 focus:ring-sky-500 focus:border-sky-500 outline-none">
                                     <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">O nome do prêmio principal, que geralmente encerra a rodada.</p>
                                 </div>
                                 <div>
                                     <label for="label-prize3Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 3 (ex: Azarão)</label>
-                                    <input type="text" id="label-prize3Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <input type="text" id="label-prize3Label" class="w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm border border-slate-300 dark:border-gray-600 focus:ring-sky-500 focus:border-sky-500 outline-none">
                                     <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Um prêmio opcional, como para quem fica por uma bola ou tem a cartela com mais números no final.</p>
                                 </div>
                             </div>
@@ -1024,14 +1024,14 @@ function populateSettingsShortcutsTab() {
                     <div class="space-y-4">
                         <div>
                             <label for="round-edit-name" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Nome da Rodada</label>
-                            <input type="text" id="round-edit-name" class="w-full text-lg font-bold p-2 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-md focus:ring-sky-500 focus:border-sky-500">
+                            <input type="text" id="round-edit-name" class="w-full text-lg font-bold p-2 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-md focus:ring-sky-500 focus:border-sky-500">
                         </div>
                         <div id="round-edit-prizes-container" class="space-y-4">
                             <!-- Inputs de prêmios serão inseridos dinamicamente aqui -->
                         </div>
                         <div>
                             <label for="round-edit-description" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Descrição da Rodada (Opcional)</label>
-                            <textarea id="round-edit-description" class="w-full h-24 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500" placeholder="Ex: Rodada especial em prol da construção..."></textarea>
+                            <textarea id="round-edit-description" class="w-full h-24 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg text-sm border border-gray-300 dark:border-gray-600 focus:ring-sky-500 focus:border-sky-500" placeholder="Ex: Rodada especial em prol da construção..."></textarea>
                         </div>
                     </div>
                     <div class="flex justify-end gap-4 mt-8">
@@ -1059,11 +1059,11 @@ function populateSettingsShortcutsTab() {
                     </div>
                  </div>`,
                 cardGenerator: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-left flex flex-col h-[90vh]">
-                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-900 dark:text-white mb-4 flex-shrink-0">Gerador de Cartelas</h2>
+                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 flex-shrink-0">Gerador de Cartelas</h2>
                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 flex-shrink-0">
-                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo de Natal)" class="md:col-span-2 w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <input type="number" id="card-quantity" placeholder="Quantidade" value="100" class="w-full text-center text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <select id="card-per-page" class="w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo de Natal)" class="md:col-span-2 w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <input type="number" id="card-quantity" placeholder="Quantidade" value="100" class="w-full text-center text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <select id="card-per-page" class="w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                                           <option value="1">1 por Folha</option>
                                           <option value="2">2 por Folha</option>
                                           <option value="4">4 por Folha</option>
@@ -1071,8 +1071,8 @@ function populateSettingsShortcutsTab() {
                                        </select>
                                    </div>
                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 flex-shrink-0">
-                                       <textarea id="card-prizes-text" placeholder="Prêmios / Rodadas (Opcional, aparece à esquerda)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
-                                       <textarea id="card-menu-text" placeholder="Cardápio (Opcional, aparece à direita)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                       <textarea id="card-prizes-text" placeholder="Prêmios / Rodadas (Opcional, aparece à esquerda)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                       <textarea id="card-menu-text" placeholder="Cardápio (Opcional, aparece à direita)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                                    </div>
                                    <div class="flex items-center gap-2 mb-4 flex-shrink-0">
                                        <input type="checkbox" id="card-use-logo" class="w-5 h-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
@@ -1082,7 +1082,7 @@ function populateSettingsShortcutsTab() {
                                         <button id="generate-cards-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full">Gerar e Visualizar</button>
                                         <button id="print-cards-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-full hidden">Imprimir Cartelas</button>
                                    </div>
-                                   <div id="card-print-preview" class="flex-grow bg-gray-50 dark:bg-gray-100 dark:bg-gray-900 rounded-lg p-4 overflow-y-auto flex items-center justify-center">
+                                   <div id="card-print-preview" class="flex-grow bg-gray-50 dark:bg-gray-900 rounded-lg p-4 overflow-y-auto flex items-center justify-center">
                                         <p class="text-slate-600 dark:text-slate-400 text-center">Defina as opções, clique em "Gerar e Visualizar" para criar as cartelas.</p>
                                    </div>
                                    <button id="close-card-generator-btn" class="mt-4 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg flex-shrink-0 self-center">${appLabels.modalCloseButton}</button>
@@ -4153,6 +4153,11 @@ function showRoundEditModal(gameNumber: string) {
                     return;
                 }
                 
+                // Only select/toggle round if clicking the play button
+                if (!target.closest('.play-btn')) {
+                    return;
+                }
+
                 if (appStore.state.gamesData[gameNumber].isComplete) {
                      showAlert("Esta rodada já foi concluída. Você pode reabri-la se necessário.");
                      return;
