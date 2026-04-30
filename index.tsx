@@ -2202,6 +2202,12 @@ function applyAuctionZoom(scale: number) {
             updateLastNumbers(letter, number, true);
             updateActiveRoundStats();
             
+            const activeGameItem = DOMElements.gamesListEl.querySelector(`.game-item[data-game-number="${activeGameNumber}"]`);
+            if (activeGameItem) {
+                 const game = gamesData[activeGameNumber];
+                 updateGameItemUI(activeGameItem, game.isComplete);
+            }
+            
             DOMElements.numberInput.value = '';
             DOMElements.letterInput.value = '';
             appStore.debouncedSave();
@@ -2550,11 +2556,20 @@ function applyAuctionZoom(scale: number) {
                 (DOMElements.currentNumberEl as HTMLElement).style.visibility = 'hidden';
             }
             updateActiveRoundStats();
+            const activeGameItem = DOMElements.gamesListEl.querySelector(`.game-item[data-game-number="${activeGameNumber}"]`);
+            if (activeGameItem) {
+                 updateGameItemUI(activeGameItem, game.isComplete);
+            }
         }
 
         function startNewRound() {
             appStore.clearActiveRound();
             loadRoundState(appStore.state.activeGameNumber);
+            const activeGameItem = DOMElements.gamesListEl.querySelector(`.game-item[data-game-number="${appStore.state.activeGameNumber}"]`);
+            if (activeGameItem) {
+                 const game = appStore.state.gamesData[appStore.state.activeGameNumber!];
+                 updateGameItemUI(activeGameItem, game.isComplete);
+            }
         }
 
         function loadRoundState(gameNumber: string | null) {
@@ -3331,11 +3346,20 @@ function applyAuctionZoom(scale: number) {
                 const gameNumber = gameItem.getAttribute('data-game-number');
                 const isActive = appStore.state.activeGameNumber === gameNumber;
                 
-                buttonContainer.innerHTML = `<button class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn">${isActive ? '▶️ Jogando...' : '▶️ Jogar'}</button>`;
-                 if (isActive) {
-                    const playBtn = buttonContainer.querySelector('.play-btn');
-                    if(playBtn) playBtn.classList.add('playing-btn');
+                let btnHtml = '';
+                if (isActive) {
+                    const game = gameNumber ? appStore.state.gamesData[gameNumber] : null;
+                    const noNumbersPlayed = game && game.calledNumbers && game.calledNumbers.length === 0;
+                    
+                    if (noNumbersPlayed) {
+                        btnHtml = `<button class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn playing-btn">⏹️ Cancelar</button>`;
+                    } else {
+                        btnHtml = `<button class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn playing-btn">▶️ Jogando...</button>`;
+                    }
+                } else {
+                    btnHtml = `<button class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn">▶️ Jogar</button>`;
                 }
+                buttonContainer.innerHTML = btnHtml;
             }
         }
         
@@ -4134,20 +4158,32 @@ function showRoundEditModal(gameNumber: string) {
                      return;
                 }
 
-                document.querySelectorAll('.game-item').forEach(el => el.classList.remove('active-round-highlight'));
-                document.querySelectorAll('.play-btn').forEach(btn => {
-                    btn.textContent = 'Jogar';
-                    btn.classList.remove('playing-btn');
+                if (appStore.state.activeGameNumber === gameNumber) {
+                    const game = appStore.state.gamesData[gameNumber];
+                    if (game && game.calledNumbers && game.calledNumbers.length === 0) {
+                        appStore.setActiveGame(null);
+                        gameItem.classList.remove('active-round-highlight');
+                        loadRoundState(null);
+                        updateGameItemUI(gameItem, false);
+                        return;
+                    }
+                }
+
+                document.querySelectorAll('.game-item').forEach(el => {
+                    if (el !== gameItem) {
+                        el.classList.remove('active-round-highlight');
+                        // Temporarily bypass playBtn text change to let updateGameItemUI handle it based on activeGameNumber state
+                        // But we must do it after setActiveGame!
+                    }
+                });
+                
+                loadRoundState(gameNumber); // Sets activeGameNumber
+                
+                document.querySelectorAll('.game-item').forEach(el => {
+                     updateGameItemUI(el, appStore.state.gamesData[el.getAttribute('data-game-number')!].isComplete);
                 });
                 
                 gameItem.classList.add('active-round-highlight');
-                const playBtn = gameItem.querySelector('.play-btn');
-                if (playBtn) {
-                    playBtn.textContent = 'Jogando...';
-                    playBtn.classList.add('playing-btn');
-                }
-                
-                loadRoundState(gameNumber);
             });
             
             document.getElementById('prize-draw-random-btn')!.addEventListener('click', drawRandomPrize);
