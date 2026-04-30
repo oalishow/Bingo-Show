@@ -22,8 +22,12 @@ import jsQR from 'jsqr';
                 ],
                 drawnPrizeNumbers: [] as number[],
                 versionHistory: `**v7.3.0 (Atual)**
-- **MELHORIAS NO PAINEL (V7.3):** Ajuste de escala e visibilidade dos prêmios no modo claro com contorno para melhor leitura. Reorganização dos botões de controle para melhor ergonomia. Adição de contorno preto (stroke) nos valores dos prêmios para destaque máximo.
-- **BUILD:** 30/04/2026 12:24
+- **NOVO LOGOTIPO:** Atualização do logotipo principal para um design mais colorido e moderno com gradientes e efeito 3D.
+- **DESIGN DO PAINEL:** Reformulação completa do painel de rodada ativa para o Modo Claro, utilizando bordas suaves, sombras e fundo branco para maior contraste e profissionalismo.
+- **LEGIBILIDADE DE PRÊMIOS:** Aumento significativo no tamanho da fonte dos prêmios e aplicação de contorno preto (text-stroke) nos valores, garantindo visibilidade máxima em projetores e ambientes iluminados.
+- **INTERFACE DE CONTROLE:** Botões de "Intervalo" e "Cardápio" agora organizados em grade no painel lateral para melhor ergonomia.
+- **SISTEMA DE BUILD:** Adição de rodapé técnico discreto com data da compilação no formato DD/MM/AAAA e identificação da versão.
+- **ESTÉTICA:** Refinamento dos estados hover e transições no painel de números.
 
 **v7.2.0**
 - **LEITOR DE QR CODE:** Adição de scanner de QR Code para verificação instantânea de cartelas via câmera.
@@ -77,7 +81,8 @@ import jsQR from 'jsqr';
                     drawnTextStrokeColor: '#000000',
                     drawnTextStrokeWidth: 2,
                     isEventClosed: false,
-                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJlbWl1bS1iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTI5M2IiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmJiZjI0IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYjQ1MzA5IiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgICAgIDwvZmVNZXJnZT4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJpbm5lci1zaGFkb3ciPgogICAgICAgICAgICA8ZmVPZmZzZXQgZHg9IjAiIGR5PSI0Ii8+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjQiIHJlc3VsdD0ib2Zmc2V0LWJsdXIiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJvdXQiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9Im9mZnNldC1ibHVyIiByZXN1bHQ9ImludmVyc2UiLz4KICAgICAgICAgICAgPGZlRmxvb2QgZmxvb2QtY29sb3I9ImJsYWNrIiBmbG9vZC1vcGFjaXR5PSIwLjgiIHJlc3VsdD0iY29sb3IiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJpbiIgaW49ImNvbG9yIiBpbjI9ImludmVyc2UiIHJlc3VsdD0ic2hhZG93Ii8+CiAgICAgICAgICAgIDxmZUNvbXBvc2l0ZSBvcGVyYXRvcj0ib3ZlciIgaW49InNoYWRvdyIgaW4yPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICAKICAgIDwhLS0gT3V0ZXIgUmluZyAtLT4KICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIiBmaWxsPSJ1cmwoI3ByZW1pdW0tYmcpIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjEwIDE1IiBvcGFjaXR5PSIwLjQiLz4KCiAgICA8IS0tIENvbnRlbnQgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDI0MCkiPgogICAgICAgIDwhLS0gVGhlIEJpbmdvIEJhbGwgQmFja2dyb3VuZCAtLT4KICAgICAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMTYwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIGZpbHRlcj0idXJsKCNpbm5lci1zaGFkb3cpIiAvPgogICAgICAgIAogICAgICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSItMjAiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0LCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjExMCIgZmlsbD0idXJsKCNnb2xkLWdyYWRpZW50KSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI2dsb3cpIiBsZXR0ZXItc3BhY2luZz0iLTUiIHN0eWxlPSJ0ZXh0LXNoYWRvdzogMCAxMHB4IDIwcHggcmdiYSgwLDAsMCwwLjUpIj5CSU5HTzwvdGV4dD4KICAgICAgICAKICAgICAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSI4MCIgZm9udC1mYW1pbHk9Ik1vbnRzZXJyYXQsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxNSIgb3BhY2l0eT0iMC45Ij5TSE9XPC90ZXh0PgogICAgPC9nPgoKICAgIDwhLS0gVmVyc2lvbiBCYWRnZSAoT3B0aW9uYWwgYnV0IG5pY2UpIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLCAxMjApIHNjYWxlKDAuNikiPgogICAgICAgIDxjaXJjbGUgcj0iNjAiIGZpbGw9IiNkOTc3MDYiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICAgICAgICA8dGV4dCBkeT0iMTUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQ1IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj43LjI8L3RleHQ+CiAgICA8L2c+CgogICAgPCEtLSBEZWNvcmF0aXZlIFN0YXJzIC0tPgogICAgPHBhdGggZD0iTTI1NiA0MCBMMjYyIDYwIEwyODIgNjAgTDI2NiA3MiBMMjcyIDkyIEwyNTYgODAgTDI0MCA5MiBMMjQ2IDcyIEwyMzAgNjAgTDI1MCA2MCBaIiBmaWxsPSIjZmJiZjI0IiBmaWx0ZXI9InVybCgjZ2xvdykiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9Im9wYWNpdHkiIHZhbHVlcz0iMC4zOzE7MC4zIiBkdXI9IjNzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgLz4KICAgIDwvcGF0aD4KPC9zdmc+',
+                    appName: 'Bingo Show',
+                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDwhLS0gQmFja2dyb3VuZCBHcmFkaWVudCAtLT4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTFiNGIiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMzMTJlODEiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNDMzOGNhIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICAKICAgICAgICA8IS0tIEdvbGRlbiBUZXh0IEdyYWRpZW50IC0tPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZlZjA4YSIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjQwJSIgc3RvcC1jb2xvcj0iI2ZiYmYyNCIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjYwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiNDUzMDkiLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgoKICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9InJlZEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZWY0NDQ0Ii8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzk5MWIxYiIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgICAgIDwhLS0gRHJvcCBTaGFkb3dzIC0tPgogICAgICAgIDxmaWx0ZXIgaWQ9ImRyb3BTaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTIiIHN0ZERldmlhdGlvbj0iMTAiIGZsb29kLW9wYWNpdHk9IjAuOCIgZmxvb2QtY29sb3I9IiMwMDAiLz4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJnbG93IiB4PSItNTAlIiB5PSItNTAlIiB3aWR0aD0iMjAwJSIgaGVpZ2h0PSIyMDAlIj4KICAgICAgICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOCIgcmVzdWx0PSJibHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJibHVyIi8+CiAgICAgICAgICAgICAgICA8ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz4KICAgICAgICAgICAgPC9mZU1lcmdlPgogICAgICAgIDwvZmlsdGVyPgogICAgICAgIDxmaWx0ZXIgaWQ9InRleHRHbG93IiB4PSItNTAlIiB5PSItNTAlIiB3aWR0aD0iMjAwJSIgaGVpZ2h0PSIyMDAlIj4KICAgICAgICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjgiIHN0ZERldmlhdGlvbj0iNiIgZmxvb2Qtb3BhY2l0eT0iMC45IiBmbG9vZC1jb2xvcj0iIzAwMCIvPgogICAgICAgIDwvZmlsdGVyPgogICAgPC9kZWZzPgoKICAgIDwhLS0gQmFja2dyb3VuZCBCYXNlIC0tPgogICAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMDAiIGZpbGw9InVybCgjYmdHcmFkKSIgZmlsdGVyPSJ1cmwoI2Ryb3BTaGFkb3cpIi8+CiAgICAKICAgIDwhLS0gRGVjb3JhdGl2ZSBPdXRsaW5lIC0tPgogICAgPHJlY3Qgd2lkdGg9IjQ3MiIgaGVpZ2h0PSI0NzIiIHg9IjIwIiB5PSIyMCIgcng9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZEdyYWQpIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1kYXNoYXJyYXk9IjIwIDEwIiBvcGFjaXR5PSIwLjYiLz4KCiAgICA8IS0tIExpZ2h0IFJheXMgLyBTdGFyYnVyc3QgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDIyMCkiPgogICAgICAgIDxwYXRoIGQ9Ik0wIC0xNTAgTDEwIDAgTDAgMTUwIEwtMTAgMCBaIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIHRyYW5zZm9ybT0icm90YXRlKDApIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoNDUpIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoOTApIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoMTM1KSIvPgogICAgPC9nPgoKICAgIDwhLS0gQ2VudGVyIEJpbmdvIEJhbGwgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjEzMCIgZmlsbD0idXJsKCNyZWRHcmFkKSIgZmlsdGVyPSJ1cmwoI2Ryb3BTaGFkb3cpIi8+CiAgICAKICAgIDwhLS0gQmFsbCBJbm5lciBoaWdobGlnaHQgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjQiIG9wYWNpdHk9IjAuMyIvPgogICAgCiAgICA8IS0tIFdoaXRlIENpcmNsZSBjZW50ZXIgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjZmZmZmZmIiBmaWx0ZXI9InVybCgjZHJvcFNoYWRvdykiLz4KICAgIAogICAgPCEtLSBTdGFyIERldGFpbHMgb24gdGhlIGJhbGwgLS0+CiAgICA8cGF0aCBkPSJNIDE3MCAxNTAgTCAxODAgMTcwIEwgMjAwIDE3MCBMIDE4MCAxODUgTCAxODUgMjA1IEwgMTcwIDE5MCBMIDE1NSAyMDUgTCAxNjAgMTg1IEwgMTQwIDE3MCBMIDE2MCAxNzAgWiIgZmlsbD0idXJsKCNnb2xkR3JhZCkiIC8+CiAgICA8cGF0aCBkPSJNIDM0MCAxNTAgTCAzNTAgMTcwIEwgMzcwIDE3MCBMIDM1MCAxODUgTCAzNTUgMjA1IEwgMzQwIDE5MCBMIDMyNSAyMDUgTCAzMzAgMTg1IEwgMzEwIDE3MCBMIDMzMCAxNzAgWiIgZmlsbD0idXJsKCNnb2xkR3JhZCkiIC8+CgogICAgPCEtLSBCaWcgTnVtYmVyIG9yIEIgLS0+CiAgICA8dGV4dCB4PSIyNTYiIHk9IjI3MCIgZm9udC1mYW1pbHk9IidJbXBhY3QnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0MCIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0iI2I5MWMxYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zdHlsZT0iaXRhbGljIj5CPC90ZXh0PgoKICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgSW1wYWN0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9Ijg1IiBmb250LXdlaWdodD0iOTAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9InVybCgjZ29sZEdyYWQpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWx0ZXI9InVybCgjdGV4dEdsb3cpIiBzdHJva2U9IiM3ODM1MGYiIHN0cm9rZS13aWR0aD0iNCIgbGV0dGVyLXNwYWNpbmc9IjQiPkJJTkdPPC90ZXh0PgogICAgCiAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDkwIiBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgSW1wYWN0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ1IiBmb250LXdlaWdodD0iOTAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbHRlcj0idXJsKCN0ZXh0R2xvdykiIGxldHRlci1zcGFjaW5nPSIxMiI+U0hPVzwvdGV4dD4KCjwvc3ZnPg==',
                     enableSponsorsByNumber: false,
                     enableModalAutoclose: true,
                     modalAutocloseSeconds: 5,
@@ -331,6 +336,13 @@ import jsQR from 'jsqr';
                 this.state.drawnPrizeNumbers = state.drawnPrizeNumbers || [];
                 this.state.versionHistory = state.versionHistory || this.state.versionHistory;
                 const loadedConfig = state.appConfig || {};
+                
+                // Migração: Se existir customLogo mas não customLogoBase64, promove para o novo campo
+                if (loadedConfig.customLogo && !loadedConfig.customLogoBase64) {
+                    console.log("Migrando logo customizado antigo para customLogoBase64");
+                    loadedConfig.customLogoBase64 = loadedConfig.customLogo;
+                }
+
                 this.state.appConfig = { ...this.state.appConfig, ...loadedConfig };
                 const loadedLabels = state.appLabels || {};
                 this.state.appLabels = { ...this.state.appLabels, ...loadedLabels };
@@ -443,7 +455,7 @@ import jsQR from 'jsqr';
         let winnerDisplayTimeout: any; 
 
         // --- Constants ---
-        const currentVersion = "7.3"; // Foco 100% Local
+        const currentVersion = "7.4"; // Foco 100% Local
         const buildInfo = "Build: 30/04/2026 - 12:24"; // Data e hora em formato DD/MM/AAAA 
         const DYNAMIC_LETTERS = ['B', 'I', 'N', 'G', 'O'];
         const DYNAMIC_LETTERS_AJUDE = ['A', 'J', 'U', 'D', 'E'];
@@ -521,21 +533,33 @@ import jsQR from 'jsqr';
         const confettiCtx = DOMElements.confettiCanvas.getContext('2d');
 
 function renderCustomLogo() {
+    console.log("Renderizando logo do programa...");
     const headerLogoContainer = document.getElementById('app-logo');
-    if (!headerLogoContainer) return;
-
-    const defaultLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJlbWl1bS1iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTI5M2IiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmJiZjI0IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYjQ1MzA5IiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgICAgIDwvZmVNZXJnZT4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJpbm5lci1zaGFkb3ciPgogICAgICAgICAgICA8ZmVPZmZzZXQgZHg9IjAiIGR5PSI0Ii8+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjQiIHJlc3VsdD0ib2Zmc2V0LWJsdXIiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJvdXQiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9Im9mZnNldC1ibHVyIiByZXN1bHQ9ImludmVyc2UiLz4KICAgICAgICAgICAgPGZlRmxvb2QgZmxvb2QtY29sb3I9ImJsYWNrIiBmbG9vZC1vcGFjaXR5PSIwLjgiIHJlc3VsdD0iY29sb3IiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJpbiIgaW49ImNvbG9yIiBpbjI9ImludmVyc2UiIHJlc3VsdD0ic2hhZG93Ii8+CiAgICAgICAgICAgIDxmZUNvbXBvc2l0ZSBvcGVyYXRvcj0ib3ZlciIgaW49InNoYWRvdyIgaW4yPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICAKICAgIDwhLS0gT3V0ZXIgUmluZyAtLT4KICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIiBmaWxsPSJ1cmwoI3ByZW1pdW0tYmcpIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjEwIDE1IiBvcGFjaXR5PSIwLjQiLz4KCiAgICA8IS0tIENvbnRlbnQgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDI0MCkiPgogICAgICAgIDwhLS0gVGhlIEJpbmdvIEJhbGwgQmFja2dyb3VuZCAtLT4KICAgICAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMTYwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIGZpbHRlcj0idXJsKCNpbm5lci1zaGFkb3cpIiAvPgogICAgICAgIAogICAgICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSItMjAiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0LCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjExMCIgZmlsbD0idXJsKCNnb2xkLWdyYWRpZW50KSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI2dsb3cpIiBsZXR0ZXItc3BhY2luZz0iLTUiIHN0eWxlPSJ0ZXh0LXNoYWRvdzogMCAxMHB4IDIwcHggcmdiYSgwLDAsMCwwLjUpIj5CSU5HTzwvdGV4dD4KICAgICAgICAKICAgICAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSI4MCIgZm9udC1mYW1pbHk9Ik1vbnRzZXJyYXQsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxNSIgb3BhY2l0eT0iMC45Ij5TSE9XPC90ZXh0PgogICAgPC9nPgoKICAgIDwhLS0gVmVyc2lvbiBCYWRnZSAoT3B0aW9uYWwgYnV0IG5pY2UpIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLCAxMjApIHNjYWxlKDAuNikiPgogICAgICAgIDxjaXJjbGUgcj0iNjAiIGZpbGw9IiNkOTc3MDYiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICAgICAgICA8dGV4dCBkeT0iMTUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQ1IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj43LjI8L3RleHQ+CiAgICA8L2c+CgogICAgPCEtLSBEZWNvcmF0aXZlIFN0YXJzIC0tPgogICAgPHBhdGggZD0iTTI1NiA0MCBMMjYyIDYwIEwyODIgNjAgTDI2NiA3MiBMMjcyIDkyIEwyNTYgODAgTDI0MCA5MiBMMjQ2IDcyIEwyMzAgNjAgTDI1MCA2MCBaIiBmaWxsPSIjZmJiZjI0IiBmaWx0ZXI9InVybCgjZ2xvdykiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9Im9wYWNpdHkiIHZhbHVlcz0iMC4zOzE7MC4zIiBkdXI9IjNzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgLz4KICAgIDwvcGF0aD4KPC9zdmc+';
-    const currentLogo = appStore.state.appConfig.customLogoBase64 || defaultLogo;
-
-    if (currentLogo) {
-        headerLogoContainer.innerHTML = `<img id="header-logo" src="${currentLogo}" alt="Logo do Evento" class="w-full h-full object-contain">`;
-    } else {
-        headerLogoContainer.innerHTML = ''; 
+    if (!headerLogoContainer) {
+        console.warn("Aviso: Container #app-logo não encontrado no DOM ainda.");
+        return;
     }
+
+    // Design v7.4: Logo moderno e adaptável (Limpo, Vibrante e Funcional)
+    const fixedDefaultLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDwhLS0gQmFja2dyb3VuZCBHcmFkaWVudCAtLT4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJnR3JhZCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTFiNGIiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSI1MCUiIHN0b3AtY29sb3I9IiMzMTJlODEiLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNDMzOGNhIi8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICAKICAgICAgICA8IS0tIEdvbGRlbiBUZXh0IEdyYWRpZW50IC0tPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZlZjA4YSIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjQwJSIgc3RvcC1jb2xvcj0iI2ZiYmYyNCIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjYwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiNDUzMDkiLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgoKICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9InJlZEdyYWQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZWY0NDQ0Ii8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzk5MWIxYiIvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CgogICAgICAgIDwhLS0gRHJvcCBTaGFkb3dzIC0tPgogICAgICAgIDxmaWx0ZXIgaWQ9ImRyb3BTaGFkb3ciIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iMTIiIHN0ZERldmlhdGlvbj0iMTAiIGZsb29kLW9wYWNpdHk9IjAuOCIgZmxvb2QtY29sb3I9IiMwMDAiLz4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJnbG93IiB4PSItNTAlIiB5PSItNTAlIiB3aWR0aD0iMjAwJSIgaGVpZ2h0PSIyMDAlIj4KICAgICAgICAgICAgPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOCIgcmVzdWx0PSJibHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJibHVyIi8+CiAgICAgICAgICAgICAgICA8ZmVNZXJnZU5vZGUgaW49IlNvdXJjZUdyYXBoaWMiLz4KICAgICAgICAgICAgPC9mZU1lcmdlPgogICAgICAgIDwvZmlsdGVyPgogICAgICAgIDxmaWx0ZXIgaWQ9InRleHRHbG93IiB4PSItNTAlIiB5PSItNTAlIiB3aWR0aD0iMjAwJSIgaGVpZ2h0PSIyMDAlIj4KICAgICAgICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMCIgZHk9IjgiIHN0ZERldmlhdGlvbj0iNiIgZmxvb2Qtb3BhY2l0eT0iMC45IiBmbG9vZC1jb2xvcj0iIzAwMCIvPgogICAgICAgIDwvZmlsdGVyPgogICAgPC9kZWZzPgoKICAgIDwhLS0gQmFja2dyb3VuZCBCYXNlIC0tPgogICAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMDAiIGZpbGw9InVybCgjYmdHcmFkKSIgZmlsdGVyPSJ1cmwoI2Ryb3BTaGFkb3cpIi8+CiAgICAKICAgIDwhLS0gRGVjb3JhdGl2ZSBPdXRsaW5lIC0tPgogICAgPHJlY3Qgd2lkdGg9IjQ3MiIgaGVpZ2h0PSI0NzIiIHg9IjIwIiB5PSIyMCIgcng9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZEdyYWQpIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1kYXNoYXJyYXk9IjIwIDEwIiBvcGFjaXR5PSIwLjYiLz4KCiAgICA8IS0tIExpZ2h0IFJheXMgLyBTdGFyYnVyc3QgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDIyMCkiPgogICAgICAgIDxwYXRoIGQ9Ik0wIC0xNTAgTDEwIDAgTDAgMTUwIEwtMTAgMCBaIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIHRyYW5zZm9ybT0icm90YXRlKDApIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoNDUpIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoOTApIi8+CiAgICAgICAgPHBhdGggZD0iTTAgLTE1MCBMMTAgMCBMMCAxNTAgTC0xMCAwIFoiIGZpbGw9IiNmZmZmZmYiIG9wYWNpdHk9IjAuMSIgdHJhbnNmb3JtPSJyb3RhdGUoMTM1KSIvPgogICAgPC9nPgoKICAgIDwhLS0gQ2VudGVyIEJpbmdvIEJhbGwgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjEzMCIgZmlsbD0idXJsKCNyZWRHcmFkKSIgZmlsdGVyPSJ1cmwoI2Ryb3BTaGFkb3cpIi8+CiAgICAKICAgIDwhLS0gQmFsbCBJbm5lciBoaWdobGlnaHQgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjEzMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjQiIG9wYWNpdHk9IjAuMyIvPgogICAgCiAgICA8IS0tIFdoaXRlIENpcmNsZSBjZW50ZXIgLS0+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyMjAiIHI9IjgwIiBmaWxsPSIjZmZmZmZmIiBmaWx0ZXI9InVybCgjZHJvcFNoYWRvdykiLz4KICAgIAogICAgPCEtLSBTdGFyIERldGFpbHMgb24gdGhlIGJhbGwgLS0+CiAgICA8cGF0aCBkPSJNIDE3MCAxNTAgTCAxODAgMTcwIEwgMjAwIDE3MCBMIDE4MCAxODUgTCAxODUgMjA1IEwgMTcwIDE5MCBMIDE1NSAyMDUgTCAxNjAgMTg1IEwgMTQwIDE3MCBMIDE2MCAxNzAgWiIgZmlsbD0idXJsKCNnb2xkR3JhZCkiIC8+CiAgICA8cGF0aCBkPSJNIDM0MCAxNTAgTCAzNTAgMTcwIEwgMzcwIDE3MCBMIDM1MCAxODUgTCAzNTUgMjA1IEwgMzQwIDE5MCBMIDMyNSAyMDUgTCAzMzAgMTg1IEwgMzEwIDE3MCBMIDMzMCAxNzAgWiIgZmlsbD0idXJsKCNnb2xkR3JhZCkiIC8+CgogICAgPCEtLSBCaWcgTnVtYmVyIG9yIEIgLS0+CiAgICA8dGV4dCB4PSIyNTYiIHk9IjI3MCIgZm9udC1mYW1pbHk9IidJbXBhY3QnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0MCIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0iI2I5MWMxYyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zdHlsZT0iaXRhbGljIj5CPC90ZXh0PgoKICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgSW1wYWN0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9Ijg1IiBmb250LXdlaWdodD0iOTAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9InVybCgjZ29sZEdyYWQpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWx0ZXI9InVybCgjdGV4dEdsb3cpIiBzdHJva2U9IiM3ODM1MGYiIHN0cm9rZS13aWR0aD0iNCIgbGV0dGVyLXNwYWNpbmc9IjQiPkJJTkdPPC90ZXh0PgogICAgCiAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDkwIiBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgSW1wYWN0LCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjQ1IiBmb250LXdlaWdodD0iOTAwIiBmb250LXN0eWxlPSJpdGFsaWMiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbHRlcj0idXJsKCN0ZXh0R2xvdykiIGxldHRlci1zcGFjaW5nPSIxMiI+U0hPVzwvdGV4dD4KCjwvc3ZnPg==';
     
+    let currentLogo = appStore.state.appConfig.customLogoBase64;
+    
+    // Validação robusta: se não houver logo, ou se não começar com data:, ou se for muito curto (corrompido)
+    if (!currentLogo || !currentLogo.startsWith('data:image') || currentLogo.length < 100) {
+        console.log("Usando logo padrão fixo.");
+        currentLogo = fixedDefaultLogo;
+    } else {
+        console.log("Usando logo customizado de comprimento:", currentLogo.length);
+    }
+
+    // Inserção no DOM
+    headerLogoContainer.innerHTML = `<img id="header-logo" src="${currentLogo}" alt="Bingo Show Logo" class="w-full h-full object-contain filter drop-shadow-lg scale-110 active:scale-95 transition-transform duration-300">`;
+    
+    // Atualização do preview nas configurações (se aberto)
     const settingsPreview = document.getElementById('custom-logo-preview') as HTMLImageElement;
     if (settingsPreview) {
-        settingsPreview.src = appStore.state.appConfig.customLogoBase64 || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+        settingsPreview.src = currentLogo;
     }
 }
 
@@ -899,6 +923,10 @@ function populateSettingsShortcutsTab() {
 
                     <div id="settings-content-container" class="max-h-[60vh] overflow-y-auto pr-4">
                         <div id="tab-content-appearance" class="space-y-6 text-left">
+                           <div class="border-b border-gray-700 pb-6">
+                                <label class="block text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Nome do Programa</label>
+                                <input type="text" id="app-name-input" class="w-full bg-white dark:bg-gray-800 text-slate-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:border-indigo-500" placeholder="Bingo Show">
+                           </div>
                            <div class="border-b border-gray-700 pb-6">
                                 <label class="block text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">${appLabels.settingsLogoTitle}</label>
                                 <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">${appLabels.settingsLogoDescription}</p>
@@ -1581,6 +1609,14 @@ function showSettingsModal() {
     });
 
     // --- Appearance Tab ---
+    const appNameInput = document.getElementById('app-name-input') as HTMLInputElement;
+    appNameInput.value = appConfig.appName || 'Bingo Show';
+    appNameInput.addEventListener('input', (e) => {
+        appStore.state.appConfig.appName = (e.target as HTMLInputElement).value;
+        renderAppName();
+        appStore.debouncedSave();
+    });
+
     const logoPreview = document.getElementById('custom-logo-preview') as HTMLImageElement;
     if(appConfig.customLogoBase64) logoPreview.src = appConfig.customLogoBase64;
     
@@ -1927,8 +1963,8 @@ function applyAuctionZoom(scale: number) {
         }
 
         function renderAppName() {
-            const mainTitle = `Bingo Show`;
-            DOMElements.mainTitle.innerHTML = `${mainTitle}<span id="subtitle-version" class="block text-xl sm:text-2xl text-slate-300 font-normal"></span>`;
+            const mainTitle = appStore.state.appConfig.appName || `Bingo Show`;
+            DOMElements.mainTitle.innerHTML = `<span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 [-webkit-text-stroke:2px_#78350f] filter drop-shadow-lg">${mainTitle}</span><span id="subtitle-version" class="block mt-2 text-lg sm:text-xl md:text-2xl text-amber-100 font-semibold tracking-normal normal-case [-webkit-text-stroke:1px_#78350f] drop-shadow-md pb-2"></span>`;
         }
         
         function renderUpdateInfo() {
@@ -4585,6 +4621,25 @@ function showRoundEditModal(gameNumber: string) {
                 setupEventListeners();
                 setupGlobalKeydownListener();
             });
+        });
+
+        // --- PWA Installation Logic ---
+        let deferredPrompt: any;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('install-pwa-btn');
+            if (installBtn) {
+                installBtn.classList.remove('hidden');
+                installBtn.addEventListener('click', async () => {
+                    installBtn.classList.add('hidden');
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    console.log(`User response to the install prompt: ${outcome}`);
+                    deferredPrompt = null;
+                });
+            }
         });
 
         // --- Service Worker ---

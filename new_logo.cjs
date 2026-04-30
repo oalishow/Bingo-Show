@@ -2,58 +2,61 @@ const fs = require('fs');
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
     <defs>
-        <linearGradient id="premium-bg" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#1e293b" />
-            <stop offset="100%" stop-color="#0f172a" />
+        <linearGradient id="main-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3b82f6" />
+            <stop offset="100%" stop-color="#8b5cf6" />
         </linearGradient>
-        <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#fbbf24" />
-            <stop offset="50%" stop-color="#d97706" />
-            <stop offset="100%" stop-color="#b45309" />
+        <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="white" stop-opacity="0.3" />
+            <stop offset="100%" stop-color="white" stop-opacity="0" />
         </linearGradient>
-        <filter id="glow">
-            <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="15" />
+            <feOffset dx="0" dy="10" />
+            <feComponentTransfer>
+                <feFuncA type="linear" slope="0.5" />
+            </feComponentTransfer>
             <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode />
+                <feMergeNode in="SourceGraphic" />
             </feMerge>
         </filter>
-        <filter id="inner-shadow">
-            <feOffset dx="0" dy="4"/>
-            <feGaussianBlur stdDeviation="4" result="offset-blur"/>
-            <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
-            <feFlood flood-color="black" flood-opacity="0.8" result="color"/>
-            <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
-            <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
-        </filter>
     </defs>
+
+    <!-- Base Circle -->
+    <circle cx="256" cy="256" r="230" fill="url(#main-bg)" filter="url(#shadow)" />
     
-    <!-- Outer Ring -->
-    <circle cx="256" cy="256" r="240" fill="url(#premium-bg)" stroke="#fbbf24" stroke-width="8" filter="url(#glow)"/>
-    <circle cx="256" cy="256" r="225" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="10 15" opacity="0.4"/>
+    <!-- Gloss Effect -->
+    <path d="M70 150 Q256 50 442 150 Q256 250 70 150" fill="url(#gloss)" />
 
-    <!-- Content -->
-    <g transform="translate(256, 240)">
-        <!-- The Bingo Ball Background -->
-        <circle cx="0" cy="0" r="160" fill="#ffffff" opacity="0.1" filter="url(#inner-shadow)" />
+    <!-- Main Content -->
+    <g transform="translate(256, 256)">
+        <!-- Central Ball -->
+        <circle r="140" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="2" />
         
-        <!-- BINGO Text -->
-        <text y="-20" font-family="Montserrat, sans-serif" font-weight="900" font-size="110" fill="url(#gold-gradient)" text-anchor="middle" filter="url(#glow)" letter-spacing="-5" style="text-shadow: 0 10px 20px rgba(0,0,0,0.5)">BINGO</text>
+        <!-- Large B -->
+        <text y="40" font-family="system-ui, sans-serif" font-weight="900" font-size="200" fill="white" text-anchor="middle" style="text-shadow: 0 10px 30px rgba(0,0,0,0.3)">B</text>
         
-        <!-- SHOW Text -->
-        <text y="80" font-family="Montserrat, sans-serif" font-weight="700" font-size="70" fill="#ffffff" text-anchor="middle" letter-spacing="15" opacity="0.9">SHOW</text>
+        <!-- Bingo Text -->
+        <text y="100" font-family="system-ui, sans-serif" font-weight="900" font-size="40" fill="#fbbf24" text-anchor="middle" letter-spacing="10" transform="translate(0, 40)">BINGO</text>
+        <text y="150" font-family="system-ui, sans-serif" font-weight="700" font-size="25" fill="white" text-anchor="middle" letter-spacing="15" opacity="0.8" transform="translate(0, 40)">SHOW</text>
     </g>
 
-    <!-- Version Badge (Optional but nice) -->
-    <g transform="translate(400, 120) scale(0.6)">
-        <circle r="60" fill="#d97706" stroke="#fbbf24" stroke-width="4" filter="url(#glow)"/>
-        <text dy="15" font-family="sans-serif" font-weight="900" font-size="45" fill="#ffffff" text-anchor="middle">7.3</text>
-    </g>
+    <!-- Floating Balls -->
+    <circle cx="100" cy="100" r="30" fill="#f43f5e" filter="url(#shadow)" opacity="0.9" />
+    <text x="100" y="108" font-family="sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">7</text>
 
-    <!-- Decorative Stars -->
-    <path d="M256 40 L262 60 L282 60 L266 72 L272 92 L256 80 L240 92 L246 72 L230 60 L250 60 Z" fill="#fbbf24" filter="url(#glow)">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite" />
-    </path>
+    <circle cx="412" cy="150" r="25" fill="#10b981" filter="url(#shadow)" opacity="0.9" />
+    <text x="412" y="157" font-family="sans-serif" font-weight="bold" font-size="16" fill="white" text-anchor="middle">3</text>
+
+    <circle cx="120" cy="400" r="35" fill="#f59e0b" filter="url(#shadow)" opacity="0.9" />
+    <text x="120" y="410" font-family="sans-serif" font-weight="bold" font-size="24" fill="white" text-anchor="middle">V</text>
+
+    <!-- Version Badge -->
+    <g transform="translate(430, 410)">
+        <rect x="-40" y="-20" width="80" height="40" rx="20" fill="white" />
+        <text dy="7" font-family="sans-serif" font-weight="bold" font-size="18" fill="#1e293b" text-anchor="middle">v7.3</text>
+    </g>
 </svg>`;
 
 const b64 = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64');

@@ -378,9 +378,10 @@
                     <!-- O logo customizado será inserido aqui, ou o SVG padrão será mostrado -->
                 </div>
                 
-                <div id="main-title" class="text-2xl sm:text-3xl font-black text-amber-400 leading-tight focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-2">
+                <div id="main-title" class="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-none drop-shadow-lg transform hover:scale-105 transition-transform duration-300 uppercase focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-4 py-2 mt-4 text-center">
                     <!-- Será preenchido pelo JS -->
                 </div>
+                <button id="install-pwa-btn" class="hidden mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-3 px-8 rounded-full text-lg sm:text-xl shadow-[0_0_15px_rgba(79,70,229,0.5)] transform hover:scale-110 transition-all duration-300 border-2 border-blue-400">⬇️ INSTALAR APP (OFFLINE / WINDOWS) ⬇️</button>
             </div>
         </header>
 
@@ -393,11 +394,13 @@
                 
 
                 <!-- NOVO: Botão de Configurações de Personalização -->
-                    <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">🎨 Personalizar Painel</button>
+                <div class="mb-4 flex-shrink-0 flex">
+                    <button id="show-settings-btn" class="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-lg text-base shadow-lg transition-all" data-label-key="customizeButton">🎨 Personalizar Painel</button>
+                </div>
 
                 <!-- 2. BOTÕES DE CONTROLE GERAIS -->
                 <div class="grid grid-cols-2 gap-2 mb-4 flex-shrink-0">
-                    <button id="show-card-scanner-btn" disabled class="bg-indigo-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🔎 Verificar (Em breve)</button>
+                    <button id="show-card-scanner-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🔎 Verificar Cartela</button>
                     <button id="show-card-generator-btn" disabled class="bg-teal-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🖨️ Gerar Cartelas (Em breve)</button>
                 </div>
                 
