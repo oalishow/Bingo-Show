@@ -352,7 +352,7 @@
                 
 
                 <!-- NOVO: Botão de Configurações de Personalização -->
-                <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">🎨 Personalizar</button>
+                    <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">🎨 Personalizar Painel</button>
 
                 <!-- 2. BOTÕES DE CONTROLE GERAIS -->
                 <div class="flex flex-col gap-2 mb-4 flex-shrink-0">
@@ -452,9 +452,9 @@
                     </div>
 
                     <div class="mt-4 grid grid-cols-3 gap-2">
-                         <button id="auto-draw-btn-bottom" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="autoDrawButton">Sorteio Automático</button>
-                         <button id="verify-btn-bottom" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="verifyButton">Verificar</button>
-                         <button id="clear-round-btn-bottom" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="clearRoundButton">Limpar Rodada Atual</button>
+                    <button id="auto-draw-btn-bottom" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="autoDrawButton">🎰 Sorteio Automático</button>
+                         <button id="verify-btn-bottom" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="verifyButton">✅ Verificar</button>
+                         <button id="clear-round-btn-bottom" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="clearRoundButton">🧹 Limpar Rodada</button>
                     </div>
                 </section>
                 
@@ -482,13 +482,13 @@
                                 <input type="text" id="letter-input" placeholder="L" maxlength="1" class="text-center text-sm uppercase font-bold w-10 p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                                 <input type="number" id="number-input" placeholder="Nº" class="text-center text-sm font-bold flex-grow p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" min="1" max="75">
                             </div>
-                            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-2 rounded-lg text-sm shadow-lg" data-label-key="manualAnnounceButton">Anunciar Manual</button>
+                            <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-2 rounded-lg text-sm shadow-lg" data-label-key="manualAnnounceButton">📢 Anunciar Manual</button>
                         </form>
                         <p id="error-message" class="text-red-500 font-bold h-5 mb-1 text-xs text-center"></p>
                         <div class="grid grid-cols-1 gap-2">
-                            <button id="auto-draw-btn-top" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="autoDrawButton">Sorteio Automático</button>
-                            <button id="verify-btn-top" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="verifyButton">Verificar</button>
-                            <button id="clear-round-btn-top" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="clearRoundButton">Limpar Rodada Atual</button>
+                            <button id="auto-draw-btn-top" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="autoDrawButton">🎰 Sorteio Automático</button>
+                            <button id="verify-btn-top" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="verifyButton">✅ Verificar</button>
+                            <button id="clear-round-btn-top" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 text-xs rounded-lg shadow-lg" data-label-key="clearRoundButton">🧹 Limpar Rodada</button>
                         </div>
                     </div>
                     
@@ -521,7 +521,7 @@
                                 </button>
                             </div>
                             <form id="prize-draw-form" class="flex flex-col gap-2 flex-grow">
-                                <button type="button" id="check-drawn-prizes-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded-lg text-xs shadow-lg mb-1" data-label-key="checkDrawnPrizesButton">Conferir Sorteados</button>
+                                <button type="button" id="check-drawn-prizes-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded-lg text-xs shadow-lg mb-1" data-label-key="checkDrawnPrizesButton">🧐 Conferir Sorteados</button>
                                 <div class="flex flex-col gap-1">
                                     <label for="prize-draw-min" class="text-xs text-slate-600 dark:text-slate-400" data-label-key="prizeDrawFromLabel">De:</label>
                                     <input type="number" id="prize-draw-min" value="1" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg">
@@ -532,11 +532,11 @@
                                     <input type="checkbox" id="no-repeat-prize-draw" class="h-3 w-3 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                                     <label for="no-repeat-prize-draw" data-label-key="noRepeatCheckboxLabel">Não repetir sorteados</label>
                                 </div>
-                                <button type="button" id="prize-draw-random-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold p-3 rounded-lg text-lg shadow-lg mt-1" data-label-key="prizeDrawRandomButton">Sortear</button>
+                                <button type="button" id="prize-draw-random-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold p-3 rounded-lg text-lg shadow-lg mt-1" data-label-key="prizeDrawRandomButton">🎁 Sortear</button>
                                 <input type="text" id="prize-draw-number-manual" data-label-key="prizeDrawTicketNumberPlaceholder" placeholder="Nº Cartela" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mt-2">
                                 <input type="text" id="prize-draw-name" data-label-key="prizeDrawNamePlaceholder" placeholder="Nome (Opcional)" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                                 <input type="text" id="prize-draw-description" data-label-key="prizeDrawDescriptionPlaceholder" placeholder="Brinde (Opcional)" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg mt-1" data-label-key="registerPrizeButton">Registrar Brinde</button>
+                                <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg mt-1" data-label-key="registerPrizeButton">📝 Registrar Brinde</button>
                             </form>
                         </div>
                     </div>
@@ -568,9 +568,9 @@
                         </div>
                         <input type="text" id="auction-winner-name" placeholder="Nome do Arrematador" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                         <div class="flex gap-2 pt-2">
-                            <button type="button" id="reset-auction-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg">Limpar</button>
+                            <button type="button" id="reset-auction-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg">🧹 Limpar</button>
                             <button type="submit" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-xl flex items-center justify-center gap-2">
-                                <span data-label-key="sellItemButton">Vender Item</span>
+                                <span data-label-key="sellItemButton">💎 Vender Item</span>
                                 <span id="gavel-icon" class="hidden text-2xl">🔨</span>
                             </button>
                         </div>
@@ -588,7 +588,7 @@
             <aside class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col">
                 <!-- RODADAS E PRÊMIOS -->
                 <div class="flex-grow">
-                    <button id="add-extra-game-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl text-base shadow-lg transition-all mb-4" data-label-key="addExtraRoundButton">Adicionar Rodada Extra</button>
+                    <button id="add-extra-game-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl text-base shadow-lg transition-all mb-4" data-label-key="addExtraRoundButton">➕ Adicionar Rodada Extra</button>
                     <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-300 mb-4" data-label-key="roundsAndPrizesTitle">Rodadas e Prêmios</h2>
                     <div id="games-list" class="space-y-4">
                         <!-- As rodadas serão inseridas dinamicamente aqui -->
@@ -600,7 +600,7 @@
                     <!-- APOIO -->
                     <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-xl text-center">
                         <h3 class="text-base font-bold text-sky-400 mb-3" data-label-key="supportTitle">Apoie o Seminarista 🤝</h3>
-                        <button id="show-donation-modal-btn" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="supportButton">Faça sua Doação</button>
+                        <button id="show-donation-modal-btn" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="supportButton">🤝 Faça sua Doação</button>
                     </div>
                 </div>
             </aside>
@@ -613,7 +613,7 @@
                 Desenvolvido inteiramente com a Inteligência Artificial Gemini 2.5 PRO da Google, este projeto demonstra como é possível criar soluções pastorais inovadoras com criatividade e ferramentas de baixo custo ou gratuitas, mesmo sem conhecimentos prévios em programação.
             </p>
             <p class="mt-2">
-                <button id="show-changelog-btn" class="hover:underline text-sky-600 dark:text-sky-400">Histórico de Versões</button> | Versão <span id="version">7.1</span> - <span id="last-updated">Última atualização do programa: carregando...</span>
+                <button id="show-changelog-btn" class="hover:underline text-sky-600 dark:text-sky-400">Histórico de Versões</button> | Versão <span id="version">7.2</span> - <span id="last-updated">Última atualização do programa: carregando...</span>
             </p>
         </footer>
     </div>

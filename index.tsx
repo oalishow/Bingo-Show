@@ -21,7 +21,13 @@ import jsQR from 'jsqr';
                     "Espetinho - R$ 8,00", "Pastel - R$ 6,00", "Porção de Fritas - R$ 15,00"
                 ],
                 drawnPrizeNumbers: [] as number[],
-                versionHistory: `**v7.0.0 (Atual)**
+                versionHistory: `**v7.2.0 (Atual)**
+- **LEITOR DE QR CODE:** Adição de scanner de QR Code para verificação instantânea de cartelas via câmera.
+- **VERIFICAÇÃO MANUAL:** Novo campo para digitar o número da cartela manualmente quando a câmera não estiver disponível.
+- **MELHORIAS VISUAIS (V7.2):** Inclusão de ícones nos botões para melhor identificação visual. Atualização do logotipo principal do programa. Ajuste de contraste no painel de rodadas para o tema claro.
+- **ESTABILIDADE:** Correções no sistema de renderização de cartelas e melhorias de performance.
+
+**v7.1.0**
 - **REMARCA E FOCO LOCAL:** O programa foi renomeado para "Bingo Show". Toda a funcionalidade online e de sincronização com a nuvem (Firebase) foi removida. O aplicativo agora opera em um modo 100% local, salvando todos os dados (incluindo imagens de patrocinadores) diretamente no navegador para máxima confiabilidade e simplicidade em eventos presenciais.
 - **NOVO LOGOTIPO:** O aplicativo agora apresenta um novo logotipo para refletir a marca "Bingo Show".
 - **PATROCINADOR GLOBAL:** Adicionada uma nova seção nas configurações para cadastrar um "Patrocinador Global". Uma única imagem e nome podem ser definidos para aparecer em todos os números que não possuam um patrocinador individual, garantindo que a tela de sorteio sempre exiba um apoio.
@@ -67,7 +73,7 @@ import jsQR from 'jsqr';
                     drawnTextStrokeColor: '#000000',
                     drawnTextStrokeWidth: 2,
                     isEventClosed: false,
-                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzNBRUQiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMCIgZmxvb2Qtb3BhY2l0eT0iMC40Ii8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI0MCIgZmlsbD0idXJsKCNiZykiIGZpbHRlcj0idXJsKCNzaGFkb3cpIiAvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAsIDE2MCkiPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNFRjQ0NDQiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDg1LCAtNDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMzQjgyRjYiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkk8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3MCwgLTYwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjMTBCOTgxIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OPC90ZXh0PgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTUsIC00MCkiPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI0Y1OUUwQiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzAiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOTUiLz4KICAgICAgICAgICAgPHRleHQgeD0iNDAiIHk9IjUyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzFGMjkzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RzwvdGV4dD4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQwLCAwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjRUM0ODk5IiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PPC90ZXh0PgogICAgICAgIDwvZz4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iMzgwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI3MCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIGxldHRlci1zcGFjaW5nPSIyIj5CSU5HTzwvdGV4dD4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0UwRTdGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjQiPlNIT1c8L3RleHQ+Cjwvc3ZnPg==',
+                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJlbWl1bS1iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTI5M2IiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmJiZjI0IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYjQ1MzA5IiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgICAgIDwvZmVNZXJnZT4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJpbm5lci1zaGFkb3ciPgogICAgICAgICAgICA8ZmVPZmZzZXQgZHg9IjAiIGR5PSI0Ii8+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjQiIHJlc3VsdD0ib2Zmc2V0LWJsdXIiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJvdXQiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9Im9mZnNldC1ibHVyIiByZXN1bHQ9ImludmVyc2UiLz4KICAgICAgICAgICAgPGZlRmxvb2QgZmxvb2QtY29sb3I9ImJsYWNrIiBmbG9vZC1vcGFjaXR5PSIwLjgiIHJlc3VsdD0iY29sb3IiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJpbiIgaW49ImNvbG9yIiBpbjI9ImludmVyc2UiIHJlc3VsdD0ic2hhZG93Ii8+CiAgICAgICAgICAgIDxmZUNvbXBvc2l0ZSBvcGVyYXRvcj0ib3ZlciIgaW49InNoYWRvdyIgaW4yPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICAKICAgIDwhLS0gT3V0ZXIgUmluZyAtLT4KICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIiBmaWxsPSJ1cmwoI3ByZW1pdW0tYmcpIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjEwIDE1IiBvcGFjaXR5PSIwLjQiLz4KCiAgICA8IS0tIENvbnRlbnQgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDI0MCkiPgogICAgICAgIDwhLS0gVGhlIEJpbmdvIEJhbGwgQmFja2dyb3VuZCAtLT4KICAgICAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMTYwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIGZpbHRlcj0idXJsKCNpbm5lci1zaGFkb3cpIiAvPgogICAgICAgIAogICAgICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSItMjAiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0LCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjExMCIgZmlsbD0idXJsKCNnb2xkLWdyYWRpZW50KSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI2dsb3cpIiBsZXR0ZXItc3BhY2luZz0iLTUiIHN0eWxlPSJ0ZXh0LXNoYWRvdzogMCAxMHB4IDIwcHggcmdiYSgwLDAsMCwwLjUpIj5CSU5HTzwvdGV4dD4KICAgICAgICAKICAgICAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSI4MCIgZm9udC1mYW1pbHk9Ik1vbnRzZXJyYXQsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxNSIgb3BhY2l0eT0iMC45Ij5TSE9XPC90ZXh0PgogICAgPC9nPgoKICAgIDwhLS0gVmVyc2lvbiBCYWRnZSAoT3B0aW9uYWwgYnV0IG5pY2UpIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLCAxMjApIHNjYWxlKDAuNikiPgogICAgICAgIDxjaXJjbGUgcj0iNjAiIGZpbGw9IiNkOTc3MDYiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICAgICAgICA8dGV4dCBkeT0iMTUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQ1IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj43LjI8L3RleHQ+CiAgICA8L2c+CgogICAgPCEtLSBEZWNvcmF0aXZlIFN0YXJzIC0tPgogICAgPHBhdGggZD0iTTI1NiA0MCBMMjYyIDYwIEwyODIgNjAgTDI2NiA3MiBMMjcyIDkyIEwyNTYgODAgTDI0MCA5MiBMMjQ2IDcyIEwyMzAgNjAgTDI1MCA2MCBaIiBmaWxsPSIjZmJiZjI0IiBmaWx0ZXI9InVybCgjZ2xvdykiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9Im9wYWNpdHkiIHZhbHVlcz0iMC4zOzE7MC4zIiBkdXI9IjNzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgLz4KICAgIDwvcGF0aD4KPC9zdmc+',
                     enableSponsorsByNumber: false,
                     enableModalAutoclose: true,
                     modalAutocloseSeconds: 5,
@@ -87,13 +93,13 @@ import jsQR from 'jsqr';
                     howToUseTitle: "🎬 Como Usar?",
                     howToUseButton: "Em Breve!",
                     versionHistoryButton: "Histórico de Versões",
-                    customizeButton: "Personalizar",
-                    intervalButton: "Intervalo",
-                    generateProofButton: "Gerar Prova",
-                    endEventButton: "Encerrar Evento",
-                    resetEventButton: "Reiniciar Evento",
-                    saveToFileButton: "Salvar no Computador",
-                    loadFromFileButton: "Carregar do Computador",
+                    customizeButton: "🎨 Personalizar",
+                    intervalButton: "⏱️ Intervalo",
+                    generateProofButton: "🧾 Gerar Prova",
+                    endEventButton: "🛑 Encerrar Evento",
+                    resetEventButton: "⚠️ Reiniciar Evento",
+                    saveToFileButton: "💾 Salvar (PC)",
+                    loadFromFileButton: "📂 Carregar",
                     winnersTitle: "Vencedores",
                     bingoBoardTitle: "Painel de Números",
                     activeRoundIndicatorDefault: "Selecione uma Rodada",
@@ -101,28 +107,28 @@ import jsQR from 'jsqr';
                     controlsPanelTitle: "Controles",
                     boardScaleLabel: "Escala Painel Números",
                     displayScaleLabel: "Escala Número Anunciado",
-                    manualAnnounceButton: "Anunciar Manual",
-                    autoDrawButton: "Sorteio Automático",
-                    verifyButton: "Verificar",
-                    clearRoundButton: "Limpar Rodada Atual",
+                    manualAnnounceButton: "📢 Anunciar Manual",
+                    autoDrawButton: "🎰 Sorteio Automático",
+                    verifyButton: "✅ Verificar",
+                    clearRoundButton: "🧹 Limpar Rodada Atual",
                     announcedNumberLabel: "Número Anunciado",
                     lastNumbersLabel: "Últimos 5 Números",
                     prizeDrawTitle: "Sorteio de Brindes",
-                    checkDrawnPrizesButton: "Conferir Sorteados",
+                    checkDrawnPrizesButton: "🧐 Conferir Sorteados",
                     prizeDrawFromLabel: "De:",
                     prizeDrawToLabel: "Até:",
                     noRepeatCheckboxLabel: "Não repetir sorteados",
-                    prizeDrawRandomButton: "Sortear",
+                    prizeDrawRandomButton: "🎁 Sortear",
                     prizeDrawTicketNumberPlaceholder: "Nº Cartela",
                     prizeDrawNamePlaceholder: "Nome (Opcional)",
                     prizeDrawDescriptionPlaceholder: "Brinde (Opcional)",
-                    registerPrizeButton: "Registrar Brinde",
+                    registerPrizeButton: "📝 Registrar Brinde",
                     supportTitle: "Apoie o Seminarista 🤝",
-                    supportButton: "Faça sua Doação",
+                    supportButton: "🤝 Faça sua Doação",
                     roundsAndPrizesTitle: "Rodadas e Prêmios",
-                    addExtraRoundButton: "Adicionar Rodada Extra",
+                    addExtraRoundButton: "➕ Adicionar Rodada Extra",
                     subscribeTitle: "Inscreva-se no Canal",
-                    subscribeButton: "Inscrever-se no Canal",
+                    subscribeButton: "📺 Inscrever-se no Canal",
                     prize1Label: "Quina",
                     prize2Label: "Cartela Cheia",
                     prize3Label: "Azarão",
@@ -131,7 +137,7 @@ import jsQR from 'jsqr';
                     verificationModalTitle: "Verificando Números",
                     verificationModalBackButton: "Voltar ao App",
                     auctionTitle: "Leilão",
-                    sellItemButton: "Vender Item",
+                    sellItemButton: "💎 Vender Item",
                     clearRoundConfirmTitle: "Confirmar Limpeza",
                     clearRoundConfirmMessage: "Tem certeza que deseja limpar todos os números sorteados da rodada atual?",
                     clearRoundConfirmButton: "Limpar",
@@ -148,32 +154,32 @@ import jsQR from 'jsqr';
                     congratsModalCloseButton: "Fechar",
                     menuEditModalTitle: "Editar Cardápio",
                     menuEditModalDescription: "Digite cada item em uma nova linha.",
-                    modalCancelButton: "Cancelar",
-                    modalSaveButton: "Salvar",
+                    modalCancelButton: "❌ Cancelar",
+                    modalSaveButton: "💾 Salvar",
                     winnerEditModalTitle: "Editar Vencedor",
                     winnerEditModalNamePlaceholder: "Nome do Ganhador",
                     winnerEditModalPrizePlaceholder: "Prêmio",
-                    winnerEditModalRemoveButton: "Remover",
+                    winnerEditModalRemoveButton: "🗑️ Remover",
                     deleteConfirmModalTitle: "Confirmar Exclusão",
-                    deleteConfirmModalDeleteButton: "Excluir",
+                    deleteConfirmModalDeleteButton: "🗑️ Excluir",
                     proofOptionsModalTitle: "Gerar Prova",
                     proofOptionsModalDescription: "Selecione quais rodadas e brindes incluir no documento.",
-                    proofOptionsModalGenerateButton: "Gerar Prova",
-                    spinningWheelSkipButton: "Pular Animação",
+                    proofOptionsModalGenerateButton: "🧾 Gerar Prova",
+                    spinningWheelSkipButton: "⏭️ Pular Animação",
                     resetConfirmModalTitle: "Atenção!",
                     resetConfirmModalMessage: "Tem certeza que deseja reiniciar todo o evento? Todos os dados de rodadas, prêmios e vencedores serão perdidos permanentemente.",
-                    resetConfirmModalConfirmButton: "Sim, Reiniciar",
+                    resetConfirmModalConfirmButton: "✅ Sim, Reiniciar",
                     drawnPrizesModalTitle: "Cartelas de Brinde Já Sorteadas",
                     modalCloseButton: "Fechar",
                     donationModalTitle: "Apoio ao Projeto Seminarista",
                     donationModalDescription: "Sua doação ajuda a manter este projeto ativo. Agradecemos imensamente!",
                     donationModalPaypalLabel: "Doação via PayPal",
                     donationModalPixLabel: "PIX (Chave Aleatória)",
-                    donationModalCopyButton: "Copiar Chave PIX",
+                    donationModalCopyButton: "📋 Copiar Chave PIX",
                     finalWinnersModalTitle: "Vencedores do Evento",
-                    finalWinnersModalProofButton: "Gerar Prova Final",
-                    finalWinnersModalSupportButton: "Apoie o Seminarista (PIX/PayPal)",
-                    changelogModalTitle: "Histórico de Versões",
+                    finalWinnersModalProofButton: "🧾 Gerar Prova Final",
+                    finalWinnersModalSupportButton: "🤝 Apoie o Seminarista (PIX/PayPal)",
+                    changelogModalTitle: "📜 Histórico de Versões",
                     changelogModalCurrentVersionLabel: "Versão Atual:",
                     settingsModalTitle: "Configurações de Personalização",
                     settingsTabAppearance: "Aparência",
@@ -192,10 +198,10 @@ import jsQR from 'jsqr';
                     shortcutLabelShowInterval: "Abrir Intervalo",
                     settingsLogoTitle: "Logo do Evento",
                     settingsLogoDescription: "Selecione uma imagem (PNG, JPG) para ser o logotipo do seu evento. A imagem será redimensionada para se ajustar ao cabeçalho.",
-                    settingsLogoRemoveButton: "Remover Logo",
+                    settingsLogoRemoveButton: "🗑️ Remover Logo",
                     settingsGlobalSponsorTitle: "Patrocinador Global",
                     settingsGlobalSponsorDescription: "Defina um nome e imagem que aparecerão para qualquer número sorteado que não tenha um patrocinador específico.",
-                    removeGlobalSponsorButton: "Remover Patrocinador Global",
+                    removeGlobalSponsorButton: "🗑️ Remover Patrocinador Global",
                     settingsSponsorsByNumberTitle: "Patrocinadores por Número",
                     settingsSponsorsByNumberEnable: "Habilitar exibição de patrocinador ao sortear número",
                     settingsSponsorsByNumberDescription: "Cadastre um patrocinador para números específicos (de 1 a 75). O nome e a imagem aparecerão em destaque quando o número for sorteado.",
@@ -206,7 +212,7 @@ import jsQR from 'jsqr';
                     settingsBingoTitleDescription: "Personalize o 'grito de vitória'. Mudar para 'AJUDE!' também altera as letras do painel (A-J-U-D-E), ideal para bingos beneficentes.",
                     settingsBoardColorLabel: "Cor de Fundo da Cartela",
                     settingsBoardColorDescription: "Escolha a cor de fundo para os números que ainda não foram sorteados no painel principal.",
-                    settingsBoardColorResetButton: "Limpar Cor",
+                    settingsBoardColorResetButton: "🧼 Limpar Cor",
                     settingsDrawnNumberTitle: "Aparência do Número Sorteado",
                     settingsDrawnTextColorLabel: "Cor do Texto (Letra e Número)",
                     settingsDrawnStrokeColorLabel: "Cor da Borda (Contorno)",
@@ -214,8 +220,8 @@ import jsQR from 'jsqr';
                     settingsModalAutocloseTitle: "Fechamento Automático do Modal",
                     settingsModalAutocloseEnable: "Fechar modais de sorteio automaticamente",
                     settingsModalAutocloseTimeLabel: "Tempo de Exibição",
-                    settingsTestDataButton: "Gerar Vencedores de Teste",
-                    settingsCloseSaveButton: "Fechar e Salvar"
+                    settingsTestDataButton: "🧪 Gerar Vencedores de Teste",
+                    settingsCloseSaveButton: "💾 Fechar e Salvar"
                 },
             },
 
@@ -433,7 +439,7 @@ import jsQR from 'jsqr';
         let winnerDisplayTimeout: any; 
 
         // --- Constants ---
-        const currentVersion = "7.1"; // Foco 100% Local
+        const currentVersion = "7.2"; // Foco 100% Local
         const DYNAMIC_LETTERS = ['B', 'I', 'N', 'G', 'O'];
         const DYNAMIC_LETTERS_AJUDE = ['A', 'J', 'U', 'D', 'E'];
         const BINGO_CONFIG: { [key: string]: { min: number; max: number } } = { B: { min: 1, max: 15 }, I: { min: 16, max: 30 }, N: { min: 31, max: 45 }, G: { min: 46, max: 60 }, O: { min: 61, max: 75 },
@@ -511,7 +517,7 @@ function renderCustomLogo() {
     const headerLogoContainer = document.getElementById('app-logo');
     if (!headerLogoContainer) return;
 
-    const defaultLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzNBRUQiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMCIgZmxvb2Qtb3BhY2l0eT0iMC40Ii8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI0MCIgZmlsbD0idXJsKCNiZykiIGZpbHRlcj0idXJsKCNzaGFkb3cpIiAvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAsIDE2MCkiPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNFRjQ0NDQiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDg1LCAtNDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMzQjgyRjYiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkk8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3MCwgLTYwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjMTBCOTgxIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OPC90ZXh0PgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTUsIC00MCkiPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI0Y1OUUwQiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzAiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOTUiLz4KICAgICAgICAgICAgPHRleHQgeD0iNDAiIHk9IjUyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzFGMjkzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RzwvdGV4dD4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQwLCAwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjRUM0ODk5IiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PPC90ZXh0PgogICAgICAgIDwvZz4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iMzgwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI3MCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIGxldHRlci1zcGFjaW5nPSIyIj5CSU5HTzwvdGV4dD4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0UwRTdGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjQiPlNIT1c8L3RleHQ+Cjwvc3ZnPg==';
+    const defaultLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icHJlbWl1bS1iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTI5M2IiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBmMTcyYSIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ29sZC1ncmFkaWVudCIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmJiZjI0IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iI2Q5NzcwNiIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYjQ1MzA5IiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPGZpbHRlciBpZD0iZ2xvdyI+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjEwIiByZXN1bHQ9ImNvbG9yZWRCbHVyIi8+CiAgICAgICAgICAgIDxmZU1lcmdlPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJjb2xvcmVkQmx1ciIvPgogICAgICAgICAgICAgICAgPGZlTWVyZ2VOb2RlIGluPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgICAgIDwvZmVNZXJnZT4KICAgICAgICA8L2ZpbHRlcj4KICAgICAgICA8ZmlsdGVyIGlkPSJpbm5lci1zaGFkb3ciPgogICAgICAgICAgICA8ZmVPZmZzZXQgZHg9IjAiIGR5PSI0Ii8+CiAgICAgICAgICAgIDxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjQiIHJlc3VsdD0ib2Zmc2V0LWJsdXIiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJvdXQiIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9Im9mZnNldC1ibHVyIiByZXN1bHQ9ImludmVyc2UiLz4KICAgICAgICAgICAgPGZlRmxvb2QgZmxvb2QtY29sb3I9ImJsYWNrIiBmbG9vZC1vcGFjaXR5PSIwLjgiIHJlc3VsdD0iY29sb3IiLz4KICAgICAgICAgICAgPGZlQ29tcG9zaXRlIG9wZXJhdG9yPSJpbiIgaW49ImNvbG9yIiBpbjI9ImludmVyc2UiIHJlc3VsdD0ic2hhZG93Ii8+CiAgICAgICAgICAgIDxmZUNvbXBvc2l0ZSBvcGVyYXRvcj0ib3ZlciIgaW49InNoYWRvdyIgaW4yPSJTb3VyY2VHcmFwaGljIi8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICAKICAgIDwhLS0gT3V0ZXIgUmluZyAtLT4KICAgIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjQwIiBmaWxsPSJ1cmwoI3ByZW1pdW0tYmcpIiBzdHJva2U9IiNmYmJmMjQiIHN0cm9rZS13aWR0aD0iOCIgZmlsdGVyPSJ1cmwoI2dsb3cpIi8+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjIyNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1kYXNoYXJyYXk9IjEwIDE1IiBvcGFjaXR5PSIwLjQiLz4KCiAgICA8IS0tIENvbnRlbnQgLS0+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTYsIDI0MCkiPgogICAgICAgIDwhLS0gVGhlIEJpbmdvIEJhbGwgQmFja2dyb3VuZCAtLT4KICAgICAgICA8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMTYwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjEiIGZpbHRlcj0idXJsKCNpbm5lci1zaGFkb3cpIiAvPgogICAgICAgIAogICAgICAgIDwhLS0gQklOR08gVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSItMjAiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0LCBzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjExMCIgZmlsbD0idXJsKCNnb2xkLWdyYWRpZW50KSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI2dsb3cpIiBsZXR0ZXItc3BhY2luZz0iLTUiIHN0eWxlPSJ0ZXh0LXNoYWRvdzogMCAxMHB4IDIwcHggcmdiYSgwLDAsMCwwLjUpIj5CSU5HTzwvdGV4dD4KICAgICAgICAKICAgICAgICA8IS0tIFNIT1cgVGV4dCAtLT4KICAgICAgICA8dGV4dCB5PSI4MCIgZm9udC1mYW1pbHk9Ik1vbnRzZXJyYXQsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI3MDAiIGZvbnQtc2l6ZT0iNzAiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxNSIgb3BhY2l0eT0iMC45Ij5TSE9XPC90ZXh0PgogICAgPC9nPgoKICAgIDwhLS0gVmVyc2lvbiBCYWRnZSAoT3B0aW9uYWwgYnV0IG5pY2UpIC0tPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDAwLCAxMjApIHNjYWxlKDAuNikiPgogICAgICAgIDxjaXJjbGUgcj0iNjAiIGZpbGw9IiNkOTc3MDYiIHN0cm9rZT0iI2ZiYmYyNCIgc3Ryb2tlLXdpZHRoPSI0IiBmaWx0ZXI9InVybCgjZ2xvdykiLz4KICAgICAgICA8dGV4dCBkeT0iMTUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQ1IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj43LjI8L3RleHQ+CiAgICA8L2c+CgogICAgPCEtLSBEZWNvcmF0aXZlIFN0YXJzIC0tPgogICAgPHBhdGggZD0iTTI1NiA0MCBMMjYyIDYwIEwyODIgNjAgTDI2NiA3MiBMMjcyIDkyIEwyNTYgODAgTDI0MCA5MiBMMjQ2IDcyIEwyMzAgNjAgTDI1MCA2MCBaIiBmaWxsPSIjZmJiZjI0IiBmaWx0ZXI9InVybCgjZ2xvdykiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9Im9wYWNpdHkiIHZhbHVlcz0iMC4zOzE7MC4zIiBkdXI9IjNzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSIgLz4KICAgIDwvcGF0aD4KPC9zdmc+';
     const currentLogo = appStore.state.appConfig.customLogoBase64 || defaultLogo;
 
     if (currentLogo) {
@@ -2784,7 +2790,7 @@ function applyAuctionZoom(scale: number) {
         function createGameElement(gameNumber: number, prizes: { prize1: string, prize2: string, prize3: string }) {
             const { gamesData, appLabels } = appStore.state;
             const gameItem = document.createElement('div');
-            gameItem.className = 'game-item bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out border border-transparent';
+            gameItem.className = 'game-item bg-white dark:bg-gray-700 p-4 rounded-xl shadow-md dark:shadow-lg transition-all duration-300 ease-in-out border border-slate-200 dark:border-transparent';
             gameItem.dataset.gameNumber = gameNumber.toString();
 
             const header = document.createElement('div');
