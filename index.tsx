@@ -622,7 +622,7 @@ function populateSettingsLabelsTab() {
 
         const label = document.createElement('label');
         label.htmlFor = `label-input-${labelKey}`;
-        label.className = 'text-sm font-bold text-slate-400 mb-1';
+        label.className = 'text-sm font-bold text-slate-600 dark:text-slate-400 mb-1';
         label.textContent = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
         
         const input = document.createElement('input');
@@ -667,7 +667,7 @@ function populateSettingsShortcutsTab() {
 
         const label = document.createElement('label');
         label.htmlFor = `shortcut-input-${shortcutKey}`;
-        label.className = 'text-base font-medium text-slate-300 mb-1 sm:mb-0';
+        label.className = 'text-base font-medium text-slate-700 dark:text-slate-300 mb-1 sm:mb-0';
         label.textContent = appStore.state.appLabels[labelKey];
 
         const input = document.createElement('input');
@@ -2051,6 +2051,9 @@ function applyAuctionZoom(scale: number) {
             }
         
             const file = input.files[0];
+            // Clear input value immediately so the same file can be selected again if needed
+            input.value = '';
+            
             const reader = new FileReader();
         
             reader.onload = (e) => {
@@ -2073,14 +2076,11 @@ function applyAuctionZoom(scale: number) {
                 } catch (error: any) {
                     console.error("Falha ao carregar estado do arquivo:", error);
                     showAlert(`Erro ao carregar o arquivo: ${error.message}`);
-                } finally {
-                    input.value = '';
                 }
             };
         
             reader.onerror = () => {
                 showAlert("Não foi possível ler o arquivo selecionado.");
-                 input.value = '';
             };
         
             reader.readAsText(file);
@@ -4521,7 +4521,7 @@ function showRoundEditModal(gameNumber: string) {
             
             (document.getElementById('load-from-file-input') as HTMLInputElement).addEventListener('change', loadStateFromFile);
             document.getElementById('save-to-file-btn')!.addEventListener('click', saveStateToFile);
-            document.getElementById('load-from-file-btn')!.addEventListener('click', () => (document.getElementById('load-from-file-input') as HTMLInputElement).click());
+            // Redundant click listener removed: the label in HTML already has for="load-from-file-input"
 
             if (DOMElements.showCardGeneratorBtn) {
                 DOMElements.showCardGeneratorBtn.addEventListener('click', showCardGeneratorModal);
