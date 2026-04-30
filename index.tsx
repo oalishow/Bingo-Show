@@ -2166,9 +2166,6 @@ function applyAuctionZoom(scale: number) {
 
             // --- NOVO: Brilho e Confete ao sortear número ---
             currentNumberEl.style.boxShadow = `0 0 40px 10px ${bgColor}`;
-            setTimeout(() => {
-                currentNumberEl.style.boxShadow = 'none';
-            }, 1000);
             
             if (typeof confetti === 'function') {
                 confetti({
@@ -3417,7 +3414,6 @@ function applyAuctionZoom(scale: number) {
                 
                 // --- NOVO: Efeitos de Brilho e Confete ---
                 prizeDisplay.style.boxShadow = `0 0 40px 10px ${roundColor}`;
-                setTimeout(() => prizeDisplay.style.boxShadow = 'none', 1000);
                 
                 if (typeof confetti === 'function') {
                     confetti({
