@@ -473,6 +473,8 @@ import jsQR from 'jsqr';
             intervalBtn: document.getElementById('interval-btn'),
             editMenuBtn: document.getElementById('edit-menu-btn'),
             lastNumbersDisplay: document.getElementById('last-numbers-display'),
+            lastPrizesDisplay: document.getElementById('last-prizes-display'),
+            lastPrizesContainer: document.getElementById('last-prizes-container'),
             gamesListEl: document.getElementById('games-list'),
             addExtraGameBtn: document.getElementById('add-extra-game-btn'),
             prizeDrawForm: document.getElementById('prize-draw-form') as HTMLFormElement,
@@ -2137,6 +2139,8 @@ function applyAuctionZoom(scale: number) {
             } else {
                 loadRoundState(null);
             }
+
+            updateLastPrizesDisplay();
         }
 
         // --- Funções do Jogo ---
@@ -2186,16 +2190,10 @@ function applyAuctionZoom(scale: number) {
             void currentNumberEl.offsetWidth; 
             currentNumberEl.classList.add('animate-bounce-in');
 
-            // --- NOVO: Brilho e Confete ao sortear número ---
+            // --- NOVO: Brilho ao sortear número ---
             currentNumberEl.style.boxShadow = `0 0 40px 10px ${bgColor}`;
             
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-            }
+            // Confete removido deste local conforme pedido: "deixe somente para sorteio de cartelas"
             // ------------------------------------------------
             
             updateMasterBoardCell(number);
@@ -2513,9 +2511,16 @@ function applyAuctionZoom(scale: number) {
             
             appStore.removeCalledNumber(number);
 
+            // Re-aplicar animação ao novo último número se houver
+            const remainingNumbers = game.calledNumbers;
+            if (remainingNumbers.length > 0) {
+                const lastNum = remainingNumbers[remainingNumbers.length - 1];
+                updateMasterBoardCell(lastNum);
+            }
+
             const cell = document.getElementById(`master-cell-${number}`) as HTMLElement;
             if (cell) {
-                cell.classList.remove('text-white', 'scale-125', 'text-gray-900');
+                cell.classList.remove('text-white', 'scale-125', 'text-gray-900', 'animate-last-number');
                 cell.style.backgroundColor = ''; 
                 cell.style.transform = '';
                 const activeRoundColor = gamesData[activeGameNumber]?.color;
@@ -2762,13 +2767,17 @@ function applyAuctionZoom(scale: number) {
 
         function updateMasterBoardCell(number: number) {
             const { activeGameNumber, gamesData } = appStore.state;
+            
+            // Remove animação de qualquer número sorteado anteriormente
+            document.querySelectorAll('.animate-last-number').forEach(el => el.classList.remove('animate-last-number'));
+
             const cell = document.getElementById(`master-cell-${number}`) as HTMLElement;
             if (cell) {
                 cell.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-slate-300', 'text-gray-900', 'text-white', 'text-slate-200', 'text-slate-800', 'dark:text-slate-200');
                 cell.style.backgroundColor = ''; 
                 const activeRoundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#16a34a'; 
                 cell.style.backgroundColor = activeRoundColor;
-                cell.classList.add(isLightColor(activeRoundColor) ? 'text-gray-900' : 'text-white', 'scale-125');
+                cell.classList.add(isLightColor(activeRoundColor) ? 'text-gray-900' : 'text-white', 'scale-125', 'animate-last-number');
             }
         }
         
@@ -3306,16 +3315,7 @@ function applyAuctionZoom(scale: number) {
             intervalContentInterval = setInterval(updateContent, 6000);
             intervalClockInterval = setInterval(updateClock, 1000);
             
-            const startConfetti = () => {
-                if (typeof confetti === 'function') {
-                    const particleCount = 2;
-                    confetti({
-                        particleCount, angle: 270, spread: 55, origin: { x: Math.random(), y: 0 },
-                        startVelocity: 15 + (Math.random() * 20), gravity: 0.7, ticks: 300, zIndex: 51,
-                    });
-                }
-            };
-            breakConfettiInterval = setInterval(startConfetti, 150);
+            // Confete de intervalo removido conforme pedido: "deixe somente para sorteio de cartelas"
 
             document.getElementById('close-break-modal-btn')!.onclick = () => {
                 DOMElements.eventBreakModal.classList.add('hidden');
@@ -3364,30 +3364,36 @@ function applyAuctionZoom(scale: number) {
         }
         
         function updateLastPrizesDisplay() {
-            const { drawnPrizeNumbers, activeGameNumber, gamesData } = appStore.state;
-            DOMElements.lastNumbersDisplay.innerHTML = '';
-            if (drawnPrizeNumbers.length === 0) return;
-        
-            const activeRoundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#a855f7';
-        
-            const lastThree = drawnPrizeNumbers.slice(-3).reverse();
-            lastThree.forEach((num: number) => {
+            const { drawnPrizeNumbers } = appStore.state;
+            if (!DOMElements.lastPrizesDisplay) return;
+            DOMElements.lastPrizesDisplay.innerHTML = '';
+            
+            if (drawnPrizeNumbers.length === 0) {
+                if (DOMElements.lastPrizesContainer) DOMElements.lastPrizesContainer.classList.add('hidden');
+                return;
+            }
+            
+            if (DOMElements.lastPrizesContainer) DOMElements.lastPrizesContainer.classList.remove('hidden');
+            const lastFive = drawnPrizeNumbers.slice(-5).reverse();
+            lastFive.forEach((num: number) => {
                 const prizeEl = document.createElement('div');
-                prizeEl.className = 'text-white font-bold rounded-lg w-28 h-16 flex flex-col items-center justify-center text-3xl shadow-md p-1';
+                prizeEl.className = 'text-white font-bold rounded-lg w-28 h-16 flex flex-col items-center justify-center shadow-md p-1 scale-90 sm:scale-100 transform transition-all';
+                const activeRoundColor = (appStore.state.activeGameNumber && appStore.state.gamesData[appStore.state.activeGameNumber]?.color) 
+                    ? appStore.state.gamesData[appStore.state.activeGameNumber].color 
+                    : '#a855f7';
                 prizeEl.style.backgroundColor = activeRoundColor;
                 
                 const labelSpan = document.createElement('span');
-                labelSpan.className = 'text-xs';
+                labelSpan.className = 'text-[10px] uppercase opacity-80 leading-none mb-1';
                 labelSpan.textContent = 'Cartela';
         
                 const numberSpan = document.createElement('span');
-                numberSpan.className = 'text-2xl leading-none';
+                numberSpan.className = 'text-3xl font-black leading-none';
                 numberSpan.textContent = num.toString();
         
                 prizeEl.appendChild(labelSpan);
                 prizeEl.appendChild(numberSpan);
-        
-                DOMElements.lastNumbersDisplay.appendChild(prizeEl);
+                DOMElements.lastPrizesDisplay.appendChild(prizeEl);
             });
         }
 
@@ -3414,12 +3420,17 @@ function applyAuctionZoom(scale: number) {
                     return;
                 }
                 finalNumber = availableNumbers[Math.floor(Math.random() * availableNumbers.length)];
-                appStore.state.drawnPrizeNumbers.push(finalNumber);
             } else {
                 finalNumber = Math.floor(Math.random() * (max - min + 1)) + min;
             }
 
+            appStore.state.drawnPrizeNumbers.push(finalNumber);
+
             const displayContainer = DOMElements.prizeDrawDisplayContainer;
+            
+            // Centraliza a tela no painel de sorteio
+            displayContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
             const mainNumberDisplay = DOMElements.currentNumberEl;
             const mainDisplayLabel = DOMElements.mainDisplayLabel;
 
@@ -3456,17 +3467,44 @@ function applyAuctionZoom(scale: number) {
             setTimeout(() => {
                 clearInterval(shuffleInterval);
                 prizeDisplay.textContent = finalNumber.toString();
-                prizeDisplay.classList.add('animate-custom-flash', 'pulse-glow-animation');
+                prizeDisplay.classList.add('animate-custom-flash', 'animate-lucky-card');
                 
-                // --- NOVO: Efeitos de Brilho e Confete ---
-                prizeDisplay.style.boxShadow = `0 0 40px 10px ${roundColor}`;
+                // --- NOVO: Efeitos de Brilho e Confete Contínuo ---
+                prizeDisplay.style.boxShadow = `0 0 50px 20px ${roundColor}`;
                 
                 if (typeof confetti === 'function') {
+                    // Primeiro estouro grande
                     confetti({
-                        particleCount: 100,
-                        spread: 70,
+                        particleCount: 150,
+                        spread: 100,
                         origin: { y: 0.6 }
                     });
+
+                    // Loop de confete contínuo
+                    const end = Date.now() + (3 * 1000); // 3 segundos de festa (ajustado de 30 para 3)
+                    const colors = ['#bb0000', '#ffffff', '#facc15', '#3b82f6'];
+
+                    const frame = () => {
+                        if (Date.now() > end || displayContainer.classList.contains('hidden')) return;
+
+                        confetti({
+                            particleCount: 2,
+                            angle: 60,
+                            spread: 55,
+                            origin: { x: 0 },
+                            colors: colors
+                        });
+                        confetti({
+                            particleCount: 2,
+                            angle: 120,
+                            spread: 55,
+                            origin: { x: 1 },
+                            colors: colors
+                        });
+
+                        requestAnimationFrame(frame);
+                    };
+                    frame();
                 }
                 // ----------------------------------------
                 
@@ -3474,9 +3512,10 @@ function applyAuctionZoom(scale: number) {
                 updateLastPrizesDisplay();
                 
                 const numberInput = document.getElementById('prize-draw-number-manual') as HTMLInputElement;
-                const nameInput = document.getElementById('prize-draw-name') as HTMLInputElement;
                 if (numberInput) numberInput.value = finalNumber.toString();
-                if (nameInput) nameInput.focus();
+                
+                // "não precisa descer para colocar o nome" - Removido o focus() automático para evitar saltos de tela
+                // nameInput.focus();
 
                 // Removed setTimeout so glow stays until next draw
             }, 5000);
