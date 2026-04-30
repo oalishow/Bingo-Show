@@ -67,7 +67,7 @@ import jsQR from 'jsqr';
                     drawnTextStrokeColor: '#000000',
                     drawnTextStrokeWidth: 2,
                     isEventClosed: false,
-                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4NCiAgPGRlZnM+DQogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJncmFkLWJnIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzE3MjU1NCIvPg0KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWUzYThhIi8+DQogICAgPC9yYWRpYWxHcmFkaWVudD4NCiAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPg0KICAgICAgPGZlRHJvcFNoYWRvdyBkeD0iMyIgZHk9IjUiIHN0ZERldmlhdGlvbj0iMyIgZmxvb2QtY29sb3I9IiMwMDAiIGZsb29kLW9wYWNpdHk9IjAuNSIvPg0KICAgIDwvZmlsdGVyPg0KICA8L2RlZnM+DQogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI1NiIgcj0iMjU2IiBmaWxsPSJ1cmwoI2dyYWQtYmcpIi8+DQogIDxnIGZpbHRlcj0idXJsKCNzaGFkb3cpIj4NCiAgICA8cGF0aCBkPSJNMTI4IDEyOCBMMzg0IDEyOCBMMzg0IDI1NiBMMjU2IDM4NCBMMTI4IDI1NiBaIiBmaWxsPSIjZmFjYzE1IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTUgMjU2IDI1NikiLz4NCiAgICA8cGF0aCBkPSJNMTQ4IDE0OCBMMzY0IDE0OCBMMzY0IDI1NiBMMjU2IDM2NCBMMTQ4IDI1NiBaIiBmaWxsPSIjZmVmMDhhIiB0cmFuc2Zvcm09InJvdGF0ZSgtMTUgMjU2IDI1NikiLz4NCiAgICA8dGV4dCB4PSI1MCUiIHk9IjQyJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTMwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSIjMWUzYThhIiBsZXR0ZXItc3BhY2luZz0iLTUiPkJJTkdPPC90ZXh0Pg0KICAgIDx0ZXh0IHg9IjUwJSIgeT0iNjUlIiBkb21pbmFudC1mYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlyeT0iJ0ludGVyJywgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI5MCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzE3MjU1NCIgbGV0dGVyLXNwYWNpbmc9IjgiPlNIT1c8L3RleHQ+DQogIDwvZz4NCiAgPGc+DQogICAgICA8Y2lyY2xlIGN4PSI5MCIgY3k9IjkwIiByPSIzMCIgZmlsbD0iIzM4YmRmOCIgb3BhY2l0eT0iMC44Ii8+DQogICAgICA8dGV4dCB4PSI5MCIgeT0iOTQiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSInSW50ZXInLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSIjMTcyNTU0Ij5CPC90ZXh0Pg0KICA8L2c+DQogIDxnPg0KICAgICAgPGNpcmNsZSBjeD0iNDIyIiBjeT0iNDIyIiByPSIzMCIgZmlsbD0iI2ZiYmYyNCIgb3BhY2l0eT0iMC44Ii8+DQogICAgICA8dGV4dCB4PSI0MjIiIHk9IjQyNiIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IidJbnRlcicsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI5MDAiIGZpbGw9IiMxNzI1NTQiPjc1PC90ZXh0Pg0KICA8L2c+DQogICAgPGc+DQogICAgICA8Y2lyY2xlIGN4PSI0MDAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSIjYTNlNjM1IiBvcGFjaXR5PSIwLjgiLz4NCiAgPC9nPg0KICAgIDxnPg0KICAgICAgPGNpcmNsZSBjeD0iMTEwIiBjeT0iMzkwIiByPSIyNSIgZmlsbD0iI2Y0NzJiNiIgb3BhY2l0eT0iMC44Ii8+DQogIDwvZz4NCjwvc3ZnPg==',
+                    customLogoBase64: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzNBRUQiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMCIgZmxvb2Qtb3BhY2l0eT0iMC40Ii8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI0MCIgZmlsbD0idXJsKCNiZykiIGZpbHRlcj0idXJsKCNzaGFkb3cpIiAvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAsIDE2MCkiPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNFRjQ0NDQiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDg1LCAtNDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMzQjgyRjYiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkk8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3MCwgLTYwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjMTBCOTgxIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OPC90ZXh0PgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTUsIC00MCkiPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI0Y1OUUwQiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzAiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOTUiLz4KICAgICAgICAgICAgPHRleHQgeD0iNDAiIHk9IjUyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzFGMjkzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RzwvdGV4dD4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQwLCAwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjRUM0ODk5IiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PPC90ZXh0PgogICAgICAgIDwvZz4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iMzgwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI3MCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIGxldHRlci1zcGFjaW5nPSIyIj5CSU5HTzwvdGV4dD4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0UwRTdGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjQiPlNIT1c8L3RleHQ+Cjwvc3ZnPg==',
                     enableSponsorsByNumber: false,
                     enableModalAutoclose: true,
                     modalAutocloseSeconds: 5,
@@ -511,8 +511,11 @@ function renderCustomLogo() {
     const headerLogoContainer = document.getElementById('app-logo');
     if (!headerLogoContainer) return;
 
-    if (appStore.state.appConfig.customLogoBase64) {
-        headerLogoContainer.innerHTML = `<img id="header-logo" src="${appStore.state.appConfig.customLogoBase64}" alt="Logo do Evento" class="w-full h-full object-contain">`;
+    const defaultLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjNEY0NkU1IiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM3QzNBRUQiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgICAgICA8ZmlsdGVyIGlkPSJzaGFkb3ciPgogICAgICAgICAgICA8ZmVEcm9wU2hhZG93IGR4PSIwIiBkeT0iNCIgc3RkRGV2aWF0aW9uPSI0IiBmbG9vZC1jb2xvcj0iIzAwMCIgZmxvb2Qtb3BhY2l0eT0iMC40Ii8+CiAgICAgICAgPC9maWx0ZXI+CiAgICA8L2RlZnM+CiAgICA8Y2lyY2xlIGN4PSIyNTYiIGN5PSIyNTYiIHI9IjI0MCIgZmlsbD0idXJsKCNiZykiIGZpbHRlcj0idXJsKCNzaGFkb3cpIiAvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjAsIDE2MCkiPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsIDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiNFRjQ0NDQiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDg1LCAtNDApIj4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iNDAiIGZpbGw9IiMzQjgyRjYiIGZpbHRlcj0idXJsKCNzaGFkb3cpIi8+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjMwIiBmaWxsPSIjRkZGRkZGIiBvcGFjaXR5PSIwLjk1Ii8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjQwIiB5PSI1MiIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiMxRjI5MzciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkk8L3RleHQ+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3MCwgLTYwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjMTBCOTgxIiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5OPC90ZXh0PgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyNTUsIC00MCkiPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSI0MCIgZmlsbD0iI0Y1OUUwQiIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiLz4KICAgICAgICAgICAgPGNpcmNsZSBjeD0iNDAiIGN5PSI0MCIgcj0iMzAiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOTUiLz4KICAgICAgICAgICAgPHRleHQgeD0iNDAiIHk9IjUyIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iIzFGMjkzNyIgdGV4dC1hbmNob3I9Im1pZGRsZSI+RzwvdGV4dD4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQwLCAwKSI+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9IjQwIiBjeT0iNDAiIHI9IjQwIiBmaWxsPSIjRUM0ODk5IiBmaWx0ZXI9InVybCgjc2hhZG93KSIvPgogICAgICAgICAgICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzMCIgZmlsbD0iI0ZGRkZGRiIgb3BhY2l0eT0iMC45NSIvPgogICAgICAgICAgICA8dGV4dCB4PSI0MCIgeT0iNTIiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjQwIiBmaWxsPSIjMUYyOTM3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5PPC90ZXh0PgogICAgICAgIDwvZz4KICAgIDwvZz4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iMzgwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI3MCIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsdGVyPSJ1cmwoI3NoYWRvdykiIGxldHRlci1zcGFjaW5nPSIyIj5CSU5HTzwvdGV4dD4KICAgIDx0ZXh0IHg9IjI1NiIgeT0iNDQwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0UwRTdGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjQiPlNIT1c8L3RleHQ+Cjwvc3ZnPg==';
+    const currentLogo = appStore.state.appConfig.customLogoBase64 || defaultLogo;
+
+    if (currentLogo) {
+        headerLogoContainer.innerHTML = `<img id="header-logo" src="${currentLogo}" alt="Logo do Evento" class="w-full h-full object-contain">`;
     } else {
         headerLogoContainer.innerHTML = ''; 
     }
@@ -620,7 +623,7 @@ function populateSettingsLabelsTab() {
         input.type = 'text';
         input.id = `label-input-${labelKey}`;
         input.value = appStore.state.appLabels[labelKey];
-        input.className = 'bg-gray-900 text-white p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500';
+        input.className = 'bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500';
 
         input.addEventListener('change', (e) => {
             appStore.state.appLabels[labelKey] = (e.target as HTMLInputElement).value;
@@ -715,13 +718,13 @@ function populateSettingsShortcutsTab() {
         function getModalTemplates() {
             const { appLabels } = appStore.state;
             return {
-                verification: `<div id="verification-modal-content" class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-7xl w-full text-center flex flex-col h-[90vh]">
+                verification: `<div id="verification-modal-content" class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-7xl w-full text-center flex flex-col h-[90vh]">
                                    <div class="flex-shrink-0 flex justify-between items-center mb-2">
-                                       <h2 class="text-3xl font-bold text-white" data-label-key="verificationModalTitle">${appLabels.verificationModalTitle}</h2>
+                                       <h2 class="text-3xl font-bold text-gray-900 dark:text-white" data-label-key="verificationModalTitle">${appLabels.verificationModalTitle}</h2>
                                        <div class="flex items-center gap-2">
-                                           <button id="zoom-out-btn-verification" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
+                                           <button id="zoom-out-btn-verification" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
                                            <span id="verification-zoom-value" class="font-bold text-lg w-16 text-center">100%</span>
-                                           <button id="zoom-in-btn-verification" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
+                                           <button id="zoom-in-btn-verification" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
                                        </div>
                                    </div>
                                    <div class="flex-grow overflow-hidden -mx-4">
@@ -738,13 +741,13 @@ function populateSettingsShortcutsTab() {
                                </div>`,
                 floatingNumber: `<div class="modal-content text-center flex flex-col items-center justify-center p-4">
                                     <div id="floating-number-display-wrapper" class="transition-transform duration-300 flex items-center justify-center" style="width: 420px; height: 420px;">
-                                        <div id="floating-number-display" class="font-black text-white flex justify-center items-center w-full h-full gap-x-2 sm:gap-x-4 mx-auto rounded-full shadow-inner my-4 animate-bounce-in" style="font-size: 240px; line-height: 1; text-shadow: 2px 2px 5px #000;"></div>
+                                        <div id="floating-number-display" class="font-black text-gray-900 dark:text-white flex justify-center items-center w-full h-full gap-x-2 sm:gap-x-4 mx-auto rounded-full shadow-inner my-4 animate-bounce-in" style="font-size: 240px; line-height: 1; text-shadow: 2px 2px 5px #000;"></div>
                                     </div>
                                     <div class="flex-shrink-0 mt-4 flex flex-col items-center z-10">
                                         <div class="my-2 max-w-xs mx-auto w-full flex items-center justify-center gap-2">
-                                           <button id="zoom-out-btn-floating" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
+                                           <button id="zoom-out-btn-floating" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
                                            <span id="floating-number-zoom-value" class="font-bold text-lg w-16 text-center">100%</span>
-                                           <button id="zoom-in-btn-floating" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
+                                           <button id="zoom-in-btn-floating" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
                                        </div>
                                         <div class="flex items-center justify-center gap-4 mt-2">
                                            <button id="cancel-floating-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full text-base">${appLabels.modalBackButton}</button>
@@ -753,9 +756,9 @@ function populateSettingsShortcutsTab() {
                                     </div>
                                 </div>`,
                 sponsorDisplay: `<div class="modal-content text-center flex flex-col items-center justify-center p-4">
-                                    <div id="sponsor-display-content-wrapper" class="bg-gray-800 p-8 rounded-2xl shadow-2xl transition-transform duration-300 w-full max-w-7xl">
+                                    <div id="sponsor-display-content-wrapper" class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl transition-transform duration-300 w-full max-w-7xl">
                                         <div id="sponsor-display-content" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center justify-items-center">
-                                            <div id="sponsor-number-display" class="font-black text-white flex justify-center items-center gap-x-4 rounded-full shadow-inner animate-bounce-in w-[500px] h-[500px] text-[300px]"></div>
+                                            <div id="sponsor-number-display" class="font-black text-gray-900 dark:text-white flex justify-center items-center gap-x-4 rounded-full shadow-inner animate-bounce-in w-[500px] h-[500px] text-[300px]"></div>
                                             <div id="sponsor-info-display" class="flex flex-col items-center justify-center animate-fade-in-up p-4">
                                                 <img id="sponsor-image" src="" class="max-w-full max-h-[450px] object-contain rounded-lg shadow-lg mb-6">
                                                 <p id="sponsor-name" class="font-bold text-amber-400 text-[52px]"></p>
@@ -764,9 +767,9 @@ function populateSettingsShortcutsTab() {
                                     </div>
                                     <div class="flex-shrink-0 mt-4 flex flex-col items-center z-10">
                                          <div class="my-2 max-w-xs mx-auto w-full flex items-center justify-center gap-2">
-                                           <button id="zoom-out-btn-sponsor" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
+                                           <button id="zoom-out-btn-sponsor" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">-</button>
                                            <span id="sponsor-display-zoom-value" class="font-bold text-lg w-16 text-center">100%</span>
-                                           <button id="zoom-in-btn-sponsor" class="bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
+                                           <button id="zoom-in-btn-sponsor" class="bg-gray-200 dark:bg-gray-700 w-10 h-10 rounded-full font-bold text-2xl">+</button>
                                        </div>
                                         <div class="flex items-center justify-center gap-4 mt-2">
                                            <button id="cancel-sponsor-display-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full text-base">${appLabels.modalBackButton}</button>
@@ -774,54 +777,54 @@ function populateSettingsShortcutsTab() {
                                        </div>
                                     </div>
                                 </div>`,
-                winner: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center relative">
-                            <div id="winner-countdown-timer" class="absolute top-4 right-4 bg-gray-900 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl border-2 border-sky-500">20</div>
+                winner: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center relative">
+                            <div id="winner-countdown-timer" class="absolute top-4 right-4 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl border-2 border-sky-500">20</div>
                             <h1 id="winner-title-display" class="text-7xl sm:text-8xl font-black text-amber-400" style="text-shadow: 0 0 20px #f59e0b;"></h1>
                             <div id="winner-prize-display" class="my-6">
                                 <p id="game-text-winner" class="text-2xl font-bold text-sky-400"></p>
                                 <p id="prize-text-winner" class="text-3xl font-bold text-yellow-400 mt-1"></p>
                             </div>
-                            <input type="text" id="winner-name-input" placeholder="${appLabels.winnerModalNamePlaceholder}" class="w-full text-center text-2xl font-bold p-4 border-2 border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <input type="text" id="winner-name-input" placeholder="${appLabels.winnerModalNamePlaceholder}" class="w-full text-center text-2xl font-bold p-4 border-2 border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
                             <button id="register-winner-btn" class="mt-8 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-10 rounded-full text-xl">${appLabels.winnerModalRegisterButton}</button>
-                            <p class="text-xs text-slate-400 mt-4">Pressione ENTER para registrar ou ESC para cancelar</p>
+                            <p class="text-xs text-slate-600 dark:text-slate-400 mt-4">Pressione ENTER para registrar ou ESC para cancelar</p>
                          </div>`,
-                alert: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-red-500 mb-4">${appLabels.alertModalTitle}</h2><p id="custom-alert-message" class="text-slate-300 text-lg"></p><button id="custom-alert-close-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.alertModalOkButton}</button></div>`,
-                congrats: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center"><h2 class="text-5xl font-black text-yellow-400">${appLabels.congratsModalTitle}</h2><div id="congrats-winner-name" contenteditable="true" class="text-4xl font-bold text-white my-4 focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-2"></div><div id="congrats-prize-value" contenteditable="true" class="text-2xl text-slate-300 mb-6 focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-2"></div><p class="text-2xl text-sky-300 mt-4">${appLabels.congratsModalMessage}</p><button id="close-congrats-modal-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.congratsModalCloseButton}</button></div>`,
-                eventBreak: `<div class="modal-content bg-gray-800/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-full h-full text-center flex flex-col justify-between">
+                alert: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-red-500 mb-4">${appLabels.alertModalTitle}</h2><p id="custom-alert-message" class="text-slate-700 dark:text-slate-300 text-lg"></p><button id="custom-alert-close-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.alertModalOkButton}</button></div>`,
+                congrats: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center"><h2 class="text-5xl font-black text-yellow-400">${appLabels.congratsModalTitle}</h2><div id="congrats-winner-name" contenteditable="true" class="text-4xl font-bold text-gray-900 dark:text-white my-4 focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-2"></div><div id="congrats-prize-value" contenteditable="true" class="text-2xl text-slate-700 dark:text-slate-300 mb-6 focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-2"></div><p class="text-2xl text-sky-300 mt-4">${appLabels.congratsModalMessage}</p><button id="close-congrats-modal-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.congratsModalCloseButton}</button></div>`,
+                eventBreak: `<div class="modal-content bg-white dark:bg-gray-800/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-full h-full text-center flex flex-col justify-between">
                                 <header class="flex-shrink-0">
                                     <h2 id="event-break-title" class="text-6xl font-black text-sky-400">${appLabels.intervalModalTitle}</h2>
                                 </header>
                                 <main class="flex-grow my-8 grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden">
                                     <div id="break-left-column" class="flex flex-col items-center justify-center bg-black/20 p-6 rounded-xl">
                                         <h3 id="break-left-title" class="text-5xl font-bold text-amber-400 mb-6">Cardápio</h3>
-                                        <div id="break-left-content" class="text-7xl font-black text-white text-center transition-opacity duration-500 opacity-0"></div>
+                                        <div id="break-left-content" class="text-7xl font-black text-gray-900 dark:text-white text-center transition-opacity duration-500 opacity-0"></div>
                                     </div>
                                     <div id="break-right-column" class="flex flex-col items-center justify-center bg-black/20 p-6 rounded-xl">
                                         <h3 id="break-right-title" class="text-5xl font-bold text-amber-400 mb-6">Apoio</h3>
-                                        <div id="break-right-content" class="text-7xl font-black text-white text-center transition-opacity duration-500 opacity-0"></div>
+                                        <div id="break-right-content" class="text-7xl font-black text-gray-900 dark:text-white text-center transition-opacity duration-500 opacity-0"></div>
                                     </div>
                                 </main>
                                 <footer class="flex-shrink-0 flex justify-between items-center w-full">
-                                    <div id="break-clock" class="text-4xl font-bold text-slate-300"></div>
+                                    <div id="break-clock" class="text-4xl font-bold text-slate-700 dark:text-slate-300"></div>
                                     <button id="close-break-modal-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.modalBackButton}</button>
                                 </footer>
                              </div>`,
-                menuEdit: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-white mb-4">${appLabels.menuEditModalTitle}</h2><p class="text-slate-400 mb-4">${appLabels.menuEditModalDescription}</p><textarea id="menu-textarea" class="w-full h-48 bg-gray-900 text-white p-2 rounded-lg focus:outline-none focus:ring-2 ring-amber-500"></textarea><div class="flex justify-end gap-4 mt-4"><button id="cancel-menu-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-menu-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalSaveButton}</button></div></div>`,
-                winnerEdit: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-white mb-6">${appLabels.winnerEditModalTitle}</h2><div class="space-y-4"><input type="text" id="edit-winner-name" placeholder="${appLabels.winnerEditModalNamePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"><input type="text" id="edit-winner-prize" placeholder="${appLabels.winnerEditModalPrizePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-600 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></div><div class="flex justify-between items-center mt-8 gap-4"><button id="remove-winner-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full">${appLabels.winnerEditModalRemoveButton}</button><div><button id="cancel-winner-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-winner-changes-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full ml-2">${appLabels.modalSaveButton}</button></div></div></div>`,
-                deleteConfirm: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-yellow-400 mb-4">${appLabels.deleteConfirmModalTitle}</h2><p id="delete-confirm-message" class="text-slate-300 text-lg mb-8"></p><div class="flex justify-center gap-4"><button id="cancel-delete-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCancelButton}</button><button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.deleteConfirmModalDeleteButton}</button></div></div>`,
-                clearRoundConfirm: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+                menuEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">${appLabels.menuEditModalTitle}</h2><p class="text-slate-600 dark:text-slate-400 mb-4">${appLabels.menuEditModalDescription}</p><textarea id="menu-textarea" class="w-full h-48 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg focus:outline-none focus:ring-2 ring-amber-500"></textarea><div class="flex justify-end gap-4 mt-4"><button id="cancel-menu-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-menu-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalSaveButton}</button></div></div>`,
+                winnerEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">${appLabels.winnerEditModalTitle}</h2><div class="space-y-4"><input type="text" id="edit-winner-name" placeholder="${appLabels.winnerEditModalNamePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"><input type="text" id="edit-winner-prize" placeholder="${appLabels.winnerEditModalPrizePlaceholder}" class="w-full text-center text-xl font-bold p-3 border-2 border-gray-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></div><div class="flex justify-between items-center mt-8 gap-4"><button id="remove-winner-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full">${appLabels.winnerEditModalRemoveButton}</button><div><button id="cancel-winner-edit-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="save-winner-changes-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full ml-2">${appLabels.modalSaveButton}</button></div></div></div>`,
+                deleteConfirm: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-yellow-400 mb-4">${appLabels.deleteConfirmModalTitle}</h2><p id="delete-confirm-message" class="text-slate-700 dark:text-slate-300 text-lg mb-8"></p><div class="flex justify-center gap-4"><button id="cancel-delete-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCancelButton}</button><button id="confirm-delete-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.deleteConfirmModalDeleteButton}</button></div></div>`,
+                clearRoundConfirm: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
                                        <h2 class="text-2xl font-bold text-yellow-400 mb-4" data-label-key="clearRoundConfirmTitle">${appLabels.clearRoundConfirmTitle}</h2>
-                                       <p class="text-slate-300 text-lg mb-8" data-label-key="clearRoundConfirmMessage">${appLabels.clearRoundConfirmMessage}</p>
+                                       <p class="text-slate-700 dark:text-slate-300 text-lg mb-8" data-label-key="clearRoundConfirmMessage">${appLabels.clearRoundConfirmMessage}</p>
                                        <div class="flex justify-center gap-4">
                                            <button id="cancel-clear-round-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg" data-label-key="clearRoundCancelButton">${appLabels.clearRoundCancelButton}</button>
                                            <button id="confirm-clear-round-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-2 px-6 rounded-full text-lg" data-label-key="clearRoundConfirmButton">${appLabels.clearRoundConfirmButton}</button>
                                        </div>
                                    </div>`,
-                proofOptions: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full"><h2 class="text-3xl font-bold text-white mb-6">${appLabels.proofOptionsModalTitle}</h2><p class="text-slate-400 mb-4">${appLabels.proofOptionsModalDescription}</p><div id="proof-options-list" class="space-y-2 max-h-60 overflow-y-auto"></div><div class="flex justify-end gap-4 mt-6"><button id="cancel-proof-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="generate-selected-proof-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.proofOptionsModalGenerateButton}</button></div></div>`,
+                proofOptions: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full"><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">${appLabels.proofOptionsModalTitle}</h2><p class="text-slate-600 dark:text-slate-400 mb-4">${appLabels.proofOptionsModalDescription}</p><div id="proof-options-list" class="space-y-2 max-h-60 overflow-y-auto"></div><div class="flex justify-end gap-4 mt-6"><button id="cancel-proof-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCancelButton}</button><button id="generate-selected-proof-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.proofOptionsModalGenerateButton}</button></div></div>`,
                 spinningWheel: `<div class="w-full h-full max-w-3xl max-h-[40rem] relative flex items-center justify-center"><div id="bingo-cage" class="w-full h-full absolute spinning-cage"><div id="number-cyclone" class="absolute w-full h-full transform-gpu"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(0deg) translateZ(0px);"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(30deg) translateZ(0px);"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(60deg) translateZ(0px);"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(90deg) translateZ(0px);"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(120deg) translateZ(0px);"></div><div class="absolute w-full h-full border-8 border-gray-500 rounded-full" style="transform: rotateY(150deg) translateZ(0px);"></div></div><div id="drawn-ball-container" class="z-10 opacity-0"></div></div><div class="absolute bottom-10 flex gap-4"><button id="skip-animation-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.spinningWheelSkipButton}</button><button id="close-drawn-btn" class="hidden bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalBackButton}</button></div>`,
-                resetConfirm: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-red-500 mb-4">${appLabels.resetConfirmModalTitle}</h2><p class="text-slate-300 text-lg mb-8">${appLabels.resetConfirmModalMessage}</p><div class="flex justify-center gap-4"><button id="cancel-reset-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCancelButton}</button><button id="confirm-reset-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.resetConfirmModalConfirmButton}</button></div></div>`,
-                drawnPrizes: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center flex flex-col h-[70vh]">
-                                <h2 id="drawn-prizes-title" class="text-3xl font-bold text-white flex-shrink-0">${appLabels.drawnPrizesModalTitle}</h2>
+                resetConfirm: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-2xl font-bold text-red-500 mb-4">${appLabels.resetConfirmModalTitle}</h2><p class="text-slate-700 dark:text-slate-300 text-lg mb-8">${appLabels.resetConfirmModalMessage}</p><div class="flex justify-center gap-4"><button id="cancel-reset-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCancelButton}</button><button id="confirm-reset-btn" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.resetConfirmModalConfirmButton}</button></div></div>`,
+                drawnPrizes: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center flex flex-col h-[70vh]">
+                                <h2 id="drawn-prizes-title" class="text-3xl font-bold text-gray-900 dark:text-white flex-shrink-0">${appLabels.drawnPrizesModalTitle}</h2>
                                 <p id="drawn-prizes-subtitle" class="text-xl font-bold text-amber-400 mb-4 flex-shrink-0"></p>
                                 
                                 <div class="mb-6 flex-shrink-0">
@@ -832,24 +835,24 @@ function populateSettingsShortcutsTab() {
                                 </div>
 
                                 <div class="flex-grow flex flex-col min-h-0">
-                                    <h3 class="text-lg font-semibold text-slate-300 mb-2 flex-shrink-0">Histórico de Sorteios</h3>
-                                    <div id="drawn-prizes-history-list" class="bg-gray-900 rounded-lg p-4 flex-grow overflow-y-auto flex flex-wrap gap-3 justify-center content-start">
+                                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-2 flex-shrink-0">Histórico de Sorteios</h3>
+                                    <div id="drawn-prizes-history-list" class="bg-gray-100 dark:bg-gray-900 rounded-lg p-4 flex-grow overflow-y-auto flex flex-wrap gap-3 justify-center content-start">
                                         <!-- O histórico de números será inserido aqui -->
                                     </div>
                                 </div>
                                 
                                 <button id="close-drawn-prizes-btn" class="mt-6 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg flex-shrink-0">${appLabels.modalCloseButton}</button>
                              </div>`,
-                donation: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-3xl font-black text-amber-400 mb-6">${appLabels.donationModalTitle}</h2><p class="text-slate-300 mb-4">${appLabels.donationModalDescription}</p><div class="space-y-6 text-left"><div class="text-center border-b border-gray-700 pb-6"><p class="text-lg font-bold text-white mb-4">${appLabels.donationModalPaypalLabel}</p><div class="flex justify-center"><form action="https://www.paypal.com/donate" method="post" target="_top"><input type="hidden" name="hosted_button_id" value="FLVDNY994MNQS" /><input type="image" src="https://www.paypalobjects.com/pt_BR/BR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Faça doações com o botão do PayPal" /></form></div></div><div class="pt-6"><p class="text-lg font-bold text-white mb-2">${appLabels.donationModalPixLabel}</p><div class="flex flex-col items-center"><div id="pix-key-display" contenteditable="false" class="bg-gray-700 text-white p-3 rounded-lg text-center text-sm font-mono select-all cursor-text max-w-full overflow-hidden whitespace-nowrap overflow-ellipsis"></div><button id="copy-pix-btn" class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all">${appLabels.donationModalCopyButton}</button></div></div></div><button id="close-donation-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCloseButton}</button></div>`,
-                finalWinners: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-center h-[95vh] flex flex-col justify-between">
+                donation: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center"><h2 class="text-3xl font-black text-amber-400 mb-6">${appLabels.donationModalTitle}</h2><p class="text-slate-700 dark:text-slate-300 mb-4">${appLabels.donationModalDescription}</p><div class="space-y-6 text-left"><div class="text-center border-b border-gray-700 pb-6"><p class="text-lg font-bold text-gray-900 dark:text-white mb-4">${appLabels.donationModalPaypalLabel}</p><div class="flex justify-center"><form action="https://www.paypal.com/donate" method="post" target="_top"><input type="hidden" name="hosted_button_id" value="FLVDNY994MNQS" /><input type="image" src="https://www.paypalobjects.com/pt_BR/BR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Faça doações com o botão do PayPal" /></form></div></div><div class="pt-6"><p class="text-lg font-bold text-gray-900 dark:text-white mb-2">${appLabels.donationModalPixLabel}</p><div class="flex flex-col items-center"><div id="pix-key-display" contenteditable="false" class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white p-3 rounded-lg text-center text-sm font-mono select-all cursor-text max-w-full overflow-hidden whitespace-nowrap overflow-ellipsis"></div><button id="copy-pix-btn" class="mt-3 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all">${appLabels.donationModalCopyButton}</button></div></div></div><button id="close-donation-btn" class="mt-8 bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full text-lg">${appLabels.modalCloseButton}</button></div>`,
+                finalWinners: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-center h-[95vh] flex flex-col justify-between">
                                 <h2 id="end-title" class="text-5xl font-black text-yellow-400 mb-4 flex-shrink-0">${appLabels.finalWinnersModalTitle}</h2>
                                 <div id="end-winner-display" class="flex-grow flex items-center justify-center p-4 min-h-[150px]">
-                                    <div id="current-winner-card" class="bg-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-2xl text-center transform scale-90 opacity-0 transition-all duration-500"></div>
+                                    <div id="current-winner-card" class="bg-gray-200 dark:bg-gray-700 p-8 rounded-xl shadow-2xl w-full max-w-2xl text-center transform scale-90 opacity-0 transition-all duration-500"></div>
                                 </div>
                                 <!-- Seção de Patrocinadores -->
                                 <div id="final-sponsors-section" class="flex-shrink-0 my-4">
-                                    <h3 class="text-2xl font-bold text-slate-300 mb-3">Agradecimento aos Patrocinadores</h3>
-                                    <div id="final-sponsors-list" class="bg-gray-900 p-3 rounded-lg max-h-40 overflow-y-auto flex flex-wrap justify-center gap-4">
+                                    <h3 class="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-3">Agradecimento aos Patrocinadores</h3>
+                                    <div id="final-sponsors-list" class="bg-gray-100 dark:bg-gray-900 p-3 rounded-lg max-h-40 overflow-y-auto flex flex-wrap justify-center gap-4">
                                         <!-- Lista de patrocinadores aqui -->
                                     </div>
                                 </div>
@@ -861,15 +864,15 @@ function populateSettingsShortcutsTab() {
                                     <button id="donation-final-btn" class="mt-2 bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg w-full max-w-xs">${appLabels.finalWinnersModalSupportButton}</button>
                                 </div>
                                </div>`,
-                changelog: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col h-[90vh]">
-                               <h2 class="text-3xl font-black text-white mb-2 flex-shrink-0">${appLabels.changelogModalTitle}</h2>
+                changelog: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full flex flex-col h-[90vh]">
+                               <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2 flex-shrink-0">${appLabels.changelogModalTitle}</h2>
                                <p class="text-xl font-bold text-sky-400 mb-4 flex-shrink-0">${appLabels.changelogModalCurrentVersionLabel} ${currentVersion}</p>
-                               <div id="version-history-content" class="flex-grow w-full bg-gray-900 text-white p-4 rounded-lg overflow-y-auto text-sm leading-snug"></div>
+                               <div id="version-history-content" class="flex-grow w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 rounded-lg overflow-y-auto text-sm leading-snug"></div>
                                <div class="flex justify-end gap-4 mt-4 flex-shrink-0">
                                    <button id="close-changelog-btn" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalCloseButton}</button>
                                </div>
                            </div>`,
-                settings: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-4xl w-full">
+                settings: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-4xl w-full">
                     <h2 class="text-3xl font-black text-amber-400 mb-4">${appLabels.settingsModalTitle}</h2>
                     
                     <div class="border-b border-gray-700 mb-4">
@@ -884,114 +887,121 @@ function populateSettingsShortcutsTab() {
                     <div id="settings-content-container" class="max-h-[60vh] overflow-y-auto pr-4">
                         <div id="tab-content-appearance" class="space-y-6 text-left">
                            <div class="border-b border-gray-700 pb-6">
-                                <label class="block text-xl font-bold text-slate-300 mb-2">${appLabels.settingsLogoTitle}</label>
-                                <p class="text-xs text-slate-400 mb-4">${appLabels.settingsLogoDescription}</p>
+                                <label class="block text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">${appLabels.settingsLogoTitle}</label>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">${appLabels.settingsLogoDescription}</p>
                                 <div class="flex items-center gap-4">
-                                    <img id="custom-logo-preview" src="" alt="Pré-visualização do Logo" class="w-24 h-24 bg-gray-700 rounded-lg object-contain border border-gray-600">
+                                    <img id="custom-logo-preview" src="" alt="Pré-visualização do Logo" class="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-lg object-contain border border-gray-300 dark:border-gray-600">
                                     <div class="flex-grow">
-                                        <label for="custom-logo-upload" class="block text-sm font-medium text-slate-300 mb-2">Selecione uma imagem</label>
-                                        <input type="file" id="custom-logo-upload" accept="image/png, image/jpeg, image/gif, image/webp" class="block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
+                                        <label for="custom-logo-upload" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Selecione uma imagem</label>
+                                        <input type="file" id="custom-logo-upload" accept="image/png, image/jpeg, image/gif, image/webp" class="block w-full text-sm text-slate-600 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
                                     </div>
                                 </div>
                                 <button id="remove-custom-logo-btn" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-lg text-sm">${appLabels.settingsLogoRemoveButton}</button>
                             </div>
                              <div class="border-b border-gray-700 pb-6">
-                                <h3 class="text-xl font-bold text-slate-300 mb-2">${appLabels.settingsModalAutocloseTitle}</h3>
-                                <div class="flex items-center gap-3 bg-gray-700 p-3 rounded-lg mb-4">
+                                <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">${appLabels.settingsModalAutocloseTitle}</h3>
+                                <div class="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 p-3 rounded-lg mb-4">
                                     <input type="checkbox" id="enable-modal-autoclose" class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                    <label for="enable-modal-autoclose" class="text-slate-200 font-medium">${appLabels.settingsModalAutocloseEnable}</label>
+                                    <label for="enable-modal-autoclose" class="text-slate-800 dark:text-slate-200 font-medium">${appLabels.settingsModalAutocloseEnable}</label>
                                 </div>
                                 <div>
-                                    <label for="modal-autoclose-timer" class="block text-sm font-bold text-slate-400 mb-1">${appLabels.settingsModalAutocloseTimeLabel} (<span id="modal-autoclose-value">5</span>s)</label>
-                                    <input type="range" id="modal-autoclose-timer" min="3" max="15" value="5" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
+                                    <label for="modal-autoclose-timer" class="block text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">${appLabels.settingsModalAutocloseTimeLabel} (<span id="modal-autoclose-value">5</span>s)</label>
+                                    <input type="range" id="modal-autoclose-timer" min="3" max="15" value="5" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
                                 </div>
                             </div>
                             <div class="border-b border-gray-700 pb-6">
-                                <label class="block text-xl font-bold text-slate-300 mb-2">${appLabels.settingsBingoTitleLabel}</label>
-                                <p class="text-xs text-slate-400 mb-4">${appLabels.settingsBingoTitleDescription}</p>
-                                <select id="bingo-title-select" class="w-full p-3 bg-gray-700 text-white rounded-lg focus:ring-sky-500 focus:border-sky-500">
+                                <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Tema</h3>
+                                <div class="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 p-3 rounded-lg">
+                                    <input type="checkbox" id="theme-toggle" class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                                    <label for="theme-toggle" class="text-slate-800 dark:text-slate-200 font-medium">Modo Escuro (Desmarque para Modo Claro)</label>
+                                </div>
+                            </div>
+                            <div class="border-b border-gray-700 pb-6">
+                                <label class="block text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">${appLabels.settingsBingoTitleLabel}</label>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">${appLabels.settingsBingoTitleDescription}</p>
+                                <select id="bingo-title-select" class="w-full p-3 bg-gray-200 dark:bg-gray-700 text-white rounded-lg focus:ring-sky-500 focus:border-sky-500">
                                     <option value="BINGO">BINGO!</option>
                                     <option value="AJUDE">AJUDE!</option>
                                 </select>
                             </div>
                             <div class="border-b border-gray-700 pb-6">
-                                <label class="block text-xl font-bold text-slate-300 mb-2">${appLabels.settingsBoardColorLabel}</label>
-                                <p class="text-xs text-slate-400 mb-4">${appLabels.settingsBoardColorDescription}</p>
+                                <label class="block text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">${appLabels.settingsBoardColorLabel}</label>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 mb-4">${appLabels.settingsBoardColorDescription}</p>
                                 <div class="flex items-center justify-center gap-4">
-                                     <input type="color" id="board-color-picker" class="w-12 h-12 p-1 border-2 border-gray-600 rounded-full cursor-pointer" value="#FFFFFF">
+                                     <input type="color" id="board-color-picker" class="w-12 h-12 p-1 border-2 border-gray-300 dark:border-gray-600 rounded-full cursor-pointer" value="#FFFFFF">
                                      <button id="reset-board-color-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all">${appLabels.settingsBoardColorResetButton}</button>
                                 </div>
                             </div>
-                            <h3 class="text-lg font-bold text-white mb-3">${appLabels.settingsDrawnNumberTitle}</h3>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3">${appLabels.settingsDrawnNumberTitle}</h3>
                             <div>
-                                <label class="block text-sm font-bold text-slate-400 mb-1">${appLabels.settingsDrawnTextColorLabel}</label>
-                                <input type="color" id="drawn-text-color-picker" class="w-12 h-12 p-1 border-2 border-gray-600 rounded-full cursor-pointer" value="#FFFFFF">
+                                <label class="block text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">${appLabels.settingsDrawnTextColorLabel}</label>
+                                <input type="color" id="drawn-text-color-picker" class="w-12 h-12 p-1 border-2 border-gray-300 dark:border-gray-600 rounded-full cursor-pointer" value="#FFFFFF">
                             </div>
                              <div>
-                                <label class="block text-sm font-bold text-slate-400 mb-1">${appLabels.settingsDrawnStrokeColorLabel}</label>
-                                <input type="color" id="drawn-stroke-color-picker" class="w-12 h-12 p-1 border-2 border-gray-600 rounded-full cursor-pointer" value="#000000">
+                                <label class="block text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">${appLabels.settingsDrawnStrokeColorLabel}</label>
+                                <input type="color" id="drawn-stroke-color-picker" class="w-12 h-12 p-1 border-2 border-gray-300 dark:border-gray-600 rounded-full cursor-pointer" value="#000000">
                             </div>
                             <div>
-                                <label for="drawn-stroke-width-slider" class="block text-sm font-bold text-slate-400 mb-1">${appLabels.settingsDrawnStrokeWidthLabel} (<span id="drawn-stroke-width-value">2</span>px)</label>
-                                <input type="range" id="drawn-stroke-width-slider" min="0" max="10" value="2" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
+                                <label for="drawn-stroke-width-slider" class="block text-sm font-bold text-slate-600 dark:text-slate-400 mb-1">${appLabels.settingsDrawnStrokeWidthLabel} (<span id="drawn-stroke-width-value">2</span>px)</label>
+                                <input type="range" id="drawn-stroke-width-slider" min="0" max="10" value="2" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
                             </div>
                         </div>
 
                         <div id="tab-content-sponsors" class="hidden space-y-4 text-left">
                             <div class="border-b border-gray-700 pb-6 mb-6">
-                               <h3 class="text-xl font-bold text-slate-300 mb-2" data-label-key="settingsGlobalSponsorTitle">${appLabels.settingsGlobalSponsorTitle}</h3>
-                               <p class="text-sm text-slate-400 mb-4" data-label-key="settingsGlobalSponsorDescription">${appLabels.settingsGlobalSponsorDescription}</p>
+                               <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2" data-label-key="settingsGlobalSponsorTitle">${appLabels.settingsGlobalSponsorTitle}</h3>
+                               <p class="text-sm text-slate-600 dark:text-slate-400 mb-4" data-label-key="settingsGlobalSponsorDescription">${appLabels.settingsGlobalSponsorDescription}</p>
                                <div class="flex items-center gap-4">
-                                   <img id="global-sponsor-preview" src="" alt="Pré-visualização do Patrocinador Global" class="w-24 h-24 bg-gray-900 rounded-lg object-contain border border-gray-600">
+                                   <img id="global-sponsor-preview" src="" alt="Pré-visualização do Patrocinador Global" class="w-24 h-24 bg-gray-100 dark:bg-gray-900 rounded-lg object-contain border border-gray-300 dark:border-gray-600">
                                    <div class="flex-grow space-y-2">
                                        <div>
-                                           <label for="global-sponsor-name" class="block text-sm font-medium text-slate-300 mb-1">Nome do Patrocinador Global</label>
-                                           <input type="text" id="global-sponsor-name" class="block w-full text-sm p-2 bg-gray-900 text-white rounded-lg">
+                                           <label for="global-sponsor-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nome do Patrocinador Global</label>
+                                           <input type="text" id="global-sponsor-name" class="block w-full text-sm p-2 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg">
                                        </div>
                                        <div>
-                                            <label for="global-sponsor-upload" class="block text-sm font-medium text-slate-300 mb-1">Imagem do Patrocinador Global</label>
-                                           <input type="file" id="global-sponsor-upload" accept="image/*" class="block w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
+                                            <label for="global-sponsor-upload" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Imagem do Patrocinador Global</label>
+                                           <input type="file" id="global-sponsor-upload" accept="image/*" class="block w-full text-sm text-slate-600 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100">
                                        </div>
                                    </div>
                                </div>
                                <button id="remove-global-sponsor-btn" class="mt-2 bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-lg text-sm" data-label-key="removeGlobalSponsorButton">${appLabels.removeGlobalSponsorButton}</button>
                            </div>
-                           <h3 class="text-xl font-bold text-slate-300">${appLabels.settingsSponsorsByNumberTitle}</h3>
-                           <div class="flex items-center gap-3 bg-gray-700 p-3 rounded-lg">
+                           <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300">${appLabels.settingsSponsorsByNumberTitle}</h3>
+                           <div class="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 p-3 rounded-lg">
                                 <input type="checkbox" id="enable-sponsors-by-number-checkbox" class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-                                <label for="enable-sponsors-by-number-checkbox" class="text-slate-200 font-medium">${appLabels.settingsSponsorsByNumberEnable}</label>
+                                <label for="enable-sponsors-by-number-checkbox" class="text-slate-800 dark:text-slate-200 font-medium">${appLabels.settingsSponsorsByNumberEnable}</label>
                            </div>
-                           <p class="text-sm text-slate-400">${appLabels.settingsSponsorsByNumberDescription}</p>
+                           <p class="text-sm text-slate-600 dark:text-slate-400">${appLabels.settingsSponsorsByNumberDescription}</p>
                            <div id="sponsors-by-number-container" class="space-y-1"></div>
                         </div>
                         
                         <div id="tab-content-labels" class="hidden">
                             <div class="border-b border-gray-700 pb-4 mb-4 space-y-4">
-                                <h3 class="text-xl font-bold text-slate-300">Nomenclatura dos Prêmios</h3>
+                                <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300">Nomenclatura dos Prêmios</h3>
                                 <div>
-                                    <label for="label-prize1Label" class="text-base font-medium text-slate-300">Prêmio 1 (ex: Quina)</label>
-                                    <input type="text" id="label-prize1Label" class="w-full bg-gray-900 text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <p class="text-xs text-slate-400 mt-1">O nome do primeiro prêmio a ser ganho na rodada. Geralmente uma linha ou quina.</p>
+                                    <label for="label-prize1Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 1 (ex: Quina)</label>
+                                    <input type="text" id="label-prize1Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">O nome do primeiro prêmio a ser ganho na rodada. Geralmente uma linha ou quina.</p>
                                 </div>
                                 <div>
-                                    <label for="label-prize2Label" class="text-base font-medium text-slate-300">Prêmio 2 (ex: Cartela Cheia)</label>
-                                    <input type="text" id="label-prize2Label" class="w-full bg-gray-900 text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <p class="text-xs text-slate-400 mt-1">O nome do prêmio principal, que geralmente encerra a rodada.</p>
+                                    <label for="label-prize2Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 2 (ex: Cartela Cheia)</label>
+                                    <input type="text" id="label-prize2Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">O nome do prêmio principal, que geralmente encerra a rodada.</p>
                                 </div>
                                 <div>
-                                    <label for="label-prize3Label" class="text-base font-medium text-slate-300">Prêmio 3 (ex: Azarão)</label>
-                                    <input type="text" id="label-prize3Label" class="w-full bg-gray-900 text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
-                                    <p class="text-xs text-slate-400 mt-1">Um prêmio opcional, como para quem fica por uma bola ou tem a cartela com mais números no final.</p>
+                                    <label for="label-prize3Label" class="text-base font-medium text-slate-700 dark:text-slate-300">Prêmio 3 (ex: Azarão)</label>
+                                    <input type="text" id="label-prize3Label" class="w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 mt-1 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+                                    <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">Um prêmio opcional, como para quem fica por uma bola ou tem a cartela com mais números no final.</p>
                                 </div>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-300 mt-6 mb-4">Todos os Textos</h3>
+                            <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mt-6 mb-4">Todos os Textos</h3>
                              <div id="labels-form-container" class="space-y-4 text-left grid grid-cols-1 md:grid-cols-2 gap-4">
                              </div>
                         </div>
 
                         <div id="tab-content-shortcuts" class="hidden space-y-6 text-left">
-                            <h3 class="text-xl font-bold text-slate-300">${appLabels.shortcutsEditTitle}</h3>
-                            <p class="text-sm text-slate-400">${appLabels.shortcutsEditDescription}</p>
+                            <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300">${appLabels.shortcutsEditTitle}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">${appLabels.shortcutsEditDescription}</p>
                             <div id="shortcuts-form-container" class="space-y-4">
                                 <!-- Os campos de atalho serão inseridos aqui pelo JS -->
                             </div>
@@ -1003,19 +1013,19 @@ function populateSettingsShortcutsTab() {
                         <button id="close-settings-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.settingsCloseSaveButton}</button>
                     </div>
                 </div>`,
-                roundEdit: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full">
-                    <h2 id="round-edit-title" class="text-3xl font-bold text-white mb-6">Editar Rodada</h2>
+                roundEdit: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full">
+                    <h2 id="round-edit-title" class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Editar Rodada</h2>
                     <div class="space-y-4">
                         <div>
-                            <label for="round-edit-name" class="block text-sm font-medium text-slate-400 mb-1">Nome da Rodada</label>
-                            <input type="text" id="round-edit-name" class="w-full text-lg font-bold p-2 border border-gray-600 bg-gray-900 text-white rounded-md focus:ring-sky-500 focus:border-sky-500">
+                            <label for="round-edit-name" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Nome da Rodada</label>
+                            <input type="text" id="round-edit-name" class="w-full text-lg font-bold p-2 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-md focus:ring-sky-500 focus:border-sky-500">
                         </div>
                         <div id="round-edit-prizes-container" class="space-y-4">
                             <!-- Inputs de prêmios serão inseridos dinamicamente aqui -->
                         </div>
                         <div>
-                            <label for="round-edit-description" class="block text-sm font-medium text-slate-400 mb-1">Descrição da Rodada (Opcional)</label>
-                            <textarea id="round-edit-description" class="w-full h-24 bg-gray-900 text-white p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500" placeholder="Ex: Rodada especial em prol da construção..."></textarea>
+                            <label for="round-edit-description" class="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Descrição da Rodada (Opcional)</label>
+                            <textarea id="round-edit-description" class="w-full h-24 bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500" placeholder="Ex: Rodada especial em prol da construção..."></textarea>
                         </div>
                     </div>
                     <div class="flex justify-end gap-4 mt-8">
@@ -1023,31 +1033,31 @@ function populateSettingsShortcutsTab() {
                         <button id="save-round-edit-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-full">${appLabels.modalSaveButton}</button>
                     </div>
                 </div>`,
-                nextRound: `<div class="modal-content next-round-modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full text-center overflow-hidden">
+                nextRound: `<div class="modal-content next-round-modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-lg w-full text-center overflow-hidden">
                     <h2 class="text-3xl font-bold text-sky-400 mb-4">Troca de Rodada!</h2>
                     <div class="flex items-center justify-center gap-4 text-xl my-6">
                         <div class="flex-1 text-right p-3 bg-red-900/50 rounded-lg">
                             <p class="text-sm text-red-300">Encerrada</p>
-                            <p id="completed-round-name" class="font-bold text-white"></p>
+                            <p id="completed-round-name" class="font-bold text-gray-900 dark:text-white"></p>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                         <div class="flex-1 text-left p-3 bg-green-900/50 rounded-lg">
                             <p class="text-sm text-green-300">Próxima</p>
-                            <p id="next-round-name" class="font-bold text-white"></p>
+                            <p id="next-round-name" class="font-bold text-gray-900 dark:text-white"></p>
                         </div>
                     </div>
-                    <div class="w-full bg-gray-700 rounded-full h-2.5 mt-6">
+                    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-6">
                       <div id="next-round-progress" class="bg-sky-500 h-2.5 rounded-full" style="width: 100%; transition: width 5s linear;"></div>
                     </div>
                  </div>`,
                 cardGenerator: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-left flex flex-col h-[90vh]">
-                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 flex-shrink-0">Gerador de Cartelas</h2>
+                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-900 dark:text-white mb-4 flex-shrink-0">Gerador de Cartelas</h2>
                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 flex-shrink-0">
-                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo de Natal)" class="md:col-span-2 w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <input type="number" id="card-quantity" placeholder="Quantidade" value="100" class="w-full text-center text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <select id="card-per-page" class="w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo de Natal)" class="md:col-span-2 w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <input type="number" id="card-quantity" placeholder="Quantidade" value="100" class="w-full text-center text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <select id="card-per-page" class="w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                                           <option value="1">1 por Folha</option>
                                           <option value="2">2 por Folha</option>
                                           <option value="4">4 por Folha</option>
@@ -1055,8 +1065,8 @@ function populateSettingsShortcutsTab() {
                                        </select>
                                    </div>
                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 flex-shrink-0">
-                                       <textarea id="card-prizes-text" placeholder="Prêmios / Rodadas (Opcional, aparece à esquerda)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
-                                       <textarea id="card-menu-text" placeholder="Cardápio (Opcional, aparece à direita)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                       <textarea id="card-prizes-text" placeholder="Prêmios / Rodadas (Opcional, aparece à esquerda)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                       <textarea id="card-menu-text" placeholder="Cardápio (Opcional, aparece à direita)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                                    </div>
                                    <div class="flex items-center gap-2 mb-4 flex-shrink-0">
                                        <input type="checkbox" id="card-use-logo" class="w-5 h-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
@@ -1066,19 +1076,23 @@ function populateSettingsShortcutsTab() {
                                         <button id="generate-cards-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full">Gerar e Visualizar</button>
                                         <button id="print-cards-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-full hidden">Imprimir Cartelas</button>
                                    </div>
-                                   <div id="card-print-preview" class="flex-grow bg-gray-50 dark:bg-gray-900 rounded-lg p-4 overflow-y-auto flex items-center justify-center">
-                                        <p class="text-slate-400 text-center">Defina as opções, clique em "Gerar e Visualizar" para criar as cartelas.</p>
+                                   <div id="card-print-preview" class="flex-grow bg-gray-50 dark:bg-gray-100 dark:bg-gray-900 rounded-lg p-4 overflow-y-auto flex items-center justify-center">
+                                        <p class="text-slate-600 dark:text-slate-400 text-center">Defina as opções, clique em "Gerar e Visualizar" para criar as cartelas.</p>
                                    </div>
                                    <button id="close-card-generator-btn" class="mt-4 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg flex-shrink-0 self-center">${appLabels.modalCloseButton}</button>
                                </div>`,
-                cardScanner: `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center">
-                                <h2 class="text-3xl font-bold text-white mb-4">Verificar Cartela com Câmera</h2>
-                                <div id="scanner-container" class="relative w-full aspect-square bg-gray-900 rounded-lg overflow-hidden">
+                cardScanner: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center">
+                                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Verificar Cartela</h2>
+                                <div class="mb-6 flex gap-2">
+                                    <input type="number" id="manual-card-id-input" placeholder="Nº da Cartela (ex: 123)" class="flex-grow text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                    <button id="verify-manual-card-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg text-lg whitespace-nowrap">Verificar</button>
+                                </div>
+                                <div class="relative w-full aspect-square bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden">
                                     <video id="scanner-video" class="w-full h-full object-cover" playsinline></video>
                                     <canvas id="scanner-canvas" class="hidden"></canvas>
                                     <div class="absolute inset-0 border-8 border-red-500/50" style="clip-path: polygon(0% 0%, 0% 25%, 25% 25%, 25% 0%, 75% 0%, 75% 25%, 100% 25%, 100% 75%, 75% 75%, 75% 100%, 25% 100%, 25% 75%, 0% 75%);"></div>
                                 </div>
-                                <p id="scanner-message" class="text-slate-400 mt-4 h-6">Aponte o QR Code da cartela para a câmera.</p>
+                                <p id="scanner-message" class="text-slate-600 dark:text-slate-400 mt-4 h-6">Aponte o QR Code ou digite o número acima.</p>
                                 <button id="close-card-scanner-btn" class="mt-4 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg">${appLabels.modalCancelButton}</button>
                             </div>`,
             };
@@ -1177,7 +1191,7 @@ function showProofOptionsModal(isFinal = false) {
     const createCheckbox = (id: string, label: string, checked = true) => `
         <div class="flex items-center">
             <input id="proof-option-${id}" type="checkbox" ${checked ? 'checked' : ''} class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-            <label for="proof-option-${id}" class="ml-3 text-sm text-slate-200">${label}</label>
+            <label for="proof-option-${id}" class="ml-3 text-sm text-slate-800 dark:text-slate-200">${label}</label>
         </div>
     `;
 
@@ -1289,7 +1303,7 @@ function showDrawnPrizesModal() {
                 </div>
             `;
         } else {
-            lastDrawnDisplay.innerHTML = `<p class="text-slate-400">Nenhum brinde sorteado ainda.</p>`;
+            lastDrawnDisplay.innerHTML = `<p class="text-slate-600 dark:text-slate-400">Nenhum brinde sorteado ainda.</p>`;
         }
     };
 
@@ -1297,7 +1311,7 @@ function showDrawnPrizesModal() {
         historyList.innerHTML = '';
         [...drawnPrizeNumbers].reverse().forEach(num => {
             const prizeEl = document.createElement('div');
-            prizeEl.className = 'relative bg-gray-700 text-white font-bold rounded-lg w-20 h-14 flex items-center justify-center text-2xl shadow-md cursor-pointer group';
+            prizeEl.className = 'relative bg-gray-200 dark:bg-gray-700 text-white font-bold rounded-lg w-20 h-14 flex items-center justify-center text-2xl shadow-md cursor-pointer group';
             prizeEl.textContent = num.toString();
 
             const deleteBtn = document.createElement('button');
@@ -1355,7 +1369,7 @@ function showFinalWinnersModal() {
         sponsorsList.innerHTML = uniqueSponsors.map(s => `
             <div class="flex flex-col items-center">
                 <img src="${s.image}" alt="${s.name}" class="w-20 h-20 object-contain rounded-md bg-white p-1">
-                <span class="text-xs text-slate-300 mt-1">${s.name}</span>
+                <span class="text-xs text-slate-700 dark:text-slate-300 mt-1">${s.name}</span>
             </div>
         `).join('');
     } else {
@@ -1366,7 +1380,7 @@ function showFinalWinnersModal() {
     let winnerIndex = 0;
     const displayNextWinner = () => {
         if (allWinners.length === 0) {
-            winnerDisplay.innerHTML = `<h3 class="text-3xl font-bold text-white">Nenhum vencedor registrado.</h3>`;
+            winnerDisplay.innerHTML = `<h3 class="text-3xl font-bold text-gray-900 dark:text-white">Nenhum vencedor registrado.</h3>`;
             winnerDisplay.classList.remove('scale-90', 'opacity-0');
             winnerDisplay.classList.add('scale-100', 'opacity-100');
             return;
@@ -1382,7 +1396,7 @@ function showFinalWinnersModal() {
             winnerDisplay.innerHTML = `
                 <p class="text-2xl font-bold text-sky-400 mb-2">${game ? game.name : 'Prêmio Especial'}</p>
                 <h3 class="text-5xl font-black text-amber-300">${winner.name}</h3>
-                <p class="text-3xl font-bold text-white mt-2">${winner.prize}</p>
+                <p class="text-3xl font-bold text-gray-900 dark:text-white mt-2">${winner.prize}</p>
             `;
             
             winnerDisplay.classList.remove('scale-90', 'opacity-0');
@@ -1465,7 +1479,7 @@ function populateSettingsSponsorsTab() {
     });
 
     const header = `
-        <div class="grid grid-cols-[auto_1fr_1fr] gap-2 items-center text-sm font-bold text-slate-400 mb-2 px-2">
+        <div class="grid grid-cols-[auto_1fr_1fr] gap-2 items-center text-sm font-bold text-slate-600 dark:text-slate-400 mb-2 px-2">
             <span>${appStore.state.appLabels.settingsSponsorNumberLabel}</span>
             <span>${appStore.state.appLabels.settingsSponsorNameLabel}</span>
             <span>${appStore.state.appLabels.settingsSponsorImageLabel}</span>
@@ -1477,17 +1491,17 @@ function populateSettingsSponsorsTab() {
         const sponsor = appStore.state.appConfig.sponsorsByNumber[i] || { name: '', image: '' };
         
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-center p-2 rounded-lg hover:bg-gray-700/50';
+        row.className = 'grid grid-cols-[auto_1fr_1fr_auto] gap-2 items-center p-2 rounded-lg hover:bg-gray-200 dark:bg-gray-700/50';
 
         const numberLabel = document.createElement('span');
-        numberLabel.className = 'font-bold text-lg text-slate-300';
+        numberLabel.className = 'font-bold text-lg text-slate-700 dark:text-slate-300';
         numberLabel.textContent = i.toString();
 
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.value = sponsor.name;
         nameInput.placeholder = 'Nome do patrocinador...';
-        nameInput.className = 'w-full bg-gray-900 text-white p-1 rounded-md text-sm';
+        nameInput.className = 'w-full bg-gray-100 dark:bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-1 rounded-md text-sm';
         nameInput.addEventListener('change', (e) => {
             if (!appStore.state.appConfig.sponsorsByNumber[i]) appStore.state.appConfig.sponsorsByNumber[i] = { name: '', image: '' };
             appStore.state.appConfig.sponsorsByNumber[i].name = (e.target as HTMLInputElement).value;
@@ -1497,7 +1511,7 @@ function populateSettingsSponsorsTab() {
         const imageInput = document.createElement('input');
         imageInput.type = 'file';
         imageInput.accept = 'image/*';
-        imageInput.className = 'text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 w-full';
+        imageInput.className = 'text-xs text-slate-600 dark:text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 w-full';
         imageInput.addEventListener('change', async (e) => {
             const file = (e.target as HTMLInputElement).files?.[0];
             if (file) {
@@ -1512,7 +1526,7 @@ function populateSettingsSponsorsTab() {
         const removeImageBtn = document.createElement('button');
         removeImageBtn.innerHTML = '🗑️';
         removeImageBtn.title = 'Remover imagem do patrocinador';
-        removeImageBtn.className = 'text-slate-400 hover:text-red-500 rounded p-1 text-sm transition-colors';
+        removeImageBtn.className = 'text-slate-600 dark:text-slate-400 hover:text-red-500 rounded p-1 text-sm transition-colors';
         removeImageBtn.addEventListener('click', () => {
             if (appStore.state.appConfig.sponsorsByNumber[i]) {
                 appStore.state.appConfig.sponsorsByNumber[i].image = '';
@@ -2151,7 +2165,9 @@ function applyAuctionZoom(scale: number) {
             let strokeStyle = `${strokeWidth}px ${strokeColor}`;
             
             const roundColor = gamesData[activeGameNumber]?.color;
-            const bgColor = roundColor || (appConfig.boardColor !== 'default' ? appConfig.boardColor : '#f1f5f9');
+            const isDarkTheme = document.documentElement.classList.contains('dark');
+            const defaultBg = isDarkTheme ? '#1e293b' : '#f1f5f9';
+            const bgColor = roundColor || (appConfig.boardColor !== 'default' ? appConfig.boardColor : defaultBg);
             currentNumberEl.style.backgroundColor = bgColor;
             
             currentNumberEl.style.color = mainColor;
@@ -2494,12 +2510,12 @@ function applyAuctionZoom(scale: number) {
 
                 if (activeRoundColor) {
                     cell.style.backgroundColor = hexToRgba(activeRoundColor, 0.25)!;
-                    cell.classList.add('text-slate-200');
+                    cell.classList.add('text-slate-800', 'dark:text-slate-200');
                 } else if (appConfig.boardColor !== 'default') {
                     cell.style.backgroundColor = appConfig.boardColor;
                     cell.classList.add(isLightColor(appConfig.boardColor) ? 'text-gray-900' : 'text-white');
                 } else {
-                    cell.classList.add('bg-gray-700', 'text-slate-300');
+                    cell.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-slate-300');
                 }
             }
             DOMElements.lastNumbersDisplay.innerHTML = '';
@@ -2507,7 +2523,7 @@ function applyAuctionZoom(scale: number) {
             lastFive.forEach((num: number) => {
                 const letter = getLetterForNumber(num);
                 const numberEl = document.createElement('div');
-                numberEl.className = 'bg-gray-700 text-slate-100 font-bold rounded-lg w-24 h-16 flex items-center justify-center text-3xl shadow-md';
+                numberEl.className = 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-slate-100 font-bold rounded-lg w-24 h-16 flex items-center justify-center text-3xl shadow-md';
                 numberEl.textContent = `${letter}-${num}`;
                 DOMElements.lastNumbersDisplay.appendChild(numberEl);
             });
@@ -2671,7 +2687,7 @@ function applyAuctionZoom(scale: number) {
                         cell.style.backgroundColor = appConfig.boardColor;
                         cellClasses += isLightColor(appConfig.boardColor) ? ' text-gray-900' : ' text-white';
                     } else {
-                        cellClasses += ' bg-gray-700 text-slate-300';
+                        cellClasses += ' bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-slate-300';
                     }
                     cell.className = cellClasses;
                     
@@ -2702,19 +2718,19 @@ function applyAuctionZoom(scale: number) {
             for (let i = 1; i <= 75; i++) {
                 const cell = document.getElementById(`master-cell-${i}`) as HTMLElement;
                 if (cell) {
-                    cell.classList.remove('scale-125', 'text-gray-900', 'text-slate-200', 'text-white');
+                    cell.classList.remove('scale-125', 'text-gray-900', 'text-slate-200', 'text-slate-800', 'text-white');
                     cell.style.backgroundColor = '';
                     cell.style.transform = '';
                     cell.className = 'bingo-cell flex items-center justify-center font-black rounded-full transition-all duration-300 w-20 h-20 text-5xl';
 
                     if (applyCustomColor && activeRoundColor) {
                         cell.style.backgroundColor = hexToRgba(activeRoundColor, 0.25)!; 
-                        cell.classList.add('text-slate-200');
+                        cell.classList.add('text-slate-800', 'dark:text-slate-200');
                     } else if (applyCustomColor && appConfig.boardColor !== 'default') {
                         cell.style.backgroundColor = appConfig.boardColor;
                         cell.classList.add(isLightColor(appConfig.boardColor) ? 'text-gray-900' : 'text-white');
                     } else {
-                        cell.classList.add('bg-gray-700', 'text-slate-300');
+                        cell.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-slate-300');
                     }
                     if (appConfig.enableSponsorsByNumber && appConfig.sponsorsByNumber[i] && appConfig.sponsorsByNumber[i].image) {
                          cell.classList.add('has-sponsor');
@@ -2727,7 +2743,7 @@ function applyAuctionZoom(scale: number) {
             const { activeGameNumber, gamesData } = appStore.state;
             const cell = document.getElementById(`master-cell-${number}`) as HTMLElement;
             if (cell) {
-                cell.classList.remove('bg-gray-700', 'text-slate-300', 'text-gray-900', 'text-white', 'text-slate-200');
+                cell.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-800', 'dark:text-slate-300', 'text-gray-900', 'text-white', 'text-slate-200', 'text-slate-800', 'dark:text-slate-200');
                 cell.style.backgroundColor = ''; 
                 const activeRoundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#16a34a'; 
                 cell.style.backgroundColor = activeRoundColor;
@@ -2748,7 +2764,7 @@ function applyAuctionZoom(scale: number) {
             lastFive.forEach((num: number) => {
                 const l = getLetterForNumber(num);
                 const numberEl = document.createElement('div');
-                numberEl.className = 'bg-gray-700 text-slate-100 font-bold rounded-lg w-24 h-16 flex items-center justify-center text-3xl shadow-md';
+                numberEl.className = 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-slate-100 font-bold rounded-lg w-24 h-16 flex items-center justify-center text-3xl shadow-md';
                 numberEl.textContent = `${l}-${num}`;
                 DOMElements.lastNumbersDisplay.appendChild(numberEl);
             });
@@ -2768,13 +2784,13 @@ function applyAuctionZoom(scale: number) {
         function createGameElement(gameNumber: number, prizes: { prize1: string, prize2: string, prize3: string }) {
             const { gamesData, appLabels } = appStore.state;
             const gameItem = document.createElement('div');
-            gameItem.className = 'game-item bg-gray-700 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out border border-transparent';
+            gameItem.className = 'game-item bg-gray-100 dark:bg-gray-700 p-4 rounded-xl shadow-lg transition-all duration-300 ease-in-out border border-transparent';
             gameItem.dataset.gameNumber = gameNumber.toString();
 
             const header = document.createElement('div');
             header.className = 'flex justify-between items-center';
             const title = document.createElement('h3');
-            title.className = 'text-lg font-bold text-white';
+            title.className = 'text-lg font-bold text-slate-800 dark:text-white';
             title.textContent = gamesData[gameNumber]?.name || `Rodada ${gameNumber}`;
 
             const controlsWrapper = document.createElement('div');
@@ -2825,12 +2841,12 @@ function applyAuctionZoom(scale: number) {
                 prizeInputWrapper.className = 'flex items-center gap-2';
                 
                 const label = document.createElement('label');
-                label.className = 'text-xs font-bold text-slate-400 prize-input-label';
+                label.className = 'text-xs font-bold text-slate-500 dark:text-slate-400 prize-input-label';
                 label.textContent = `${appLabels[('prize' + (index + 1) + 'Label') as keyof typeof appLabels]}:`;
 
                 const input = document.createElement('input');
                 input.type = 'text';
-                input.className = 'prize-input w-full text-sm font-bold p-1 border border-gray-600 bg-gray-800 text-white rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500';
+                input.className = 'prize-input w-full text-sm font-bold p-1 border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-1 focus:ring-sky-500';
                 input.value = prizes[prizeKey as keyof typeof prizes];
                 input.dataset.prizeKey = prizeKey;
                 input.addEventListener('change', (e) => {
@@ -2962,15 +2978,15 @@ function applyAuctionZoom(scale: number) {
             sortedNumbers.forEach((num: number) => {
                 const letter = getLetterForNumber(num);
                 const numberEl = document.createElement('div');
-                numberEl.className = 'verification-number flex items-center justify-center font-black rounded-full transition-colors duration-200 cursor-pointer bg-gray-700 text-slate-200';
+                numberEl.className = 'verification-number flex items-center justify-center font-black rounded-full transition-colors duration-200 cursor-pointer bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200';
                 numberEl.dataset.number = num.toString();
                 numberEl.innerHTML = `<span>${letter}</span><span class="ml-1">${num}</span>`;
                 
                 numberEl.addEventListener('click', () => {
                     numberEl.classList.toggle('bg-green-500');
                     numberEl.classList.toggle('text-white');
-                    numberEl.classList.toggle('bg-gray-700');
-                    numberEl.classList.toggle('text-slate-200');
+                    numberEl.classList.toggle('bg-gray-200'); numberEl.classList.toggle('dark:bg-gray-700');
+                    numberEl.classList.toggle('text-slate-800'); numberEl.classList.toggle('dark:text-slate-200');
                 });
                 verificationNumbersContainer.appendChild(numberEl);
             });
@@ -3165,7 +3181,7 @@ function applyAuctionZoom(scale: number) {
             winnerCard.dataset.winnerId = winnerData.id.toString();
 
             const prizeText = winnerData.bingoType === 'Sorteio' ? winnerData.prize : `${appLabels[winnerData.bingoType + 'Label' as keyof typeof appLabels]} (${winnerData.prize})`;
-            winnerCard.innerHTML = `<h4 class="text-lg font-bold text-white">${winnerData.name}</h4>
+            winnerCard.innerHTML = `<h4 class="text-lg font-bold text-slate-800 dark:text-white">${winnerData.name}</h4>
                                      <p class="text-sm text-amber-300">${prizeText}</p>
                                      <p class="text-xs text-slate-400 mt-1">${winnerData.gameNumber === 'Brinde' || winnerData.gameNumber === 'Leilão' ? '' : gamesData[winnerData.gameNumber]?.name || `Rodada ${winnerData.gameNumber}`}</p>`;
             
@@ -3300,7 +3316,7 @@ function applyAuctionZoom(scale: number) {
             if (isComplete) {
                 gameItem.classList.add('game-completed-style');
                 gameItem.classList.remove('cursor-pointer');
-                buttonContainer.innerHTML = `<button class="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded-lg text-sm cursor-pointer reopen-btn">Reabrir Rodada</button>`;
+                buttonContainer.innerHTML = `<button class="w-full bg-gray-500 text-white font-bold py-2 px-4 rounded-lg text-sm cursor-pointer reopen-btn">🔄 Reabrir Rodada</button>`;
                 gameItem.classList.add('animate-flash-complete');
                 setTimeout(() => gameItem.classList.remove('animate-flash-complete'), 1000);
             } else {
@@ -3309,7 +3325,7 @@ function applyAuctionZoom(scale: number) {
                 const gameNumber = gameItem.getAttribute('data-game-number');
                 const isActive = appStore.state.activeGameNumber === gameNumber;
                 
-                buttonContainer.innerHTML = `<button class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn">${isActive ? 'Jogando...' : 'Jogar'}</button>`;
+                buttonContainer.innerHTML = `<button class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all shadow-lg play-btn">${isActive ? '▶️ Jogando...' : '▶️ Jogar'}</button>`;
                  if (isActive) {
                     const playBtn = buttonContainer.querySelector('.play-btn');
                     if(playBtn) playBtn.classList.add('playing-btn');
@@ -3432,7 +3448,7 @@ function applyAuctionZoom(scale: number) {
                 if (numberInput) numberInput.value = finalNumber.toString();
                 if (nameInput) nameInput.focus();
 
-                setTimeout(() => prizeDisplay.classList.remove('pulse-glow-animation'), 4000);
+                // Removed setTimeout so glow stays until next draw
             }, 5000);
 
             appStore.debouncedSave();
@@ -3468,7 +3484,7 @@ function showRoundEditModal(gameNumber: string) {
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `
             <label for="round-edit-${prizeKey}" class="block text-sm font-medium text-slate-400 mb-1">${labelText}</label>
-            <input type="text" id="round-edit-${prizeKey}" data-prize-key="${prizeKey}" value="${prizeValue}" class="w-full p-2 bg-gray-900 text-white rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
+            <input type="text" id="round-edit-${prizeKey}" data-prize-key="${prizeKey}" value="${prizeValue}" class="w-full p-2 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white rounded-lg text-sm focus:ring-sky-500 focus:border-sky-500">
         `;
         prizesContainer.appendChild(wrapper);
     });
@@ -3897,7 +3913,39 @@ function showRoundEditModal(gameNumber: string) {
 
             closeBtn.onclick = cleanupScanner;
 
+            const manualInput = document.getElementById('manual-card-id-input') as HTMLInputElement;
+            const manualBtn = document.getElementById('verify-manual-card-btn') as HTMLButtonElement;
+            manualBtn.addEventListener('click', () => {
+                const searchId = manualInput.value.trim();
+                if (!searchId) {
+                    showAlert("Digite o número da cartela.");
+                    return;
+                }
+                
+                // Procurar nas cartelas pelo numero curto (series)
+                let foundUuid = "";
+                for (const [uuid, card] of Object.entries(appStore.state.cardsData)) {
+                    if (card.series.toString() === searchId) {
+                        foundUuid = uuid;
+                        break;
+                    }
+                }
+                
+                if (foundUuid) {
+                    cleanupScanner();
+                    verifyCardByQRCode(foundUuid);
+                } else {
+                    showAlert("Cartela N° " + searchId + " não encontrada na base de dados.");
+                }
+            });
+            manualInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') manualBtn.click();
+            });
+
             try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error("Navegador não suporta acesso à câmera ou execução em contexto inseguro.");
+                }
                 scannerStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
                 video.srcObject = scannerStream;
                 video.setAttribute("playsinline", "true");
@@ -3930,10 +3978,22 @@ function showRoundEditModal(gameNumber: string) {
                     }
                 };
                 scannerAnimationId = requestAnimationFrame(tick);
-            } catch (error) {
-                console.error("Erro ao acessar a câmera:", error);
-                message.textContent = "Erro ao acessar a câmera. Verifique as permissões.";
-                message.classList.add("text-red-400");
+            } catch (error: any) {
+                console.warn("Erro ao acessar a câmera:", error);
+                message.innerHTML = `<b>Câmera Indisponível:</b> ${error.message || "Permissão negada"}.<br>Caso não consiga habilitar, digite o número da cartela acima.`;
+                message.classList.add("text-amber-500");
+                message.classList.remove("text-slate-400");
+                
+                // Keep the manual input working by just hiding the video area or showing a placeholder
+                video.classList.add("hidden");
+                const parent = video.parentElement;
+                if (parent && !document.getElementById('camera-placeholder')) {
+                    const placeholder = document.createElement("div");
+                    placeholder.id = "camera-placeholder";
+                    placeholder.className = "w-full h-full flex flex-col items-center justify-center bg-gray-200 dark:bg-gray-800 text-gray-500 dark:text-gray-400 p-4 text-center";
+                    placeholder.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg><p>Câmera desativada ou sem permissão.</p><p class="text-sm mt-2 font-bold">Use o campo de texto acima.</p>`;
+                    parent.appendChild(placeholder);
+                }
             }
         }
 
@@ -3976,12 +4036,12 @@ function showRoundEditModal(gameNumber: string) {
             cardHTML += `</div>`;
             
             const resultHtml = isWinner ? 
-                `<h3 class="text-2xl font-bold text-green-400 mb-2">BINGO VÁLIDO!</h3><p class="text-slate-200">Todos os números da cartela foram cantados!</p>` :
-                `<h3 class="text-2xl font-bold text-red-400 mb-2">BINGO INVÁLIDO</h3><p class="text-slate-200">Faltam ${(totalNumbers - hits)} número(s).</p>`;
+                `<h3 class="text-2xl font-bold text-green-400 mb-2">BINGO VÁLIDO!</h3><p class="text-slate-800 dark:text-slate-200">Todos os números da cartela foram cantados!</p>` :
+                `<h3 class="text-2xl font-bold text-red-400 mb-2">BINGO INVÁLIDO</h3><p class="text-slate-800 dark:text-slate-200">Faltam ${(totalNumbers - hits)} número(s).</p>`;
                 
-            DOMElements.customAlertModal.innerHTML = `<div class="modal-content bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-                <h2 class="text-3xl font-bold text-white mb-2">Resultado da Verificação</h2>
-                <h3 class="text-xl text-slate-300 mb-4">Cartela N° ${String(cardData.series).padStart(4, '0')}</h3>
+            DOMElements.customAlertModal.innerHTML = `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Resultado da Verificação</h2>
+                <h3 class="text-xl text-slate-800 dark:text-slate-300 mb-4">Cartela N° ${String(cardData.series).padStart(4, '0')}</h3>
                 ${resultHtml}
                 ${cardHTML}
                 <button id="close-card-result-btn" class="mt-6 bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-8 rounded-full text-lg">Fechar</button>
@@ -4347,6 +4407,20 @@ function showRoundEditModal(gameNumber: string) {
             });
 
             DOMElements.showSettingsBtn.addEventListener('click', showSettingsModal);
+
+            const themeToggleMainBtn = document.getElementById('theme-toggle-main-btn');
+            if (themeToggleMainBtn) {
+                themeToggleMainBtn.addEventListener('click', () => {
+                    const themeToggle = document.getElementById('theme-toggle') as HTMLInputElement;
+                    // Toggle current value
+                    appStore.state.appConfig.isDarkMode = !appStore.state.appConfig.isDarkMode;
+                    if (themeToggle) {
+                        themeToggle.checked = appStore.state.appConfig.isDarkMode;
+                    }
+                    applyTheme();
+                    appStore.debouncedSave();
+                });
+            }
 
             document.getElementById('add-50-bid')!.addEventListener('click', () => incrementAuctionBid(50));
             document.getElementById('add-100-bid')!.addEventListener('click', () => incrementAuctionBid(100));

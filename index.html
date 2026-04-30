@@ -321,12 +321,16 @@
     </style>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
     <meta name="description" content="An interactive bingo and prize show application designed for local, offline events. Manage rounds, draw numbers, track winners, and customize the game experience.">
     <canvas id="confetti-canvas"></canvas>
     
     <div class="flex flex-col min-h-screen">
         <header class="text-center py-4 flex-shrink-0 relative mt-6">
+            <button id="theme-toggle-main-btn" class="absolute top-0 right-4 p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors h-10 w-10 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 shadow-sm" title="Alternar Modo Claro/Escuro">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            </button>
             <div class="flex flex-col items-center justify-center">
                 <!-- App Logo (será preenchido dinamicamente) -->
                 <div id="app-logo" class="w-32 h-32 sm:w-48 sm:h-48 mb-2 logo-animation">
@@ -343,48 +347,52 @@
         <main class="grid grid-cols-1 lg:grid-cols-5 gap-6 p-4 sm:p-6">
             
             <!-- BARRA LATERAL ESQUERDA: VÍDEO, CONTROLES GERAIS E VENCEDORES -->
-            <aside class="lg:col-span-1 bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col">
+            <aside class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col">
                 
                 
-
-                <!-- NOVO: Histórico de Versões -->
-                <button id="show-changelog-btn" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="versionHistoryButton">Histórico de Versões</button>
 
                 <!-- NOVO: Botão de Configurações de Personalização -->
-                <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">Personalizar</button>
+                <button id="show-settings-btn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all mb-4 flex-shrink-0" data-label-key="customizeButton">🎨 Personalizar</button>
 
                 <!-- 2. BOTÕES DE CONTROLE GERAIS -->
                 <div class="flex flex-col gap-2 mb-4 flex-shrink-0">
-                    <button id="show-card-generator-btn" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all">Gerar Cartelas</button>
-                    <button id="show-card-scanner-btn" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all">Escanear Cartela</button>
-                    <button id="save-to-file-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="saveToFileButton">Salvar no Computador</button>
-                    <label id="load-from-file-btn" for="load-from-file-input" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all text-center cursor-pointer" data-label-key="loadFromFileButton">Carregar do Computador</label>
-                    <input type="file" id="load-from-file-input" class="hidden" accept=".json,application/json">
-                    <div class="flex gap-2">
-                        <button id="interval-btn" class="flex-grow bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="intervalButton">Intervalo</button>
-                        <button id="edit-menu-btn" title="Editar Cardápio" class="flex-shrink-0 bg-gray-600 hover:bg-gray-500 text-white font-bold p-2 rounded-lg text-sm shadow-lg transition-all">
+                    <button id="show-card-scanner-btn" disabled class="bg-indigo-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-sm shadow-sm transition-all text-center">🔎 Verificar (Em breve)</button>
+                </div>
+                
+                <!-- AÇÕES EXTRAS -->
+                <div class="flex flex-col gap-2 mb-4 flex-shrink-0">
+                    <button id="show-card-generator-btn" disabled class="w-full bg-teal-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-sm shadow-sm transition-all text-center">🖨️ Gerar Cartelas (Em breve)</button>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="save-to-file-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg transition-all text-center" data-label-key="saveToFileButton">💾 Salvar (PC)</button>
+                        <label id="load-from-file-btn" for="load-from-file-input" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-lg transition-all text-center cursor-pointer" data-label-key="loadFromFileButton">📂 Carregar</label>
+                        <input type="file" id="load-from-file-input" class="hidden" accept=".json,application/json">
+                    </div>
+                    <button id="interval-btn" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-2 rounded-lg text-sm shadow-lg transition-all text-center" data-label-key="intervalButton">⏱️ Intervalo</button>
+                    <div class="flex gap-2 items-center">
+                        <button id="edit-menu-btn" title="Editar Cardápio" class="flex-grow bg-slate-300 dark:bg-gray-600 hover:bg-slate-400 dark:hover:bg-gray-500 text-slate-800 dark:text-white font-bold p-2 rounded-lg text-sm shadow-lg transition-all flex justify-center items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" /></svg>
+                             Editar Cardápio
                         </button>
                     </div>
-                    <button id="share-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-base shadow-lg transition-all" data-label-key="generateProofButton">Gerar Prova</button>
-                    <button id="end-event-btn" class="hidden w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="endEventButton">Encerrar Evento</button>
-                    <button id="reset-event-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="resetEventButton">Reiniciar Evento</button>
+                    <button id="share-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-base shadow-lg transition-all" data-label-key="generateProofButton">🧾 Gerar Prova</button>
+                    <button id="end-event-btn" class="hidden w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="endEventButton">🛑 Encerrar Evento</button>
+                    <button id="reset-event-btn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="resetEventButton">⚠️ Reiniciar Evento</button>
                 </div>
-
+                
                 <!-- LEGENDA DE ATALHOS -->
                 <div id="shortcuts-legend" class="mt-4 flex-shrink-0">
                     <h3 class="text-base font-bold text-sky-400 mb-3 text-center" data-label-key="quickShortcutsTitle">Atalhos Rápidos</h3>
-                    <ul id="shortcuts-legend-list" class="space-y-2 text-xs text-slate-400 pl-4">
+                    <ul id="shortcuts-legend-list" class="space-y-2 text-xs text-slate-600 dark:text-slate-400 pl-4">
                         <!-- Conteúdo dinâmico via JS -->
                     </ul>
                 </div>
 
                 <!-- 3. VENCEDORES (LISTA FLEXÍVEL E SCROLLÁVEL) -->
-                <h2 class="text-2xl font-bold text-slate-300 mb-2 flex-shrink-0 mt-4" data-label-key="winnersTitle">Vencedores</h2>
+                <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-300 mb-2 flex-shrink-0 mt-4" data-label-key="winnersTitle">Vencedores</h2>
                 <div id="winners-container" class="space-y-4 flex-grow overflow-y-auto pr-2"></div>
 
                 <!-- INSCREVA-SE -->
-                <div class="bg-gray-700 p-4 rounded-xl text-center mt-4 flex-shrink-0">
+                <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-xl text-center mt-4 flex-shrink-0">
                     <h3 class="text-base font-bold text-sky-400 mb-3" data-label-key="subscribeTitle">Inscreva-se no Canal</h3>
                     <a href="https://www.youtube.com/@iaecatolico" target="_blank" class="block w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="subscribeButton">Inscrever-se no Canal</a>
                 </div>
@@ -393,10 +401,10 @@
             <!-- COLUNA CENTRAL: PAINEL, NÚMERO ANUNCIado E BRINDES -->
             <div class="lg:col-span-3 flex flex-col gap-6">
                 <!-- PAINEL DE NÚMEROS -->
-                <section id="board-section" class="p-4 bg-gray-800 rounded-2xl shadow-xl">
+                <section id="board-section" class="p-4 bg-white dark:bg-gray-800 rounded-2xl shadow-xl">
                     <div class="flex items-center justify-between mb-4 relative">
-                        <h2 class="text-xl font-bold text-center text-slate-300 w-full" data-label-key="bingoBoardTitle">Painel de Números</h2>
-                        <button id="fullscreen-board-btn" class="absolute right-0 p-2 bg-gray-700 hover:bg-gray-600 rounded text-slate-300 transition-colors" title="Tela Cheia">
+                        <h2 class="text-xl font-bold text-center text-slate-800 dark:text-slate-300 w-full" data-label-key="bingoBoardTitle">Painel de Números</h2>
+                        <button id="fullscreen-board-btn" class="absolute right-0 p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:bg-gray-600 rounded text-slate-800 dark:text-slate-300 transition-colors" title="Tela Cheia">
                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                              </svg>
@@ -404,25 +412,25 @@
                     </div>
                     
                     <!-- NOVO PAINEL DE RODADA ATIVA -->
-                    <div id="active-round-panel" class="bg-gray-700 rounded-lg mb-4 p-6 text-center transition-all shadow-inner hidden cursor-pointer hover:bg-gray-600" title="Clique para editar prêmios e descrição">
+                    <div id="active-round-panel" class="bg-gray-200 dark:bg-gray-700 rounded-lg mb-4 p-6 text-center transition-all shadow-inner hidden cursor-pointer hover:bg-gray-300 dark:bg-gray-600" title="Clique para editar prêmios e descrição">
                         <div class="grid grid-cols-3 items-center gap-x-4">
                             <div id="active-round-info" class="text-left">
                                 <p id="active-round-name" class="text-3xl font-bold text-sky-400"></p>
-                                <p class="text-sm text-slate-400 mt-1"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
                             </div>
-                            <div id="active-round-prizes" class="text-center border-x border-gray-600 px-4 text-lg prize-highlight">
+                            <div id="active-round-prizes" class="text-center border-x border-slate-300 dark:border-gray-600 px-4 text-lg prize-highlight">
                                 <!-- Prêmios serão inseridos aqui -->
                             </div>
                             <div id="active-round-stats" class="text-right">
-                                <p class="text-sm text-slate-400">Números Sorteados</p>
-                                <p id="active-round-called-count" class="text-3xl font-bold text-white"></p>
+                                <p class="text-sm text-slate-600 dark:text-slate-400">Números Sorteados</p>
+                                <p id="active-round-called-count" class="text-3xl font-bold text-gray-900 dark:text-white"></p>
                             </div>
                         </div>
-                        <div id="active-round-description-display" class="marquee-container text-slate-300 text-base mt-3 pt-3 border-t border-gray-600 hidden text-left italic">
+                        <div id="active-round-description-display" class="marquee-container text-slate-800 dark:text-slate-300 text-base mt-3 pt-3 border-t border-slate-300 dark:border-gray-600 hidden text-left italic">
                             <span class="marquee-text"></span>
                         </div>
                     </div>
-                    <div id="no-active-round-panel" class="text-lg font-bold text-center text-slate-400 bg-gray-700 py-4 rounded-lg mb-4 transition-all shadow-inner">
+                    <div id="no-active-round-panel" class="text-lg font-bold text-center text-slate-600 dark:text-slate-400 bg-gray-200 dark:bg-gray-700 py-4 rounded-lg mb-4 transition-all shadow-inner">
                         Selecione uma Rodada
                     </div>
                     
@@ -430,10 +438,10 @@
                     <div id="bingo-board-wrapper" class="w-full mx-auto overflow-x-auto">
                         <!-- AQUI AS LETRAS B-I-N-G-O/A-J-U-D-E SERÃO RENDERIZADAS DINAMICAMENTE -->
                         <div id="bingo-board" class="grid grid-cols-10 gap-x-2 sm:gap-x-4 min-w-max"></div>
-                    <div id="fullscreen-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-700 p-4 rounded-lg">
+                    <div id="fullscreen-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
                         <div class="flex-1">
-                            <label for="fs-board-zoom-slider" class="block text-xs font-bold text-slate-400 mb-1">Zoom do Painel (<span id="fs-board-zoom-value">100</span>%)</label>
-                            <input type="range" id="fs-board-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                            <label for="fs-board-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Zoom do Painel (<span id="fs-board-zoom-value">100</span>%)</label>
+                            <input type="range" id="fs-board-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
                         </div>
                         <div class="flex gap-2">
                              <button id="fs-next-round-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105">Próxima Rodada</button>
@@ -452,27 +460,27 @@
                 
                 <div id="middle-row-section" class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
                     <!-- CONTROLES -->
-                    <div id="controls-panel-left" class="lg:col-span-1 bg-gray-800 rounded-2xl p-4 w-full mx-auto flex flex-col">
-                        <div id="clock" class="text-center text-2xl font-bold text-slate-300 mb-2"></div>
-                        <h2 class="text-lg font-bold text-slate-300 mb-3 text-center" data-label-key="controlsPanelTitle">Controles</h2>
+                    <div id="controls-panel-left" class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl p-4 w-full mx-auto flex flex-col">
+                        <div id="clock" class="text-center text-2xl font-bold text-slate-800 dark:text-slate-300 mb-2"></div>
+                        <h2 class="text-lg font-bold text-slate-800 dark:text-slate-300 mb-3 text-center" data-label-key="controlsPanelTitle">Controles</h2>
                         
                         <!-- Slider de Zoom PAINEL DE NÚMEROS -->
                         <div class="mb-3">
-                            <label for="board-zoom-slider" class="block text-xs font-bold text-slate-400 mb-1" data-label-key="boardScaleLabel">Escala Painel Números (<span id="board-zoom-value">100</span>%)</label>
-                            <input type="range" id="board-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
+                            <label for="board-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" data-label-key="boardScaleLabel">Escala Painel Números (<span id="board-zoom-value">100</span>%)</label>
+                            <input type="range" id="board-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
                         </div>
 
                         <!-- Slider de Zoom NÚMERO ANUNCIADO -->
                         <div class="mb-3">
-                            <label for="display-zoom-slider" class="block text-xs font-bold text-slate-400 mb-1" data-label-key="displayScaleLabel">Escala Número Anunciado (<span id="display-zoom-value">100</span>%)</label>
-                            <input type="range" id="display-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
+                            <label for="display-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1" data-label-key="displayScaleLabel">Escala Número Anunciado (<span id="display-zoom-value">100</span>%)</label>
+                            <input type="range" id="display-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
                         </div>
 
 
                         <form id="manual-input-form" class="flex flex-col gap-2 mb-3">
                             <div class="flex items-center gap-1">
-                                <input type="text" id="letter-input" placeholder="L" maxlength="1" class="text-center text-sm uppercase font-bold w-10 p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                <input type="number" id="number-input" placeholder="Nº" class="text-center text-sm font-bold flex-grow p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" min="1" max="75">
+                                <input type="text" id="letter-input" placeholder="L" maxlength="1" class="text-center text-sm uppercase font-bold w-10 p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                <input type="number" id="number-input" placeholder="Nº" class="text-center text-sm font-bold flex-grow p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500" min="1" max="75">
                             </div>
                             <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold p-2 rounded-lg text-sm shadow-lg" data-label-key="manualAnnounceButton">Anunciar Manual</button>
                         </form>
@@ -487,8 +495,8 @@
                     
                     <div id="draw-and-prize-section" class="lg:col-span-4 grid grid-cols-1 xl:grid-cols-4 gap-6 relative">
                         <!-- NÚMERO ANUNCIADO -->
-                        <div class="lg:col-span-4 xl:col-span-3 bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col justify-center items-center h-full relative">
-                            <p id="main-display-label" class="text-xl sm:text-2xl font-bold text-slate-400 tracking-wider uppercase" data-label-key="announcedNumberLabel">Número Anunciado</p>
+                        <div class="lg:col-span-4 xl:col-span-3 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col justify-center items-center h-full relative">
+                            <p id="main-display-label" class="text-xl sm:text-2xl font-bold text-slate-600 dark:text-slate-400 tracking-wider uppercase" data-label-key="announcedNumberLabel">Número Anunciado</p>
                             <!-- Wrapper do Zoom para o Número Anunciado -->
                             <div id="current-number-wrapper" class="my-4 flex justify-center items-center w-full relative">
                                  <!-- Container para o número do bingo e para o número do brinde -->
@@ -497,16 +505,16 @@
                                 <div id="prize-draw-display-container" class="absolute inset-0 flex items-center justify-center hidden"></div>
                             </div>
                             <div class="mt-4 text-center">
-                                <h3 class="text-xl font-bold text-slate-300 mb-3" data-label-key="lastNumbersLabel">Últimos 5 Números</h3>
+                                <h3 class="text-xl font-bold text-slate-800 dark:text-slate-300 mb-3" data-label-key="lastNumbersLabel">Últimos 5 Números</h3>
                                 <div id="last-numbers-display" class="flex flex-wrap justify-center gap-4"></div>
                             </div>
                         </div>
                         
                         <!-- SORTEIO DE BRINDES -->
-                        <div id="prize-draw-section" class="lg:col-span-4 xl:col-span-1 bg-gray-800 rounded-2xl p-4 w-full mx-auto flex flex-col">
+                        <div id="prize-draw-section" class="lg:col-span-4 xl:col-span-1 bg-white dark:bg-gray-800 rounded-2xl p-4 w-full mx-auto flex flex-col">
                             <div class="flex items-center justify-between mb-3 relative">
-                                <h2 class="text-lg font-bold text-center text-slate-300 w-full" data-label-key="prizeDrawTitle">Sorteio de Brindes</h2>
-                                <button id="fullscreen-prize-btn" class="absolute right-0 p-1 bg-gray-700 hover:bg-gray-600 rounded text-slate-300 transition-colors" title="Tela Cheia">
+                                <h2 class="text-lg font-bold text-center text-slate-800 dark:text-slate-300 w-full" data-label-key="prizeDrawTitle">Sorteio de Brindes</h2>
+                                <button id="fullscreen-prize-btn" class="absolute right-0 p-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:bg-gray-600 rounded text-slate-800 dark:text-slate-300 transition-colors" title="Tela Cheia">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                                     </svg>
@@ -515,50 +523,50 @@
                             <form id="prize-draw-form" class="flex flex-col gap-2 flex-grow">
                                 <button type="button" id="check-drawn-prizes-btn" class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded-lg text-xs shadow-lg mb-1" data-label-key="checkDrawnPrizesButton">Conferir Sorteados</button>
                                 <div class="flex flex-col gap-1">
-                                    <label for="prize-draw-min" class="text-xs text-slate-400" data-label-key="prizeDrawFromLabel">De:</label>
-                                    <input type="number" id="prize-draw-min" value="1" class="w-full text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg">
-                                    <label for="prize-draw-max" class="text-xs text-slate-400 mt-1" data-label-key="prizeDrawToLabel">Até:</label>
-                                    <input type="number" id="prize-draw-max" value="500" class="w-full text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg">
+                                    <label for="prize-draw-min" class="text-xs text-slate-600 dark:text-slate-400" data-label-key="prizeDrawFromLabel">De:</label>
+                                    <input type="number" id="prize-draw-min" value="1" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                                    <label for="prize-draw-max" class="text-xs text-slate-600 dark:text-slate-400 mt-1" data-label-key="prizeDrawToLabel">Até:</label>
+                                    <input type="number" id="prize-draw-max" value="500" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg">
                                 </div>
-                                <div class="flex items-center justify-center gap-2 text-xs text-slate-300">
+                                <div class="flex items-center justify-center gap-2 text-xs text-slate-800 dark:text-slate-300">
                                     <input type="checkbox" id="no-repeat-prize-draw" class="h-3 w-3 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                                     <label for="no-repeat-prize-draw" data-label-key="noRepeatCheckboxLabel">Não repetir sorteados</label>
                                 </div>
                                 <button type="button" id="prize-draw-random-btn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold p-3 rounded-lg text-lg shadow-lg mt-1" data-label-key="prizeDrawRandomButton">Sortear</button>
-                                <input type="text" id="prize-draw-number-manual" data-label-key="prizeDrawTicketNumberPlaceholder" placeholder="Nº Cartela" class="text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mt-2">
-                                <input type="text" id="prize-draw-name" data-label-key="prizeDrawNamePlaceholder" placeholder="Nome (Opcional)" class="text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                <input type="text" id="prize-draw-description" data-label-key="prizeDrawDescriptionPlaceholder" placeholder="Brinde (Opcional)" class="text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                <input type="text" id="prize-draw-number-manual" data-label-key="prizeDrawTicketNumberPlaceholder" placeholder="Nº Cartela" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mt-2">
+                                <input type="text" id="prize-draw-name" data-label-key="prizeDrawNamePlaceholder" placeholder="Nome (Opcional)" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                <input type="text" id="prize-draw-description" data-label-key="prizeDrawDescriptionPlaceholder" placeholder="Brinde (Opcional)" class="text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                                 <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg mt-1" data-label-key="registerPrizeButton">Registrar Brinde</button>
                             </form>
                         </div>
                     </div>
                 </div>
                  <!-- 2. LEILÃO (MOVIDO PARA O PAINEL CENTRAL) -->
-                <section id="auction-section" class="bg-gray-800 p-6 rounded-2xl shadow-xl relative flex flex-col justify-center">
+                <section id="auction-section" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl relative flex flex-col justify-center">
                     <div class="flex items-center justify-between mb-4 relative">
-         <h2 class="text-2xl font-bold text-center text-slate-300 w-full" data-label-key="auctionTitle">Leilão</h2>
-         <button id="fullscreen-auction-btn" class="absolute right-0 p-2 bg-gray-700 hover:bg-gray-600 rounded text-slate-300 transition-colors" title="Tela Cheia">
+         <h2 class="text-2xl font-bold text-center text-slate-800 dark:text-slate-300 w-full" data-label-key="auctionTitle">Leilão</h2>
+         <button id="fullscreen-auction-btn" class="absolute right-0 p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:bg-gray-600 rounded text-slate-800 dark:text-slate-300 transition-colors" title="Tela Cheia">
              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
              </svg>
          </button>
      </div>
                     <form id="auction-form" class="space-y-3 max-w-lg mx-auto">
-                        <input type="text" id="auction-item-name" placeholder="Nome do Item" class="w-full text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <input type="text" id="auction-item-name" placeholder="Nome do Item" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                         <div class="relative text-center">
                             <div id="bid-feedback-container" class="absolute inset-0 z-10 pointer-events-none"></div>
                             <div id="auction-current-bid-display" class="text-7xl font-black text-amber-400 py-2">R$ 0,00</div>
                             <input type="hidden" id="auction-item-current-bid" value="0">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
-                            <button type="button" id="add-50-bid" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg text-lg">+ R$ 50</button>
-                            <button type="button" id="add-100-bid" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg text-lg">+ R$ 100</button>
+                            <button type="button" id="add-50-bid" class="bg-slate-300 dark:bg-gray-600 hover:bg-slate-400 dark:hover:bg-gray-500 text-slate-800 dark:text-white font-bold py-2 px-4 rounded-lg text-lg">+ R$ 50</button>
+                            <button type="button" id="add-100-bid" class="bg-slate-300 dark:bg-gray-600 hover:bg-slate-400 dark:hover:bg-gray-500 text-slate-800 dark:text-white font-bold py-2 px-4 rounded-lg text-lg">+ R$ 100</button>
                         </div>
                         <div class="flex gap-2">
-                            <input type="number" id="custom-bid-input" placeholder="Valor" class="flex-grow text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                            <input type="number" id="custom-bid-input" placeholder="Valor" class="flex-grow text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                             <button type="button" id="add-custom-bid-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold p-2 px-4 rounded-lg">Adicionar</button>
                         </div>
-                        <input type="text" id="auction-winner-name" placeholder="Nome do Arrematador" class="w-full text-center text-base font-bold p-2 border-2 border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <input type="text" id="auction-winner-name" placeholder="Nome do Arrematador" class="w-full text-center text-base font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
                         <div class="flex gap-2 pt-2">
                             <button type="button" id="reset-auction-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg">Limpar</button>
                             <button type="submit" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg text-xl flex items-center justify-center gap-2">
@@ -567,21 +575,21 @@
                             </button>
                         </div>
                     </form>
-                    <div id="fs-auction-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-700 p-4 rounded-lg">
+                    <div id="fs-auction-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
                         <div class="flex-1">
-                            <label for="fs-auction-zoom-slider" class="block text-xs font-bold text-slate-400 mb-1">Zoom do Leilão (<span id="fs-auction-zoom-value">100</span>%)</label>
-                            <input type="range" id="fs-auction-zoom-slider" min="50" max="250" value="100" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer">
+                            <label for="fs-auction-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Zoom do Leilão (<span id="fs-auction-zoom-value">100</span>%)</label>
+                            <input type="range" id="fs-auction-zoom-slider" min="50" max="250" value="100" class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
                         </div>
                     </div>
                 </section>
             </div>
 
             <!-- BARRA LATERAL DIREITA: RODADAS, PRÊMIOS E APOIO -->
-            <aside class="lg:col-span-1 bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col">
+            <aside class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 flex flex-col">
                 <!-- RODADAS E PRÊMIOS -->
                 <div class="flex-grow">
                     <button id="add-extra-game-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl text-base shadow-lg transition-all mb-4" data-label-key="addExtraRoundButton">Adicionar Rodada Extra</button>
-                    <h2 class="text-2xl font-bold text-slate-300 mb-4" data-label-key="roundsAndPrizesTitle">Rodadas e Prêmios</h2>
+                    <h2 class="text-2xl font-bold text-slate-800 dark:text-slate-300 mb-4" data-label-key="roundsAndPrizesTitle">Rodadas e Prêmios</h2>
                     <div id="games-list" class="space-y-4">
                         <!-- As rodadas serão inseridas dinamicamente aqui -->
                     </div>
@@ -590,7 +598,7 @@
                 <!-- CONTROLES DE RODADA E APOIO -->
                 <div class="flex-shrink-0 mt-6 space-y-4">
                     <!-- APOIO -->
-                    <div class="bg-gray-700 p-4 rounded-xl text-center">
+                    <div class="bg-gray-200 dark:bg-gray-700 p-4 rounded-xl text-center">
                         <h3 class="text-base font-bold text-sky-400 mb-3" data-label-key="supportTitle">Apoie o Seminarista 🤝</h3>
                         <button id="show-donation-modal-btn" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg text-sm shadow-lg transition-all" data-label-key="supportButton">Faça sua Doação</button>
                     </div>
@@ -598,14 +606,14 @@
             </aside>
         </main>
         
-        <footer class="text-center py-6 px-4 text-xs text-slate-400 flex-shrink-0">
+        <footer class="text-center py-6 px-4 text-xs text-slate-600 dark:text-slate-400 flex-shrink-0">
             <p class="max-w-4xl mx-auto">
                 Este programa é o resultado do Trabalho de Conclusão de Curso de <a href="https://www.instagram.com/oalison.rodrigues" target="_blank" class="text-sky-400 hover:underline">Alison Fernando Rodrigues dos Santos</a>, sob orientação do <a href="https://www.instagram.com/danilonobresant" target="_blank" class="text-sky-400 hover:underline">Prof. Pe. Dr. Danilo Nobre dos Santos</a> Título: "E O VERBO SE FEZ I.A.? DA REFLEXÃO TEOLÓGICA E COMUNICATIVA AO DESENVOLVIMENTO DE SOLUÇÕES PASTORAIS COM INTELIGÊNCIA ARTIFICIAL". (<a href="https://drive.google.com/file/d/14uPBeHCT5aP1ACPLlPpIjfD5J1iLQfyD/view?usp=drive_link" target="_blank" class="text-sky-400 hover:underline">Link para acessar</a>)
                 <br>
                 Desenvolvido inteiramente com a Inteligência Artificial Gemini 2.5 PRO da Google, este projeto demonstra como é possível criar soluções pastorais inovadoras com criatividade e ferramentas de baixo custo ou gratuitas, mesmo sem conhecimentos prévios em programação.
             </p>
             <p class="mt-2">
-                Versão <span id="version">7.1</span> - <span id="last-updated">Última atualização do programa: carregando...</span>
+                <button id="show-changelog-btn" class="hover:underline text-sky-600 dark:text-sky-400">Histórico de Versões</button> | Versão <span id="version">7.1</span> - <span id="last-updated">Última atualização do programa: carregando...</span>
             </p>
         </footer>
     </div>
@@ -617,7 +625,7 @@
     <div id="winner-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
     <div id="custom-alert-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
     <div id="congrats-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
-    <div id="event-break-modal" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center p-4 z-50 hidden"></div>
+    <div id="event-break-modal" class="fixed inset-0 bg-gray-100 dark:bg-gray-900 bg-opacity-95 flex items-center justify-center p-4 z-50 hidden"></div>
     <div id="menu-edit-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
     <div id="winner-edit-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
     <div id="delete-confirm-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden"></div>
