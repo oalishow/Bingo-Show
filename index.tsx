@@ -1123,11 +1123,11 @@ function populateSettingsShortcutsTab() {
                                    </div>
                                    <button id="close-card-generator-btn" class="mt-4 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg flex-shrink-0 self-center">${appLabels.modalCloseButton}</button>
                                </div>`,
-                cardScanner: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center">
-                                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Verificar Cartela</h2>
-                                <div class="mb-6 flex gap-2">
-                                    <input type="number" id="manual-card-id-input" placeholder="Nº da Cartela (ex: 123)" class="flex-grow text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                    <button id="verify-manual-card-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg text-lg whitespace-nowrap">Verificar</button>
+                cardScanner: `<div class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl max-w-md w-full text-center">
+                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Verificar Cartela</h2>
+                                <div class="mb-6 flex flex-col sm:flex-row gap-2">
+                                    <input type="number" id="manual-card-id-input" placeholder="Nº (ex: 123)" class="flex-grow text-center text-lg font-bold p-2 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                    <button id="verify-manual-card-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-lg text-lg whitespace-nowrap">Verificar</button>
                                 </div>
                                 <div class="relative w-full aspect-square bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden">
                                     <video id="scanner-video" class="w-full h-full object-cover" playsinline></video>
