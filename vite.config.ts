@@ -14,9 +14,7 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [
         VitePWA({
-          registerType: 'autoUpdate',
-          injectRegister: 'script',
-          filename: 'sw.js',
+          registerType: 'prompt',
           devOptions: {
             enabled: true,
             type: 'module',
@@ -74,7 +72,7 @@ export default defineConfig(({ mode }) => {
               }
             ]
           },
-          includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg', 'icon.svg'],
+          includeAssets: ['favicon.ico', 'favicon.svg', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-512x512-maskable.png', 'icon.svg'],
           manifest: {
             name: 'Bingo Show',
             short_name: 'Bingo Show',
@@ -85,20 +83,35 @@ export default defineConfig(({ mode }) => {
             start_url: '/',
             icons: [
               {
-                src: 'icon.svg',
+                src: 'pwa-192x192.png',
                 sizes: '192x192',
-                type: 'image/svg+xml'
+                type: 'image/png'
               },
               {
-                src: 'icon.svg',
+                src: 'pwa-512x512.png',
                 sizes: '512x512',
-                type: 'image/svg+xml'
+                type: 'image/png'
               },
               {
-                src: 'icon.svg',
+                src: 'pwa-512x512-maskable.png',
                 sizes: '512x512',
+                type: 'image/png',
+                purpose: 'maskable'
+              },
+              {
+                src: 'favicon.svg',
+                sizes: 'any',
                 type: 'image/svg+xml',
-                purpose: 'any maskable'
+                purpose: 'any'
+              }
+            ],
+            shortcuts: [
+              {
+                name: 'Iniciar Bingo',
+                short_name: 'Bingo',
+                description: 'Abrir painel de Bingo',
+                url: '/',
+                icons: [{ src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' }]
               }
             ]
           }

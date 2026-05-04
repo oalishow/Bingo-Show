@@ -4,6 +4,7 @@
         declare var confetti: any;
 import QRCode from 'qrcode';
 import jsQR from 'jsqr';
+import { registerSW } from 'virtual:pwa-register';
 
 
         // --- Refactoring: Central Application Store ---
@@ -455,7 +456,7 @@ import jsQR from 'jsqr';
         let winnerDisplayTimeout: any; 
 
         // --- Constants ---
-        const currentVersion = "7.4"; // Foco 100% Local
+        const currentVersion = "7.5"; // Foco 100% Local
         const buildInfo = "Build: 30/04/2026 - 12:24"; // Data e hora em formato DD/MM/AAAA 
         const DYNAMIC_LETTERS = ['B', 'I', 'N', 'G', 'O'];
         const DYNAMIC_LETTERS_AJUDE = ['A', 'J', 'U', 'D', 'E'];
@@ -4621,6 +4622,31 @@ function showRoundEditModal(gameNumber: string) {
                 setupEventListeners();
                 setupGlobalKeydownListener();
             });
+        });
+
+        // --- PWA Auto Update Logic ---
+        const updateSW = registerSW({
+            onNeedRefresh() {
+                const updateContainer = document.createElement('div');
+                updateContainer.innerHTML = `
+                    <div class="fixed bottom-4 right-4 z-50 bg-indigo-600 text-white px-6 py-4 rounded-xl shadow-2xl flex flex-col sm:flex-row items-center gap-4 transition-all duration-500 hover:scale-105 border-2 border-indigo-400">
+                        <div>
+                            <p class="font-bold text-lg">🚀 Nova versão disponível!</p>
+                            <p class="text-sm text-indigo-200">Atualize agora. Seu jogo NÃO será reiniciado.</p>
+                        </div>
+                        <button id="pwa-auto-update-btn" class="bg-white text-indigo-600 hover:bg-gray-100 font-bold px-6 py-3 rounded-lg shadow-md whitespace-nowrap transition-colors w-full sm:w-auto">
+                            Atualizar App
+                        </button>
+                    </div>
+                `;
+                document.body.appendChild(updateContainer);
+                document.getElementById('pwa-auto-update-btn')!.addEventListener('click', () => {
+                    updateSW(true);
+                });
+            },
+            onOfflineReady() {
+                console.log('App ready to work offline');
+            },
         });
 
         // --- PWA Installation Logic ---
