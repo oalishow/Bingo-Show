@@ -619,15 +619,18 @@ function incrementAuctionBid(amount: number) {
     const bidInput = document.getElementById('auction-item-current-bid') as HTMLInputElement;
     if (bidInput) {
         const currentBid = parseInt(bidInput.value, 10) || 0;
-        const newBid = currentBid + amount;
+        let newBid = currentBid + amount;
+        if (newBid < 0) newBid = 0;
         bidInput.value = newBid.toString();
         updateAuctionBidDisplay(newBid);
 
+        const actualAmountAdded = newBid - currentBid;
+
         const feedbackContainer = document.getElementById('bid-feedback-container');
-        if (feedbackContainer && amount !== 0) {
+        if (feedbackContainer && actualAmountAdded !== 0) {
             const feedbackEl = document.createElement('span');
-            const isPositive = amount > 0;
-            feedbackEl.textContent = `${isPositive ? '+' : ''} ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(amount)}`;
+            const isPositive = actualAmountAdded > 0;
+            feedbackEl.textContent = `${isPositive ? '+' : ''} ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(actualAmountAdded)}`;
             feedbackEl.className = `bid-feedback-animation ${isPositive ? 'text-green-400' : 'text-red-500'}`;
             feedbackContainer.appendChild(feedbackEl);
             setTimeout(() => feedbackEl.remove(), 1000); 
@@ -2155,6 +2158,9 @@ function applyAuctionZoom(scale: number) {
             renderCustomLogo();
             renderMasterBoard();
             DOMElements.gamesListEl.innerHTML = '';
+            
+            const fsRoundSelector = document.getElementById('fs-round-selector') as HTMLSelectElement | null;
+            if (fsRoundSelector) fsRoundSelector.innerHTML = '';
         
             if (Object.keys(gamesData).length > 0) {
                 const sortedGameNumbers = Object.keys(gamesData).filter(key => !isNaN(parseInt(key))).sort((a, b) => parseInt(a) - parseInt(b));
@@ -2163,6 +2169,14 @@ function applyAuctionZoom(scale: number) {
                         const gameEl = createGameElement(parseInt(gameNum), gamesData[gameNum].prizes);
                         DOMElements.gamesListEl.appendChild(gameEl);
                         updateGameItemUI(gameEl, gamesData[gameNum].isComplete);
+                        
+                        if (fsRoundSelector) {
+                            const opt = document.createElement('option');
+                            opt.value = gameNum.toString();
+                            opt.text = gamesData[gameNum].name || `Rodada ${gameNum}`;
+                            if (gameNum.toString() === appStore.state.activeGameNumber) opt.selected = true;
+                            fsRoundSelector.appendChild(opt);
+                        }
                     }
                 }
             }
@@ -4237,6 +4251,39 @@ function showRoundEditModal(gameNumber: string) {
                 appStore.debouncedSave();
             });
 
+            const handleGameSelect = (gameNumber: string) => {
+                if (appStore.state.gamesData[gameNumber]?.isComplete) {
+                    showAlert("Esta rodada já foi concluída. Você pode reabri-la se necessário.");
+                    return;
+                }
+                const gameItem = document.querySelector(`.game-item[data-game-number="${gameNumber}"]`);
+                if (appStore.state.activeGameNumber === gameNumber) {
+                    const game = appStore.state.gamesData[gameNumber];
+                    if (game && game.calledNumbers && game.calledNumbers.length === 0) {
+                        appStore.setActiveGame(null);
+                        if (gameItem) gameItem.classList.remove('active-round-highlight');
+                        loadRoundState(null);
+                        if (gameItem) updateGameItemUI(gameItem, false);
+                        return;
+                    }
+                }
+
+                document.querySelectorAll('.game-item').forEach(el => {
+                    if (el !== gameItem) el.classList.remove('active-round-highlight');
+                });
+                
+                loadRoundState(gameNumber);
+                
+                document.querySelectorAll('.game-item').forEach(el => {
+                     updateGameItemUI(el, appStore.state.gamesData[el.getAttribute('data-game-number')!].isComplete);
+                });
+                
+                if (gameItem) gameItem.classList.add('active-round-highlight');
+                
+                const fsRoundSelector = document.getElementById('fs-round-selector') as HTMLSelectElement | null;
+                if (fsRoundSelector) fsRoundSelector.value = gameNumber;
+            };
+
             DOMElements.gamesListEl.addEventListener('click', (e) => {
                 const target = e.target as HTMLElement;
                 const gameItem = target.closest('.game-item');
@@ -4260,37 +4307,7 @@ function showRoundEditModal(gameNumber: string) {
                     return;
                 }
 
-                if (appStore.state.gamesData[gameNumber].isComplete) {
-                     showAlert("Esta rodada já foi concluída. Você pode reabri-la se necessário.");
-                     return;
-                }
-
-                if (appStore.state.activeGameNumber === gameNumber) {
-                    const game = appStore.state.gamesData[gameNumber];
-                    if (game && game.calledNumbers && game.calledNumbers.length === 0) {
-                        appStore.setActiveGame(null);
-                        gameItem.classList.remove('active-round-highlight');
-                        loadRoundState(null);
-                        updateGameItemUI(gameItem, false);
-                        return;
-                    }
-                }
-
-                document.querySelectorAll('.game-item').forEach(el => {
-                    if (el !== gameItem) {
-                        el.classList.remove('active-round-highlight');
-                        // Temporarily bypass playBtn text change to let updateGameItemUI handle it based on activeGameNumber state
-                        // But we must do it after setActiveGame!
-                    }
-                });
-                
-                loadRoundState(gameNumber); // Sets activeGameNumber
-                
-                document.querySelectorAll('.game-item').forEach(el => {
-                     updateGameItemUI(el, appStore.state.gamesData[el.getAttribute('data-game-number')!].isComplete);
-                });
-                
-                gameItem.classList.add('active-round-highlight');
+                handleGameSelect(gameNumber);
             });
             
             document.getElementById('prize-draw-random-btn')!.addEventListener('click', drawRandomPrize);
@@ -4391,14 +4408,27 @@ function showRoundEditModal(gameNumber: string) {
                              section.classList.add('p-4');
                         }
                         
-                        ['floating-number-modal', 'custom-alert-modal', 'congrats-modal', 'winner-modal', 'sponsor-display-modal', 'verification-modal', 'event-break-modal'].forEach(modalId => {
+                        ['floating-number-modal', 'custom-alert-modal', 'congrats-modal', 'winner-modal', 'sponsor-display-modal', 'verification-modal', 'event-break-modal', 'round-edit-modal'].forEach(modalId => {
                              const el = document.getElementById(modalId);
                              if (el) section.appendChild(el);
                         });
 
                         if (id === 'board-section') {
                             if (fsControls) fsControls.classList.remove('hidden');
+                            if (fsControls) fsControls.classList.remove('flex-row');
                             if (fsControls) fsControls.classList.add('flex');
+                            
+                            // Mostrar Toast Explicativo
+                            Swal.fire({
+                                title: 'Modo Tela Cheia',
+                                text: 'Use os controles na barra inferior para trocar de rodada ou ajustar o zoom.',
+                                icon: 'info',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                            });
                             
                             const fsZoomSlider = document.getElementById('fs-board-zoom-slider') as HTMLInputElement;
                             if (fsZoomSlider) fsZoomSlider.value = appStore.state.appConfig.boardScale.toString();
@@ -4410,8 +4440,22 @@ function showRoundEditModal(gameNumber: string) {
                             const fsAuctionControls = document.getElementById('fs-auction-controls');
                             if (fsAuctionControls) {
                                 fsAuctionControls.classList.remove('hidden');
+                                fsAuctionControls.classList.remove('flex-row');
                                 fsAuctionControls.classList.add('flex');
                             }
+                            
+                            // Mostrar Toast Explicativo
+                            Swal.fire({
+                                title: 'Modo Tela Cheia',
+                                text: 'Faça os lances ou ajuste o zoom diretamente na tela.',
+                                icon: 'info',
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 5000,
+                                timerProgressBar: true,
+                            });
+
                             const fsAuctionZoomSlider = document.getElementById('fs-auction-zoom-slider') as HTMLInputElement;
                             if (fsAuctionZoomSlider) fsAuctionZoomSlider.value = appStore.state.appConfig.auctionScale.toString();
                             const fsAuctionZoomValue = document.getElementById('fs-auction-zoom-value');
@@ -4431,6 +4475,12 @@ function showRoundEditModal(gameNumber: string) {
                         if (id === 'draw-and-prize-section') {
                              section.classList.remove('p-4');
                         }
+                        
+                        ['floating-number-modal', 'custom-alert-modal', 'congrats-modal', 'winner-modal', 'sponsor-display-modal', 'verification-modal', 'event-break-modal', 'round-edit-modal'].forEach(modalId => {
+                             const el = document.getElementById(modalId);
+                             if (el) document.body.appendChild(el);
+                        });
+
                         if (id === 'board-section') {
                             if (fsControls) fsControls.classList.add('hidden');
                             if (fsControls) fsControls.classList.remove('flex');
@@ -4485,29 +4535,100 @@ function showRoundEditModal(gameNumber: string) {
             const fsNextBtn = document.getElementById('fs-next-round-btn');
             if (fsNextBtn) {
                 fsNextBtn.addEventListener('click', () => {
-                    // find next incomplete round
                     const games = appStore.state.gamesData;
                     const keys = Object.keys(games).filter(k => parseInt(k) > 0).sort((a,b)=>parseInt(a)-parseInt(b));
+                    if (keys.length === 0) return;
                     let nextKey = null;
                     let currentKeyIdx = appStore.state.activeGameNumber ? keys.indexOf(appStore.state.activeGameNumber) : -1;
-                    for (let i = currentKeyIdx + 1; i < keys.length; i++) {
-                        if (!games[keys[i]].isComplete) {
-                            nextKey = keys[i];
-                            break;
-                        }
-                    }
-                    if (!nextKey) {
-                        for (let i = 0; i <= currentKeyIdx; i++) {
-                            if (!games[keys[i]].isComplete) {
-                                nextKey = keys[i];
-                                break;
-                            }
-                        }
-                    }
-                    if (nextKey) {
-                        handleGameSelect(nextKey);
+                    if (currentKeyIdx === -1) {
+                        nextKey = keys[0];
+                    } else if (currentKeyIdx < keys.length - 1) {
+                        nextKey = keys[currentKeyIdx + 1];
                     } else {
-                        showAlert('Todas as rodadas foram concluídas!');
+                        nextKey = keys[0];
+                    }
+                    if (nextKey) handleGameSelect(nextKey);
+                });
+            }
+
+            const fsPrevBtn = document.getElementById('fs-prev-round-btn');
+            if (fsPrevBtn) {
+                fsPrevBtn.addEventListener('click', () => {
+                    const games = appStore.state.gamesData;
+                    const keys = Object.keys(games).filter(k => parseInt(k) > 0).sort((a,b)=>parseInt(a)-parseInt(b));
+                    if (keys.length === 0) return;
+                    let prevKey = null;
+                    let currentKeyIdx = appStore.state.activeGameNumber ? keys.indexOf(appStore.state.activeGameNumber) : -1;
+                    if (currentKeyIdx === -1) {
+                        prevKey = keys[0];
+                    } else if (currentKeyIdx > 0) {
+                        prevKey = keys[currentKeyIdx - 1];
+                    } else {
+                        prevKey = keys[keys.length - 1];
+                    }
+                    if (prevKey) handleGameSelect(prevKey);
+                });
+            }
+
+            const panelNextBtn = document.getElementById('panel-next-round-btn');
+            if (panelNextBtn) {
+                panelNextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const games = appStore.state.gamesData;
+                    const keys = Object.keys(games).filter(k => parseInt(k) > 0).sort((a,b)=>parseInt(a)-parseInt(b));
+                    if (keys.length === 0) return;
+                    let nextKey = null;
+                    let currentKeyIdx = appStore.state.activeGameNumber ? keys.indexOf(appStore.state.activeGameNumber) : -1;
+                    if (currentKeyIdx === -1) {
+                        nextKey = keys[0];
+                    } else if (currentKeyIdx < keys.length - 1) {
+                        nextKey = keys[currentKeyIdx + 1];
+                    } else {
+                        nextKey = keys[0];
+                    }
+                    if (nextKey) handleGameSelect(nextKey);
+                });
+            }
+
+            const panelPrevBtn = document.getElementById('panel-prev-round-btn');
+            if (panelPrevBtn) {
+                panelPrevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const games = appStore.state.gamesData;
+                    const keys = Object.keys(games).filter(k => parseInt(k) > 0).sort((a,b)=>parseInt(a)-parseInt(b));
+                    if (keys.length === 0) return;
+                    let prevKey = null;
+                    let currentKeyIdx = appStore.state.activeGameNumber ? keys.indexOf(appStore.state.activeGameNumber) : -1;
+                    if (currentKeyIdx === -1) {
+                        prevKey = keys[0];
+                    } else if (currentKeyIdx > 0) {
+                        prevKey = keys[currentKeyIdx - 1];
+                    } else {
+                        prevKey = keys[keys.length - 1];
+                    }
+                    if (prevKey) handleGameSelect(prevKey);
+                });
+            }
+
+            const fsRoundSelector = document.getElementById('fs-round-selector');
+            if (fsRoundSelector) {
+                fsRoundSelector.addEventListener('change', (e) => {
+                    const val = (e.target as HTMLSelectElement).value;
+                    if (val) {
+                        handleGameSelect(val);
+                    }
+                });
+            }
+
+            if (DOMElements.activeRoundPanel) {
+                DOMElements.activeRoundPanel.addEventListener('click', (e) => {
+                    // Evita disparar se clicou nos botões de navegação
+                    if ((e.target as HTMLElement).closest('#panel-prev-round-btn') || 
+                        (e.target as HTMLElement).closest('#panel-next-round-btn')) {
+                        return;
+                    }
+                    if (appStore.state.activeGameNumber) {
+                        showRoundEditModal(appStore.state.activeGameNumber);
                     }
                 });
             }
@@ -4585,6 +4706,11 @@ function showRoundEditModal(gameNumber: string) {
 
             document.getElementById('add-50-bid')!.addEventListener('click', () => incrementAuctionBid(50));
             document.getElementById('add-100-bid')!.addEventListener('click', () => incrementAuctionBid(100));
+            const auctionMinus50Btn = document.getElementById('auction-minus-50-btn');
+            if (auctionMinus50Btn) auctionMinus50Btn.addEventListener('click', () => incrementAuctionBid(-50));
+            const auctionPlus50Btn = document.getElementById('auction-plus-50-btn');
+            if (auctionPlus50Btn) auctionPlus50Btn.addEventListener('click', () => incrementAuctionBid(50));
+
             document.getElementById('add-custom-bid-btn')!.addEventListener('click', () => {
                 const customInput = document.getElementById('custom-bid-input') as HTMLInputElement;
                 const value = parseInt(customInput.value, 10);

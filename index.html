@@ -6,7 +6,7 @@
     <title>Bingo Show</title>
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="alternate icon" type="image/png" href="/favicon.ico">
+    <link rel="alternate icon" type="image/png" href="/pwa-192x192.png">
     <link rel="apple-touch-icon" href="/pwa-192x192.png">
     <meta name="theme-color" content="#1e1b4b">
     <!-- Carrega o Tailwind CSS para estilização -->
@@ -465,16 +465,25 @@
                     <!-- NOVO PAINEL DE RODADA ATIVA -->
                     <div id="active-round-panel" class="bg-white dark:bg-gray-800 rounded-2xl mb-6 p-4 sm:p-6 text-center transition-all shadow-md border border-slate-200 dark:border-gray-700 hidden cursor-pointer hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-700 group" title="Clique para editar prêmios e descrição">
                         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                            <div id="active-round-info" class="text-center md:text-left flex-shrink-0">
-                                <p id="active-round-name" class="text-2xl sm:text-3xl font-black text-sky-500 dark:text-sky-400"></p>
-                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
+                            <div id="active-round-info" class="text-center md:text-left flex-shrink-0 flex items-center gap-2">
+                                <button id="panel-prev-round-btn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-800 dark:text-white rounded-full w-8 h-8 flex items-center justify-center transition" title="Rodada Anterior" onclick="event.stopPropagation()">◀</button>
+                                <div>
+                                    <p id="active-round-name" class="text-2xl sm:text-3xl font-black text-sky-500 dark:text-sky-400"></p>
+                                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
+                                </div>
+                                <button id="panel-next-round-btn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-800 dark:text-white rounded-full w-8 h-8 flex items-center justify-center transition" title="Próxima Rodada" onclick="event.stopPropagation()">▶</button>
                             </div>
-                            <div id="active-round-prizes" class="text-center md:border-x border-slate-100 dark:border-gray-700 px-4 w-full md:w-auto flex-grow prize-highlight overflow-hidden">
+                            <div id="active-round-prizes" class="text-center md:border-l border-slate-100 dark:border-gray-700 px-4 w-full md:w-auto flex-grow prize-highlight overflow-hidden">
                                 <!-- Prêmios serão inseridos aqui -->
                             </div>
-                            <div id="active-round-stats" class="text-center md:text-right flex-shrink-0">
-                                <p class="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Chamados</p>
-                                <p id="active-round-called-count" class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white"></p>
+                            <div id="active-round-stats" class="text-center md:text-right flex-shrink-0 md:border-l border-slate-100 dark:border-gray-700 md:pl-4 flex flex-col justify-center items-center md:items-end">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Chamados</p>
+                                    <p id="active-round-called-count" class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white leading-none"></p>
+                                </div>
+                                <button type="button" class="mt-3 bg-sky-100 hover:bg-sky-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-sky-600 dark:text-sky-300 font-bold py-1 px-3 rounded text-xs flex items-center gap-1 transition shadow-sm pointer-events-none">
+                                    <span>✏️</span> Editar
+                                </button>
                             </div>
                         </div>
                         <div id="active-round-description-display" class="marquee-container text-slate-600 dark:text-slate-300 text-sm mt-4 pt-3 border-t border-slate-100 dark:border-gray-700 hidden text-left italic">
@@ -492,14 +501,17 @@
                     <div id="bingo-board-wrapper" class="w-full mx-auto overflow-x-auto">
                         <!-- AQUI AS LETRAS B-I-N-G-O/A-J-U-D-E SERÃO RENDERIZADAS DINAMICAMENTE -->
                         <div id="bingo-board" class="grid grid-cols-10 gap-x-2 sm:gap-x-4 min-w-max"></div>
-                    <div id="fullscreen-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
-                        <div class="flex-1">
+                    <div id="fullscreen-controls" class="hidden flex-col sm:flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
+                        <div class="flex-1 w-full sm:w-auto">
                             <label for="fs-board-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Zoom do Painel (<span id="fs-board-zoom-value">100</span>%)</label>
                             <input type="range" id="fs-board-zoom-slider" min="50" max="150" value="100" class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
                         </div>
-                        <div class="flex gap-2">
-                             <button id="fs-next-round-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105">Próxima Rodada</button>
-                             <button id="fs-auto-draw-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" data-label-key="autoDrawButton">Sorteio Automático</button>
+                        <div class="flex gap-2 w-full sm:w-auto items-center">
+                             <button id="fs-prev-round-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" title="Rodada Anterior">◀</button>
+                             <select id="fs-round-selector" class="bg-white dark:bg-gray-800 text-slate-800 dark:text-white border-2 border-sky-400 font-bold py-2 px-4 rounded-lg text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                             </select>
+                             <button id="fs-next-round-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105" title="Próxima Rodada">▶</button>
+                             <button id="fs-auto-draw-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-xl text-sm shadow-lg transition-transform transform hover:scale-105 ml-2" data-label-key="autoDrawButton">Sorteio Auto</button>
                         </div>
                     </div>
 
@@ -612,7 +624,11 @@
                     <form id="auction-form" class="space-y-3 max-w-lg mx-auto w-full">
                         <div class="relative text-center flex flex-col items-center justify-center w-full">
                             <div id="bid-feedback-container" class="absolute inset-x-0 top-0 bottom-0 z-[9999] pointer-events-none flex justify-center items-center"></div>
-                            <div id="auction-current-bid-display" class="text-4xl sm:text-5xl md:text-6xl font-black text-amber-400 py-4 auction-bid-display w-full whitespace-nowrap leading-none overflow-hidden text-ellipsis px-2 relative z-10">R$ 0,00</div>
+                            <div class="flex items-center justify-center w-full gap-4 relative z-10">
+                                <button type="button" id="auction-minus-50-btn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-800 dark:text-white rounded-full w-10 h-10 flex items-center justify-center transition text-xl font-bold p-0 shadow-sm flex-shrink-0" title="Subtrair R$ 50">-</button>
+                                <div id="auction-current-bid-display" class="text-4xl sm:text-5xl md:text-5xl font-black text-amber-400 py-4 auction-bid-display whitespace-nowrap leading-none px-2 flex-grow flex justify-center w-full">R$ 0,00</div>
+                                <button type="button" id="auction-plus-50-btn" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-800 dark:text-white rounded-full w-10 h-10 flex items-center justify-center transition text-xl font-bold p-0 shadow-sm flex-shrink-0" title="Adicionar R$ 50">+</button>
+                            </div>
                             <input type="hidden" id="auction-item-current-bid" value="0">
                         </div>
                         <input type="text" id="auction-item-name" placeholder="Nome do Item" class="w-full text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -633,7 +649,7 @@
                             </button>
                         </div>
                     </form>
-                    <div id="fs-auction-controls" class="hidden flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg">
+                    <div id="fs-auction-controls" class="hidden flex-col sm:flex-row gap-4 justify-between items-center mt-4 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg flex-wrap">
                         <div class="flex-1">
                             <label for="fs-auction-zoom-slider" class="block text-xs font-bold text-slate-600 dark:text-slate-400 mb-1">Zoom do Leilão (<span id="fs-auction-zoom-value">100</span>%)</label>
                             <input type="range" id="fs-auction-zoom-slider" min="50" max="250" value="100" class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer">
