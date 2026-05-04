@@ -462,7 +462,6 @@ import { registerSW } from 'virtual:pwa-register';
         const DYNAMIC_LETTERS_AJUDE = ['A', 'J', 'U', 'D', 'E'];
         const BINGO_CONFIG: { [key: string]: { min: number; max: number } } = { B: { min: 1, max: 15 }, I: { min: 16, max: 30 }, N: { min: 31, max: 45 }, G: { min: 46, max: 60 }, O: { min: 61, max: 75 },
                                A: { min: 1, max: 15 }, J: { min: 16, max: 30 }, U: { min: 31, max: 45 }, D: { min: 46, max: 60 }, E: { min: 61, max: 75 } };
-        const LETTERS = Object.keys(BINGO_CONFIG);
         const roundColors = ['#16a34a', '#ca8a04', '#c2410c', '#0e7490', '#be185d', '#6d28d9', '#059669', '#b45309'];
         const predefinedPrizes = [ { prize1: 'R$ 100,00', prize2: '', prize3: '' }, { prize1: 'R$ 100,00', prize2: 'R$ 200,00', prize3: '' }, { prize1: 'R$ 200,00', prize2: '', prize3: '' }, { prize1: 'R$ 100,00', prize2: 'R$ 300,00', prize3: '' }, { prize1: 'R$ 300,00', prize2: '', prize3: 'R$ 300,00' }, { prize1: 'R$ 200,00', prize2: 'R$ 2.000,00', prize3: '' } ];
         const winnerDisplayDuration = 5000;
@@ -531,7 +530,6 @@ import { registerSW } from 'virtual:pwa-register';
             cardGeneratorModal: document.getElementById('card-generator-modal'),
             cardScannerModal: document.getElementById('card-scanner-modal'),
         };
-        const confettiCtx = DOMElements.confettiCanvas.getContext('2d');
 
 function renderCustomLogo() {
     console.log("Renderizando logo do programa...");
@@ -1162,7 +1160,7 @@ function confirmClearRound() {
 }
 
 function generateProof(selectedGameKeys: string[]) {
-    const { gamesData, appLabels, appConfig } = appStore.state;
+    const { gamesData, appConfig } = appStore.state;
     let proofContent = `
         <html>
         <head>
@@ -1325,15 +1323,13 @@ function showWinnerEditModal(winnerId: number) {
 }
 
 function showDrawnPrizesModal() {
-    const { drawnPrizeNumbers, activeGameNumber, gamesData } = appStore.state;
+    const { drawnPrizeNumbers } = appStore.state;
     DOMElements.drawnPrizesModal.innerHTML = getModalTemplates().drawnPrizes;
     const historyList = document.getElementById('drawn-prizes-history-list')!;
     const lastDrawnDisplay = document.getElementById('last-drawn-prize-display')!;
     const subtitle = document.getElementById('drawn-prizes-subtitle')!;
     historyList.innerHTML = '';
     lastDrawnDisplay.innerHTML = '';
-
-    const activeRoundColor = (activeGameNumber && gamesData[activeGameNumber]?.color) ? gamesData[activeGameNumber].color : '#a855f7';
 
     subtitle.textContent = `Total Sorteado: ${drawnPrizeNumbers.length}`;
 
@@ -1901,7 +1897,6 @@ function applyAuctionZoom(scale: number) {
                         ctx.drawImage(img, 0, 0, width, height);
                         
                         // Preserve transparency using WebP (or PNG for older browsers, though WebP is widely supported now)
-                        let format = 'image/webp';
                         if (file.type === 'image/png') {
                              // Use PNG for pristine logos if they specifically uploaded a PNG and size is small enough, but webp is safer for compression.
                              // Actually, let's just use WebP for everything as it supports transparency and compression.
@@ -2153,7 +2148,7 @@ function applyAuctionZoom(scale: number) {
         }
 
         function renderUIFromState() {
-            const { gamesData, activeGameNumber, appConfig, appLabels } = appStore.state;
+            const { gamesData, activeGameNumber, appConfig } = appStore.state;
             applyTheme();
             renderCustomLogo();
             renderMasterBoard();
@@ -2858,7 +2853,7 @@ function applyAuctionZoom(scale: number) {
             }
         }
         
-        function updateLastNumbers(letter: string, number: number, shouldAddToState: boolean) {
+        function updateLastNumbers(_letter: string, number: number, shouldAddToState: boolean) {
             if (shouldAddToState) {
                 appStore.addCalledNumber(number);
             }
@@ -3876,8 +3871,6 @@ function showRoundEditModal(gameNumber: string) {
                4 per page => grid-cols-2
                6 per page => grid-cols-2
             */
-            const colsClass = (perPage === 1 || perPage === 2) ? 'grid-cols-1' : 'grid-cols-2';
-            
             // To ensure 6 per page works nicely on A4 portrait, we make the cards relatively small.
             // If they have winged menus/prizes, it gets tighter.
 
@@ -3954,7 +3947,6 @@ function showRoundEditModal(gameNumber: string) {
             }
             
             // To force page break natively, we inject perPage wrappers
-            let finalPagesHTML = '';
             // Just use Tailwind's screen columns unless they specify a strict limit
             // Actually CSS column grid takes care of standard splits
             
@@ -4419,16 +4411,7 @@ function showRoundEditModal(gameNumber: string) {
                             if (fsControls) fsControls.classList.add('flex');
                             
                             // Mostrar Toast Explicativo
-                            Swal.fire({
-                                title: 'Modo Tela Cheia',
-                                text: 'Use os controles na barra inferior para trocar de rodada ou ajustar o zoom.',
-                                icon: 'info',
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 5000,
-                                timerProgressBar: true,
-                            });
+                            // Swal removido
                             
                             const fsZoomSlider = document.getElementById('fs-board-zoom-slider') as HTMLInputElement;
                             if (fsZoomSlider) fsZoomSlider.value = appStore.state.appConfig.boardScale.toString();
@@ -4445,16 +4428,7 @@ function showRoundEditModal(gameNumber: string) {
                             }
                             
                             // Mostrar Toast Explicativo
-                            Swal.fire({
-                                title: 'Modo Tela Cheia',
-                                text: 'Faça os lances ou ajuste o zoom diretamente na tela.',
-                                icon: 'info',
-                                toast: true,
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 5000,
-                                timerProgressBar: true,
-                            });
+                            // Swal removido
 
                             const fsAuctionZoomSlider = document.getElementById('fs-auction-zoom-slider') as HTMLInputElement;
                             if (fsAuctionZoomSlider) fsAuctionZoomSlider.value = appStore.state.appConfig.auctionScale.toString();
