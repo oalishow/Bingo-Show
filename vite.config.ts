@@ -54,7 +54,11 @@ export default defineConfig(({ mode }) => {
                 urlPattern: /^https:\/\/cdn\.tailwindcss\.com\/.*/i,
                 handler: 'StaleWhileRevalidate',
                 options: {
-                  cacheName: 'tailwind-cache',
+                  cacheName: 'tailwindcss-cache',
+                  expiration: {
+                    maxEntries: 5,
+                    maxAgeSeconds: 60 * 60 * 24 * 30
+                  },
                   cacheableResponse: {
                     statuses: [0, 200]
                   }
@@ -65,6 +69,10 @@ export default defineConfig(({ mode }) => {
                 handler: 'StaleWhileRevalidate',
                 options: {
                   cacheName: 'jsdelivr-cache',
+                  expiration: {
+                    maxEntries: 10,
+                    maxAgeSeconds: 60 * 60 * 24 * 30
+                  },
                   cacheableResponse: {
                     statuses: [0, 200]
                   }

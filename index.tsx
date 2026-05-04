@@ -1852,6 +1852,22 @@ function applyAuctionZoom(scale: number) {
     if (wrapper) {
         wrapper.style.zoom = `${scale}%`;
     }
+    const fsZoomValueEl = document.getElementById('fs-auction-zoom-value');
+    if (fsZoomValueEl) {
+        fsZoomValueEl.textContent = `${scale}%`;
+    }
+    const zoomValueEl = document.getElementById('auction-zoom-value');
+    if (zoomValueEl) {
+        zoomValueEl.textContent = `${scale}`;
+    }
+    const auctionZoomSlider = document.getElementById('auction-zoom-slider') as HTMLInputElement;
+    if (auctionZoomSlider && auctionZoomSlider.value !== scale.toString()) {
+        auctionZoomSlider.value = scale.toString();
+    }
+    const fsAuctionZoomSlider = document.getElementById('fs-auction-zoom-slider') as HTMLInputElement;
+    if (fsAuctionZoomSlider && fsAuctionZoomSlider.value !== scale.toString()) {
+        fsAuctionZoomSlider.value = scale.toString();
+    }
 }
 
         const fileToBase64 = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.8): Promise<string> =>
@@ -2161,8 +2177,10 @@ function applyAuctionZoom(scale: number) {
         
             const boardZoomSlider = document.getElementById('board-zoom-slider') as HTMLInputElement;
             const displayZoomSlider = document.getElementById('display-zoom-slider') as HTMLInputElement;
+            const auctionZoomSliderInput = document.getElementById('auction-zoom-slider') as HTMLInputElement;
             if (boardZoomSlider) boardZoomSlider.value = appConfig.boardScale.toString();
             if (displayZoomSlider) displayZoomSlider.value = appConfig.displayScale.toString();
+            if (auctionZoomSliderInput && appConfig.auctionScale) auctionZoomSliderInput.value = appConfig.auctionScale.toString();
             applyBoardZoom(appConfig.boardScale);
             applyDisplayZoom(appConfig.displayScale);
             if (appConfig.auctionScale) applyAuctionZoom(appConfig.auctionScale);
@@ -2660,8 +2678,8 @@ function applyAuctionZoom(scale: number) {
             const createPrizeEl = (label: string, value: string) => {
                 if (!value) return null;
                 const p = document.createElement('p');
-                p.className = 'text-3xl sm:text-4xl leading-tight flex items-center justify-center gap-4 mb-3';
-                p.innerHTML = `<span class="font-bold text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs uppercase tracking-widest">${label}:</span> <span class="text-amber-500 dark:text-amber-400 font-black text-stroke-black drop-shadow-xl transform scale-150 origin-left inline-block">${value}</span>`;
+                p.className = 'text-2xl sm:text-3xl lg:text-4xl leading-tight flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 mb-2';
+                p.innerHTML = `<span class="font-bold text-slate-500 dark:text-slate-400 text-sm sm:text-base uppercase tracking-widest">${label}:</span> <span class="text-amber-500 dark:text-amber-400 font-black text-stroke-black drop-shadow-md break-words text-center">${value}</span>`;
                 return p;
             };
 
@@ -4508,6 +4526,18 @@ function showRoundEditModal(gameNumber: string) {
             });
              displayZoomSlider.addEventListener('change', () => appStore.debouncedSave());
 
+            const auctionZoomSlider = document.getElementById('auction-zoom-slider') as HTMLInputElement;
+            if (auctionZoomSlider) {
+                auctionZoomSlider.addEventListener('input', (e) => {
+                    const scale = parseInt((e.target as HTMLInputElement).value);
+                    appStore.state.appConfig.auctionScale = scale;
+                    applyAuctionZoom(scale);
+                    const auctionZoomValue = document.getElementById('auction-zoom-value');
+                    if (auctionZoomValue) auctionZoomValue.textContent = `${scale}`;
+                });
+                auctionZoomSlider.addEventListener('change', () => appStore.debouncedSave());
+            }
+
             DOMElements.clearRoundBtnTop.addEventListener('click', confirmClearRound);
             DOMElements.clearRoundBtnBottom.addEventListener('click', confirmClearRound);
 
@@ -4667,14 +4697,3 @@ function showRoundEditModal(gameNumber: string) {
                 });
             }
         });
-
-        // --- Service Worker ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }

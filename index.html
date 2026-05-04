@@ -201,20 +201,22 @@
         }
         
         /* ANIMAÇÃO DE LANCE DO LEILÃO */
-        @keyframes bid-feedback {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-60px) scale(0.7); opacity: 0; }
-        }
         .bid-feedback-animation {
             position: absolute;
-            top: -30px; /* Posição inicial acima do campo de lance */
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: 900;
             pointer-events: none;
-            animation: bid-feedback 1s ease-out forwards;
-            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            z-index: 99999;
+            animation: bid-feedback 1.2s ease-out forwards;
+            text-shadow: 0px 4px 10px rgba(0,0,0,0.7);
+        }
+        @keyframes bid-feedback {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            20% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            80% { transform: translate(-50%, -100px) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -120px) scale(0.8); opacity: 0; }
         }
         
         /* Animação para Atualização do Lance do Leilão */
@@ -461,18 +463,18 @@
                     </div>
                     
                     <!-- NOVO PAINEL DE RODADA ATIVA -->
-                    <div id="active-round-panel" class="bg-white dark:bg-gray-800 rounded-2xl mb-6 p-6 text-center transition-all shadow-md border border-slate-200 dark:border-gray-700 hidden cursor-pointer hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-700 group" title="Clique para editar prêmios e descrição">
-                        <div class="grid grid-cols-3 items-center gap-x-4">
-                            <div id="active-round-info" class="text-left">
-                                <p id="active-round-name" class="text-3xl font-black text-sky-500 dark:text-sky-400"></p>
-                                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
+                    <div id="active-round-panel" class="bg-white dark:bg-gray-800 rounded-2xl mb-6 p-4 sm:p-6 text-center transition-all shadow-md border border-slate-200 dark:border-gray-700 hidden cursor-pointer hover:shadow-lg hover:border-sky-300 dark:hover:border-sky-700 group" title="Clique para editar prêmios e descrição">
+                        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                            <div id="active-round-info" class="text-center md:text-left flex-shrink-0">
+                                <p id="active-round-name" class="text-2xl sm:text-3xl font-black text-sky-500 dark:text-sky-400"></p>
+                                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium"><span id="active-round-date"></span> - <span id="active-round-time"></span></p>
                             </div>
-                            <div id="active-round-prizes" class="text-center border-x border-slate-100 dark:border-gray-700 px-4 prize-highlight">
+                            <div id="active-round-prizes" class="text-center md:border-x border-slate-100 dark:border-gray-700 px-4 w-full md:w-auto flex-grow prize-highlight overflow-hidden">
                                 <!-- Prêmios serão inseridos aqui -->
                             </div>
-                            <div id="active-round-stats" class="text-right">
+                            <div id="active-round-stats" class="text-center md:text-right flex-shrink-0">
                                 <p class="text-xs uppercase tracking-wider font-bold text-slate-400 dark:text-slate-500 mb-1">Chamados</p>
-                                <p id="active-round-called-count" class="text-4xl font-black text-slate-800 dark:text-white"></p>
+                                <p id="active-round-called-count" class="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white"></p>
                             </div>
                         </div>
                         <div id="active-round-description-display" class="marquee-container text-slate-600 dark:text-slate-300 text-sm mt-4 pt-3 border-t border-slate-100 dark:border-gray-700 hidden text-left italic">
@@ -607,10 +609,10 @@
              </svg>
          </button>
      </div>
-                    <form id="auction-form" class="space-y-3 max-w-lg mx-auto">
-                        <div class="relative text-center flex flex-col items-center justify-center w-full overflow-hidden">
-                            <div id="bid-feedback-container" class="absolute inset-0 z-10 pointer-events-none"></div>
-                            <div id="auction-current-bid-display" class="text-5xl sm:text-7xl md:text-8xl font-black text-amber-400 py-4 auction-bid-display w-full whitespace-nowrap leading-none overflow-x-auto scrollbar-hide">R$ 0,00</div>
+                    <form id="auction-form" class="space-y-3 max-w-lg mx-auto w-full">
+                        <div class="relative text-center flex flex-col items-center justify-center w-full">
+                            <div id="bid-feedback-container" class="absolute inset-x-0 top-0 bottom-0 z-[9999] pointer-events-none flex justify-center items-center"></div>
+                            <div id="auction-current-bid-display" class="text-4xl sm:text-5xl md:text-6xl font-black text-amber-400 py-4 auction-bid-display w-full whitespace-nowrap leading-none overflow-hidden text-ellipsis px-2 relative z-10">R$ 0,00</div>
                             <input type="hidden" id="auction-item-current-bid" value="0">
                         </div>
                         <input type="text" id="auction-item-name" placeholder="Nome do Item" class="w-full text-center text-xl font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-gray-200 dark:bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
