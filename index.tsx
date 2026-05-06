@@ -5232,6 +5232,9 @@ function showRoundEditModal(gameNumber: string) {
                             await signInAnonymously(auth);
                         } catch(e) {
                             console.error("Auth falhou online", e);
+                            document.body.innerHTML += `<div class="fixed top-0 left-0 w-full p-4 bg-red-600 text-white font-bold text-center z-50 shadow-lg">
+                                ⚠️ Erro de nuvem: O organizador não ativou a permissão de "Login Anônimo" no banco de dados. O bingo não funcionará online.
+                            </div>`;
                         }
                     } else {
                         // Watch event
@@ -5382,12 +5385,12 @@ function showRoundEditModal(gameNumber: string) {
                 } else {
                     try {
                         await signInAnonymously(auth);
-                    } catch (e) {
+                    } catch (e: any) {
                          console.error("Firebase auth error:", e);
                          const statusEl = document.getElementById('online-sync-status');
                          if (statusEl) {
-                             statusEl.className = 'mt-2 text-sm text-center p-2 rounded max-w-sm ml-auto mr-auto break-all bg-red-100 text-red-800 border-red-300 dark:bg-red-900 dark:text-red-200';
-                             statusEl.innerHTML = `❌ Falha ao conectar: ${e}`;
+                             statusEl.className = 'mt-2 text-sm text-center p-2 rounded max-w-sm ml-auto mr-auto bg-red-100 text-red-800 border-[1px] border-red-300 dark:bg-red-900 dark:text-red-200';
+                             statusEl.innerHTML = `❌ Falha ao conectar: Você precisa ativar o "Login Anônimo" no Firebase Authentication. <br/><span class="text-[10px]">Detalhe técnico: ${e.message || String(e)}</span>`;
                          }
                     }
                 }
