@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "firebase": "^12.12.1",
     "jsqr": "^1.4.0",
     "qrcode": "^1.5.4"
   },

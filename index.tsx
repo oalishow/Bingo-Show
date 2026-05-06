@@ -5,6 +5,27 @@
 import QRCode from 'qrcode';
 import jsQR from 'jsqr';
 import { registerSW } from 'virtual:pwa-register';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, doc, setDoc, onSnapshot, collection, getDoc, getDocs, writeBatch, enableIndexedDbPersistence } from 'firebase/firestore';
+import firebaseConfig from './firebase-applet-config.json';
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+
+enableIndexedDbPersistence(db).catch((err) => {
+    if (err.code == 'failed-precondition') {
+        // Multiple tabs open
+        console.warn("Multiple tabs open, persistence can only be enabled in one tab at a a time.");
+    } else if (err.code == 'unimplemented') {
+        // The current browser does not support all of the features required to enable persistence
+        console.warn("The current browser does not support offline persistence.");
+    }
+});
+let firebaseUser: any = null;
+let syncEnabled = false;
+let eventId = '';
 
 
         // --- Refactoring: Central Application Store ---
@@ -67,6 +88,8 @@ import { registerSW } from 'virtual:pwa-register';
 - **CONTROLE DE MODAIS:** Adicionada uma nova seção nas configurações para desativar o fechamento automático dos modais de sorteio ou ajustar seu tempo de exibição (de 3 a 15 segundos).`,
                 appConfig: {
                     isDarkMode: true,
+                    onlineSyncEnabled: true,
+                    eventId: '',
                     pixKey: '1e8e4af0-4d23-440c-9f3d-b4e527f65911',
                     paypalLink: 'https://www.paypal.com/donate/?hosted_button_id=WJBLF3LV3RZRW',
                     tutorialVideoLink: 'https://youtu.be/8iOOW-CR-WQ?si=Jolrp2qR38xhY5EZ', 
@@ -312,10 +335,9 @@ import { registerSW } from 'virtual:pwa-register';
             },
 
             // --- Persistence Logic ---
-            getAppStateForSaving() {
-                const state = {
+            getAppStateForSaving(includeCards = false) {
+                const state: any = {
                     gamesData: this.state.gamesData,
-                    cardsData: this.state.cardsData,
                     gameCount: this.state.gameCount,
                     activeGameNumber: this.state.activeGameNumber,
                     menuItems: this.state.menuItems,
@@ -325,12 +347,17 @@ import { registerSW } from 'virtual:pwa-register';
                     appConfig: this.state.appConfig,
                     appLabels: this.state.appLabels,
                 };
+                if (includeCards) {
+                    state.cardsData = this.state.cardsData;
+                }
                 return state;
             },
 
             loadStateFromObject(state: any) {
                 this.state.gamesData = state.gamesData || {};
-                this.state.cardsData = state.cardsData || {};
+                if (state.cardsData) {
+                    this.state.cardsData = state.cardsData;
+                }
                 this.state.gameCount = state.gameCount || 6;
                 this.state.activeGameNumber = state.activeGameNumber || null;
                 this.state.menuItems = state.menuItems || [ "Refrigerante - R$ 5,00", "Cerveja - R$ 7,00", "Água - R$ 3,00", "Espetinho - R$ 8,00", "Pastel - R$ 6,00", "Porção de Fritas - R$ 15,00" ];
@@ -354,11 +381,45 @@ import { registerSW } from 'virtual:pwa-register';
                 this.saveTimeout = setTimeout(() => {
                     this.saveStateToLocalStorage();
                 }, 1000);
+                if (typeof (this as any).debouncedFirebaseSync === 'function') {
+                    (this as any).debouncedFirebaseSync();
+                }
+            },
+
+            debouncedFirebaseSync() {
+                if (!this.state.appConfig.onlineSyncEnabled || !eventId || !firebaseUser) return;
+                clearTimeout((this as any).firebaseSyncTimeout);
+                (this as any).firebaseSyncTimeout = setTimeout(async () => {
+                   try {
+                       await setDoc(doc(db, "events", eventId), {
+                           hostId: firebaseUser.uid,
+                           activeGameNumber: this.state.activeGameNumber || '',
+                           appName: this.state.appConfig.appName || '',
+                           bingoTitle: this.state.appConfig.bingoTitle || '',
+                           updatedAt: Date.now(),
+                           createdAt: this.state.appConfig.createdAt || Date.now()
+                       }, { merge: true });
+
+                       // Sync games
+                       const promises = Object.keys(this.state.gamesData).map(gameId => {
+                           const game = this.state.gamesData[gameId];
+                           return setDoc(doc(db, `events/${eventId}/games`, gameId), {
+                               name: game.name || `Rodada ${gameId}`,
+                               color: game.color || '',
+                               calledNumbers: game.calledNumbers,
+                               updatedAt: Date.now()
+                           }, { merge: true });
+                       });
+                       await Promise.all(promises);
+                   } catch (e) {
+                       console.error("Firebase sync error:", e);
+                   }
+                }, 2000);
             },
 
             async saveStateToLocalStorage() {
                 try {
-                    const appState = this.getAppStateForSaving();
+                    const appState = this.getAppStateForSaving(false); // Excluir cartelas do localStorage
                     const stateToStore = JSON.parse(JSON.stringify(appState));
                     const imageSavePromises: Promise<void>[] = [];
                     if (stateToStore.appConfig && stateToStore.appConfig.sponsorsByNumber) {
@@ -392,6 +453,11 @@ import { registerSW } from 'virtual:pwa-register';
                         const appState = JSON.parse(savedState);
                         this.loadStateFromObject(appState);
                         await loadSponsorImages();
+                        // Load cartelas from IndexedDB after loading standard state
+                        const cards = await loadAllCardsFromDB();
+                        if (cards) {
+                            appStore.state.cardsData = Object.assign(appStore.state.cardsData, cards);
+                        }
                         return true;
                     }
                     return false;
@@ -952,7 +1018,21 @@ function populateSettingsShortcutsTab() {
                                     <input type="range" id="modal-autoclose-timer" min="3" max="15" value="5" class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer range-lg">
                                 </div>
                             </div>
-                            <div class="border-b border-gray-700 pb-6">
+                            <div class="border-b border-slate-300 dark:border-gray-700 pb-6 mt-6">
+                                <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">🎈 Etapa 2: Online Sync</h3>
+                                <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">Ative o modo Online para permitir que os jogadores acessem suas cartelas diretamente pelo celular escaneando o QR Code. Ao ativar, você precisará aguardar a sincronização (host online).</p>
+                                <div class="flex items-center gap-3 bg-indigo-100 dark:bg-indigo-900/50 p-3 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                                    <input type="checkbox" id="online-sync-toggle" class="h-5 w-5 rounded border-indigo-300 text-indigo-600 focus:ring-indigo-500">
+                                    <label for="online-sync-toggle" class="text-slate-800 dark:text-indigo-200 font-bold">Transmitir rodadas ao vivo para cartelas digitais</label>
+                                </div>
+                                <div id="online-sync-status" class="mt-2 text-sm text-center hidden p-2 rounded max-w-sm ml-auto mr-auto break-all"></div>
+                                <div class="text-center mt-3">
+                                    <button id="force-sync-cards-btn" class="hidden text-sm bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">
+                                        Subir Cartelas Antigas para Nuvem
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="border-b border-slate-300 dark:border-gray-700 pb-6 mt-6">
                                 <h3 class="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Tema</h3>
                                 <div class="flex items-center gap-3 bg-gray-200 dark:bg-gray-700 p-3 rounded-lg">
                                     <input type="checkbox" id="theme-toggle" class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -1095,34 +1175,33 @@ function populateSettingsShortcutsTab() {
                       <div id="next-round-progress" class="bg-sky-500 h-2.5 rounded-full" style="width: 100%; transition: width 5s linear;"></div>
                     </div>
                  </div>`,
-                cardGenerator: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-left flex flex-col h-[90vh]">
-                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4 flex-shrink-0">Gerador de Cartelas</h2>
-                                   <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4 flex-shrink-0">
-                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo de Natal)" class="md:col-span-2 w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <input type="number" id="card-quantity" placeholder="Quantidade" value="100" class="w-full text-center text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                       <select id="card-per-page" class="w-full text-base font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
-                                          <option value="1">1 por Folha</option>
-                                          <option value="2">2 por Folha</option>
-                                          <option value="4">4 por Folha</option>
-                                          <option value="6" selected>6 por Folha</option>
-                                       </select>
+                cardGenerator: `<div class="modal-content bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full text-center flex flex-col">
+                                   <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Gerador de Cartelas</h2>
+                                   <p class="text-slate-600 dark:text-slate-400 mb-6">As cartelas serão geradas no padrão de 6 por folha (A4 - Retrato), contendo QR Code e Número de Série para jogar online.</p>
+                                   <div class="flex flex-col gap-4 mb-6">
+                                       <input type="text" id="card-batch-title" placeholder="Título (Ex: Bingo dos Amigos)" class="w-full text-lg font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       <div class="flex flex-col sm:flex-row gap-2">
+                                           <input type="text" id="card-batch-location" placeholder="Onde? (Local do Evento)" class="flex-[2] text-sm font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                           <input type="text" id="card-batch-date" placeholder="Data (ex: 20/DEZ)" class="flex-1 text-sm font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                           <input type="text" id="card-batch-price" placeholder="Valor (ex: R$ 10,00)" class="flex-1 text-sm font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       </div>
+                                       <div class="flex items-center justify-between gap-2">
+                                            <div class="flex-1 text-left text-sm font-bold text-slate-500 dark:text-slate-400">Total de Grades:</div>
+                                            <input type="number" id="card-quantity" placeholder="Ex: 120 (rendem 20 folhas)" value="120" class="w-48 text-center text-lg font-bold p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500">
+                                       </div>
+                                       <div class="flex items-center justify-between border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                           <label class="text-slate-700 dark:text-slate-300 font-bold" for="card-color">Cor das Cartelas:</label>
+                                           <input type="color" id="card-color" value="#000000" class="w-12 h-10 p-0 border-0 rounded cursor-pointer">
+                                       </div>
+                                       <div class="flex items-center gap-2 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 rounded-lg">
+                                           <input type="checkbox" id="card-reset-series" class="w-5 h-5 rounded cursor-pointer focus:ring-2 focus:ring-sky-500 accent-sky-600 border-gray-300">
+                                           <label class="text-slate-700 dark:text-slate-300 font-bold cursor-pointer" for="card-reset-series">Zerar numeração de série na geração</label>
+                                       </div>
                                    </div>
-                                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 flex-shrink-0">
-                                       <textarea id="card-prizes-text" placeholder="Prêmios / Rodadas (Opcional, aparece à esquerda)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
-                                       <textarea id="card-menu-text" placeholder="Cardápio (Opcional, aparece à direita)" class="w-full text-sm p-3 border-2 border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg h-24 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
+                                   <div class="flex justify-center gap-4 mb-4">
+                                        <button id="generate-and-print-cards-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-8 rounded-full text-lg w-full">Gerar e Imprimir</button>
                                    </div>
-                                   <div class="flex items-center gap-2 mb-4 flex-shrink-0">
-                                       <input type="checkbox" id="card-use-logo" class="w-5 h-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500">
-                                       <label for="card-use-logo" class="text-sm font-bold text-gray-800 dark:text-slate-200">Usar logomarca no espaço central da cartela (em vez de ★)</label>
-                                   </div>
-                                   <div class="flex justify-end gap-4 mb-4 flex-shrink-0">
-                                        <button id="generate-cards-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full">Gerar e Visualizar</button>
-                                        <button id="print-cards-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-2 px-6 rounded-full hidden">Imprimir Cartelas</button>
-                                   </div>
-                                   <div id="card-print-preview" class="flex-grow bg-gray-50 dark:bg-gray-900 rounded-lg p-4 overflow-y-auto flex items-center justify-center">
-                                        <p class="text-slate-600 dark:text-slate-400 text-center">Defina as opções, clique em "Gerar e Visualizar" para criar as cartelas.</p>
-                                   </div>
-                                   <button id="close-card-generator-btn" class="mt-4 bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-full text-lg flex-shrink-0 self-center">${appLabels.modalCloseButton}</button>
+                                   <button id="close-card-generator-btn" class="mt-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-bold py-2 px-8 uppercase tracking-widest text-sm">Cancelar</button>
                                </div>`,
                 cardScanner: `<div class="modal-content bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl max-w-md w-full text-center">
                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Verificar Cartela</h2>
@@ -1698,6 +1777,61 @@ function showSettingsModal() {
     });
     autocloseTimer.addEventListener('change', () => appStore.debouncedSave());
 
+    const syncToggle = document.getElementById('online-sync-toggle') as HTMLInputElement;
+    syncToggle.checked = appConfig.onlineSyncEnabled === true;
+    syncToggle.addEventListener('change', async (e) => {
+        const checked = (e.target as HTMLInputElement).checked;
+        appStore.state.appConfig.onlineSyncEnabled = checked;
+        appStore.debouncedSave();
+        if (checked) {
+            initFirebaseSync();
+        }
+    });
+
+    document.getElementById('force-sync-cards-btn')?.addEventListener('click', async () => {
+        if (!eventId || !firebaseUser) return;
+        const btn = document.getElementById('force-sync-cards-btn') as HTMLButtonElement;
+        const originalText = btn.textContent;
+        btn.textContent = "Sincronizando...";
+        btn.disabled = true;
+        try {
+            const batchPromises = [];
+            let currentBatch = writeBatch(db);
+            let docCount = 0;
+            const entries = Object.entries(appStore.state.cardsData);
+            for (const [uuid, cardData] of entries) {
+                currentBatch.set(doc(db, "cards", uuid), {
+                    hostId: firebaseUser.uid,
+                    eventId: eventId,
+                    series: cardData.series,
+                    numbersString: JSON.stringify(cardData.numbers)
+                });
+                docCount++;
+                if (docCount === 500) {
+                    batchPromises.push(currentBatch.commit());
+                    currentBatch = writeBatch(db);
+                    docCount = 0;
+                }
+            }
+            if (docCount > 0) {
+                batchPromises.push(currentBatch.commit());
+            }
+            await Promise.all(batchPromises);
+            btn.textContent = "Concluído!";
+            setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 3000);
+        } catch(e) {
+            console.error(e);
+            showAlert("Erro ao subir cartelas para a nuvem.");
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    });
+    
+    // Updates the sync status UI
+    if (appConfig.onlineSyncEnabled && eventId) {
+        updateSyncStatusUI();
+    }
+
     const themeToggle = document.getElementById('theme-toggle') as HTMLInputElement;
     if (themeToggle) {
         themeToggle.checked = appConfig.isDarkMode !== false; // default true
@@ -1995,19 +2129,23 @@ function applyAuctionZoom(scale: number) {
         
         // --- Funções de Salvamento ---
         const DB_NAME = 'BingoShowDB';
-        const STORE_NAME = 'sponsorImages';
+        const STORE_NAME_IMAGES = 'sponsorImages';
+        const STORE_NAME_CARDS = 'cards';
         let dbPromise: Promise<IDBDatabase>;
 
         function openDb() {
             if (!dbPromise) {
                 dbPromise = new Promise((resolve, reject) => {
-                    const request = indexedDB.open(DB_NAME, 1);
+                    const request = indexedDB.open(DB_NAME, 2);
                     request.onerror = () => reject("Error opening IndexedDB.");
                     request.onsuccess = () => resolve(request.result);
                     request.onupgradeneeded = (event) => {
                         const db = (event.target as IDBOpenDBRequest).result;
-                        if (!db.objectStoreNames.contains(STORE_NAME)) {
-                            db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                        if (!db.objectStoreNames.contains(STORE_NAME_IMAGES)) {
+                            db.createObjectStore(STORE_NAME_IMAGES, { keyPath: 'id' });
+                        }
+                        if (!db.objectStoreNames.contains(STORE_NAME_CARDS)) {
+                            db.createObjectStore(STORE_NAME_CARDS, { keyPath: 'uuid' });
                         }
                     };
                 });
@@ -2018,8 +2156,8 @@ function applyAuctionZoom(scale: number) {
         async function saveSponsorImage(id: string, image: string) {
             const db = await openDb();
             return new Promise<void>((resolve, reject) => {
-                const transaction = db.transaction(STORE_NAME, 'readwrite');
-                const store = transaction.objectStore(STORE_NAME);
+                const transaction = db.transaction(STORE_NAME_IMAGES, 'readwrite');
+                const store = transaction.objectStore(STORE_NAME_IMAGES);
                 const request = store.put({ id, image });
                 request.onsuccess = () => resolve();
                 request.onerror = () => reject("Failed to save image to IndexedDB.");
@@ -2029,8 +2167,8 @@ function applyAuctionZoom(scale: number) {
         async function deleteSponsorImage(id: string) {
             const db = await openDb();
             return new Promise<void>((resolve, reject) => {
-                const transaction = db.transaction(STORE_NAME, 'readwrite');
-                const store = transaction.objectStore(STORE_NAME);
+                const transaction = db.transaction(STORE_NAME_IMAGES, 'readwrite');
+                const store = transaction.objectStore(STORE_NAME_IMAGES);
                 const request = store.delete(id);
                 request.onsuccess = () => resolve();
                 request.onerror = () => reject("Failed to delete image from IndexedDB.");
@@ -2041,8 +2179,8 @@ function applyAuctionZoom(scale: number) {
             try {
                 const db = await openDb();
                 return new Promise<void>((resolve, reject) => {
-                    const transaction = db.transaction(STORE_NAME, 'readwrite');
-                    const store = transaction.objectStore(STORE_NAME);
+                    const transaction = db.transaction(STORE_NAME_IMAGES, 'readwrite');
+                    const store = transaction.objectStore(STORE_NAME_IMAGES);
                     const request = store.clear();
                     request.onsuccess = () => resolve();
                     request.onerror = () => reject("Failed to clear images from IndexedDB.");
@@ -2052,12 +2190,59 @@ function applyAuctionZoom(scale: number) {
             }
         }
 
+        async function clearCardsDB() {
+            try {
+                const db = await openDb();
+                return new Promise<void>((resolve, reject) => {
+                    const transaction = db.transaction(STORE_NAME_CARDS, 'readwrite');
+                    const store = transaction.objectStore(STORE_NAME_CARDS);
+                    const request = store.clear();
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject("Failed to clear cards from IndexedDB.");
+                });
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function saveCardsBatchToDB(cardsObj: Record<string, any>) {
+            const db = await openDb();
+            return new Promise<void>((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME_CARDS, 'readwrite');
+                const store = transaction.objectStore(STORE_NAME_CARDS);
+                Object.entries(cardsObj).forEach(([uuid, data]) => {
+                    store.put({ uuid, ...data });
+                });
+                transaction.oncomplete = () => resolve();
+                transaction.onerror = () => reject("Failed to save cards batch to IndexedDB.");
+            });
+        }
+
+        async function loadAllCardsFromDB(): Promise<Record<string, any>> {
+            const db = await openDb();
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(STORE_NAME_CARDS, 'readonly');
+                const store = transaction.objectStore(STORE_NAME_CARDS);
+                const request = store.getAll();
+                request.onsuccess = () => {
+                    const cardsObj: Record<string, any> = {};
+                    request.result.forEach((item: any) => {
+                        const { uuid, ...rest } = item;
+                        cardsObj[uuid] = rest;
+                    });
+                    resolve(cardsObj);
+                };
+                request.onerror = () => reject("Failed to load cards from IndexedDB.");
+            });
+        }
+
+
         async function loadSponsorImages() {
             try {
                 const db = await openDb();
                 return new Promise<void>((resolve, reject) => {
-                    const transaction = db.transaction(STORE_NAME, 'readonly');
-                    const store = transaction.objectStore(STORE_NAME);
+                    const transaction = db.transaction(STORE_NAME_IMAGES, 'readonly');
+                    const store = transaction.objectStore(STORE_NAME_IMAGES);
                     const request = store.getAll();
 
                     request.onsuccess = () => {
@@ -2083,7 +2268,8 @@ function applyAuctionZoom(scale: number) {
             try {
                 await appStore.saveStateToLocalStorage();
         
-                const appState = appStore.getAppStateForSaving();
+                // Include cards true for backup file
+                const appState = appStore.getAppStateForSaving(true);
                 const stateString = JSON.stringify(appState, null, 2); 
                 const blob = new Blob([stateString], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
@@ -2112,12 +2298,11 @@ function applyAuctionZoom(scale: number) {
             }
         
             const file = input.files[0];
-            // Clear input value immediately so the same file can be selected again if needed
             input.value = '';
             
             const reader = new FileReader();
         
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 try {
                     const result = e.target?.result as string;
                     if (!result) throw new Error("Arquivo vazio ou ilegível.");
@@ -2129,6 +2314,16 @@ function applyAuctionZoom(scale: number) {
                     }
         
                     appStore.loadStateFromObject(loadedState);
+                    
+                    // If file has cards, save them to IDB
+                    if (loadedState.cardsData) {
+                        try {
+                            await saveCardsBatchToDB(loadedState.cardsData);
+                        } catch (err) {
+                            console.error("Erro ao importar cartelas pro banco local", err);
+                        }
+                    }
+
                     renderUIFromState();
                     applyLabels();
                     appStore.debouncedSave();
@@ -2649,9 +2844,53 @@ function applyAuctionZoom(scale: number) {
             }
         }
 
+        function showBingoClaimNotification(series: number, uuid: string, gameNumber: string) {
+            const audio = new Audio('/bingo-alert.mp3');
+            audio.play().catch(e => console.log('Audio blocked', e));
+
+            const container = document.getElementById('bingo-claims-container') || (() => {
+                const c = document.createElement('div');
+                c.id = 'bingo-claims-container';
+                c.className = 'fixed top-20 right-4 z-[9999] p-4 flex flex-col gap-2 pointer-events-none items-end max-w-sm w-[400px] overflow-hidden';
+                document.body.appendChild(c);
+                return c;
+            })();
+            
+            const cardStr = String(series).padStart(5, '0');
+            const el = document.createElement('div');
+            el.className = 'pointer-events-auto bg-green-500 text-white font-bold p-4 w-full rounded-xl shadow-2xl flex flex-col gap-2 animate-bounce-in border-4 border-white';
+            el.innerHTML = `
+                <div class="flex justify-between items-center w-full">
+                    <span class="text-[10px] uppercase bg-black/20 px-2 py-0.5 rounded tracking-widest">Alerta de Jogador Online</span>
+                    <button class="text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">✕</button>
+                </div>
+                <div class="text-3xl font-black uppercase text-center mt-1 drop-shadow-md">BINGO!</div>
+                <div class="text-lg text-center mx-1 mb-1 leading-tight">A cartela nº <span class="bg-yellow-400 text-black px-2 py-1 mx-1 rounded inline-block shadow-sm">${cardStr}</span> bateu lá do celular!</div>
+                <button class="bg-white text-green-700 hover:bg-gray-100 py-3 mt-1 w-full rounded-lg font-bold shadow uppercase transition-all active:scale-95" onclick="window.pauseDrawAndVerify('${uuid}', '${cardStr}'); this.parentElement.remove()">Fazer Checagem Oficial</button>
+            `;
+            
+            container.appendChild(el);
+        }
+        
+        (window as any).pauseDrawAndVerify = (uuid: string, displaySeries: string) => {
+             // Pausar sorteio se auto-draw ligado
+             const autoBtn = document.getElementById('panel-auto-draw-btn') as HTMLButtonElement;
+             if (autoBtn && autoBtn.innerText.includes('Pausar')) {
+                 autoBtn.click();
+             }
+             
+             verifyCardByQRCode(uuid);
+        };
+
         function loadRoundState(gameNumber: string | null) {
             const { gamesData, appLabels } = appStore.state;
             clearInterval(clockInterval);
+            
+            if ((window as any).masterBingoClaimsUnsub) {
+               (window as any).masterBingoClaimsUnsub();
+               (window as any).masterBingoClaimsUnsub = null;
+            }
+
             if (gameNumber === null) {
                 appStore.setActiveGame(null);
                 DOMElements.activeRoundPanel.classList.add('hidden');
@@ -2740,6 +2979,24 @@ function applyAuctionZoom(scale: number) {
 
                 DOMElements.currentNumberEl.innerHTML = `<span>${letter}</span><span>${lastNumber}</span>`;
                 (DOMElements.currentNumberEl as HTMLElement).style.visibility = 'visible';
+            }
+            
+            // Listen to Bingo Claims from online players
+            if (appStore.state.appConfig.onlineSyncEnabled && eventId && gameNumber) {
+               const claimsRef = collection(db, `events/${eventId}/games/${gameNumber}/bingoClaims`);
+               let initialLoad = true;
+               (window as any).masterBingoClaimsUnsub = onSnapshot(claimsRef, (snapshot) => {
+                   if (initialLoad) {
+                       initialLoad = false;
+                       return;
+                   }
+                   snapshot.docChanges().forEach((change) => {
+                       if (change.type === 'added') {
+                           const docData = change.doc.data();
+                           showBingoClaimNotification(docData.series, docData.uuid, gameNumber);
+                       }
+                   });
+               });
             }
         }
 
@@ -3744,286 +4001,332 @@ function showRoundEditModal(gameNumber: string) {
             return card;
         }
 
-        let pendingPrintCardQuantity = 0;
-        let pendingPrintCardTitle = "";
-        let pendingPrintCardPerPage = 6;
-        let pendingPrintPrizes = "";
-        let pendingPrintMenu = "";
-        let pendingPrintUseLogo = false;
 
-        async function renderCardsForPreview(title: string, quantity: number) {
-            pendingPrintCardQuantity = quantity;
-            pendingPrintCardTitle = title;
-            pendingPrintCardPerPage = parseInt((document.getElementById('card-per-page') as HTMLSelectElement).value) || 6;
-            pendingPrintPrizes = (document.getElementById('card-prizes-text') as HTMLTextAreaElement).value.trim();
-            pendingPrintMenu = (document.getElementById('card-menu-text') as HTMLTextAreaElement).value.trim();
-            pendingPrintUseLogo = (document.getElementById('card-use-logo') as HTMLInputElement).checked;
 
-            const previewContainer = document.getElementById('card-print-preview');
-            const printBtn = document.getElementById('print-cards-btn');
-            if (!previewContainer || !printBtn) return;
-
-            previewContainer.innerHTML = '<p class="text-slate-400 text-center w-full col-span-full">Renderizando visualização...</p>'; 
-            previewContainer.className = 'flex-grow bg-white rounded-lg p-4 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4';
-
-            const newCardUUIDs = Object.keys(appStore.state.cardsData).slice(-quantity);
-            const previewUUIDs = newCardUUIDs.slice(0, 15);
-            let finalHTML = "";
-            const logoData = appStore.state.appConfig.customLogoBase64 || '';
-
-            for (const uuid of previewUUIDs) {
-                const cardData = appStore.state.cardsData[uuid];
-                if (!cardData) continue;
-                
-                let qrDataUrl = "";
-                try {
-                    qrDataUrl = await QRCode.toDataURL(uuid, { width: 80, margin: 1 });
-                } catch (err) {}
-
-                // In preview, we don't render the huge full layout, just a simplified card (but with bigger squares)
-                finalHTML += `
-                    <div class="bingo-card-print p-4 border border-gray-300 rounded-lg text-black bg-white flex flex-col items-center shadow-md pb-2" style="page-break-inside: avoid;">
-                        <h3 class="text-lg font-bold text-center leading-tight mb-1">${title}</h3>
-                        <p class="text-xs mb-2">Cartela N°: ${String(cardData.series).padStart(4, '0')}</p>
-                        <div class="grid grid-cols-5 gap-0.5 w-full my-1">
-                            ${['B', 'I', 'N', 'G', 'O'].map((letter, colIndex) => `
-                                <div class="text-center">
-                                    <div class="font-black text-xl text-red-600 mb-1">${letter}</div>
-                                    ${cardData.numbers[colIndex].map(num => {
-                                        if (num === 0) {
-                                            if (pendingPrintUseLogo && logoData) {
-                                                return `<div class="w-10 h-10 flex items-center justify-center border border-gray-400"><img src="${logoData}" class="max-w-full max-h-full object-contain p-0.5"></div>`;
-                                            }
-                                            return `<div class="w-10 h-10 flex items-center justify-center border border-gray-400 font-bold text-lg bg-gray-300">★</div>`;
-                                        }
-                                        return `<div class="w-10 h-10 flex items-center justify-center border border-gray-400 font-bold text-xl">${num}</div>`;
-                                    }).join('')}
-                                </div>
-                            `).join('')}
-                        </div>
-                        <img src="${qrDataUrl}" alt="QR Code" class="mt-2 w-16 h-16">
-                    </div>
-                `;
-            }
-
-            if (quantity > 15) {
-                finalHTML += `<div class="p-4 border border-transparent flex items-center justify-center text-gray-500 font-bold col-span-full">... e mais ${quantity - 15} cartelas prontas para impressão.</div>`;
-            }
-            
-            previewContainer.innerHTML = finalHTML;
-            printBtn.classList.remove('hidden');
-        }
-
-        function handleGenerateCards() {
+        
+        async function generateAndPrintCards() {
             const titleInput = document.getElementById('card-batch-title') as HTMLInputElement;
+            const locationInput = document.getElementById('card-batch-location') as HTMLInputElement;
+            const dateInput = document.getElementById('card-batch-date') as HTMLInputElement;
+            const priceInput = document.getElementById('card-batch-price') as HTMLInputElement;
             const quantityInput = document.getElementById('card-quantity') as HTMLInputElement;
-            const previewContainer = document.getElementById('card-print-preview');
+            const colorInput = document.getElementById('card-color') as HTMLInputElement;
             
-            if (!titleInput || !quantityInput || !previewContainer) return;
+            if (!quantityInput) return;
 
-            const title = titleInput.value.trim() || "Bingo Show";
+            const title = (titleInput && titleInput.value.trim()) || "Bingo Amigos";
+            const locationVal = (locationInput && locationInput.value.trim()) || "";
+            const dateVal = (dateInput && dateInput.value.trim()) || "";
+            const priceVal = (priceInput && priceInput.value.trim()) || "";
             const quantity = parseInt(quantityInput.value, 10);
+            const cardColor = colorInput ? colorInput.value : '#0ea5e9';
+            const isLight = isLightColor(cardColor);
+            const headerTextColor = isLight ? '#000000' : '#ffffff';
 
             if (isNaN(quantity) || quantity <= 0 || quantity > 5000) {
                 showAlert("Por favor, insira uma quantidade válida entre 1 e 5000.");
                 return;
             }
 
-            previewContainer.innerHTML = `<p class="text-slate-400 text-center">Gerando ${quantity} cartelas... Isso pode levar alguns segundos.</p>`;
-            
-            setTimeout(() => {
-                const startSeries = Object.keys(appStore.state.cardsData).length + 1;
-                for (let i = 0; i < quantity; i++) {
-                    const uuid = generateUUID();
-                    const numbers = generateSingleBingoCardNumbers();
-                    appStore.state.cardsData[uuid] = {
-                        series: startSeries + i,
-                        numbers: numbers
-                    };
-                }
-                
-                appStore.debouncedSave();
-                renderCardsForPreview(title, quantity);
-            }, 100);
-        }
-
-        async function handlePrintCards() {
-            const quantity = pendingPrintCardQuantity;
-            const title = pendingPrintCardTitle;
-            const perPage = pendingPrintCardPerPage;
-            const prizesText = pendingPrintPrizes;
-            const menuText = pendingPrintMenu;
-            const useLogo = pendingPrintUseLogo;
-            const logoData = appStore.state.appConfig.customLogoBase64 || '';
-
-            if (quantity === 0) return;
-
-            showAlert("Preparando PDF para " + quantity + " cartelas. Isso pode levar alguns segundos...");
-
-            const allNewUUIDs = Object.keys(appStore.state.cardsData).slice(-quantity);
-            let printHTML = "";
-
-            /* 
-               Grid logic:
-               Using Tailwind:
-               1 per page => grid-cols-1
-               2 per page => grid-cols-1 (stack vertically) or grid-cols-2
-               4 per page => grid-cols-2
-               6 per page => grid-cols-2
-            */
-            // To ensure 6 per page works nicely on A4 portrait, we make the cards relatively small.
-            // If they have winged menus/prizes, it gets tighter.
-
-            for (let i = 0; i < allNewUUIDs.length; i += 50) {
-                const batch = allNewUUIDs.slice(i, i + 50);
-                const batchPromises = batch.map(async (uuid) => {
-                    const cardData = appStore.state.cardsData[uuid];
-                    if (!cardData) return "";
-                    let qrDataUrl = await QRCode.toDataURL(uuid, { width: 80, margin: 1 }).catch(()=>"");
-
-                    // Generate the wings
-                    const prizesHtml = prizesText ? `
-                    <div class="w-1/4 border-r border-black p-2 text-[10px] sm:text-xs text-center flex flex-col justify-center bg-gray-50 uppercase font-bold break-all">
-                        <div class="mb-2 text-sm text-sky-800">Prêmios/Rodadas</div>
-                        <pre class="whitespace-pre-wrap font-sans text-left leading-tight">${prizesText.replace(/</g,'&lt;')}</pre>
-                    </div>` : '';
-
-                    const menuHtml = menuText ? `
-                    <div class="w-1/4 border-l border-black p-2 text-[10px] sm:text-xs text-center flex flex-col justify-center bg-gray-50 uppercase font-bold break-all relative">
-                        <div class="mb-2 text-sm text-sky-800">Cardápio</div>
-                        <pre class="whitespace-pre-wrap font-sans text-left leading-tight">${menuText.replace(/</g,'&lt;')}</pre>
-                        <div class="absolute bottom-1 right-2 text-[8px] text-gray-500 font-normal">Identificação: ${String(cardData.series).padStart(4,'0')}</div>
-                    </div>` : '';
-
-                    const centerWidth = (prizesText && menuText) ? 'w-1/2' : (prizesText || menuText) ? 'w-3/4' : 'w-full';
-
-                    return `
-                        <div class="border-2 border-black flex flex-row items-stretch text-black bg-white shadow-sm break-inside-avoid print:break-inside-avoid" style="page-break-inside: avoid; margin-bottom: 2mm;">
-                            ${prizesHtml}
-
-                            <!-- CENTER: BINGO CARD -->
-                            <div class="${centerWidth} p-2 flex flex-col items-center justify-between">
-                                <div class="flex flex-col items-center mb-1">
-                                    <h3 class="text-base sm:text-xl font-bold text-center uppercase tracking-tight leading-none">${title}</h3>
-                                    <div class="text-[10px] sm:text-xs font-bold text-gray-600 mt-1">Cartela N° ${String(cardData.series).padStart(4, '0')}</div>
-                                </div>
-                                <div class="grid grid-cols-5 gap-0 w-full mb-1 border-2 border-black">
-                                    ${['B', 'I', 'N', 'G', 'O'].map((letter, colIndex) => `
-                                        <div class="text-center flex flex-col">
-                                            <div class="font-black text-lg sm:text-2xl text-white bg-black border-b border-r border-black">${letter}</div>
-                                            ${cardData.numbers[colIndex].map(num => {
-                                                const borderClass = colIndex === 4 ? 'border-b border-black' : 'border-b border-r border-black';
-                                                if (num === 0) {
-                                                    if (useLogo && logoData) {
-                                                        return `<div class="aspect-square flex items-center justify-center ${borderClass}"><img src="${logoData}" class="max-w-[80%] max-h-[80%] object-contain" /></div>`;
-                                                    }
-                                                    return `<div class="aspect-square flex items-center justify-center bg-gray-300 font-bold text-lg sm:text-xl ${borderClass}">★</div>`;
-                                                }
-                                                return `<div class="aspect-square flex items-center justify-center font-bold text-lg sm:text-2xl ${borderClass}">${num}</div>`;
-                                            }).join('')}
-                                        </div>
-                                    `).join('')}
-                                </div>
-                                <div class="flex flex-row justify-between w-full items-center px-2">
-                                    <div class="text-[8px] text-gray-500 uppercase tracking-widest">${uuid.split('-')[0]}</div>
-                                    <img src="${qrDataUrl}" alt="QR Code" class="w-12 h-12 object-contain">
-                                </div>
-                            </div>
-                            
-                            ${menuHtml}
-                        </div>
-                    `;
-                });
-
-                const resolvedBatchHTML = await Promise.all(batchPromises);
-                printHTML += resolvedBatchHTML.join("");
-                if (allNewUUIDs.length > 200) await new Promise(res => setTimeout(res, 5));
+            const printBtn = document.getElementById('generate-and-print-cards-btn') as HTMLButtonElement | null;
+            if (printBtn) {
+                printBtn.innerHTML = "Gerando... Aguarde";
+                printBtn.disabled = true;
             }
+
+            // small delay to allow UI to update
+            await new Promise(res => setTimeout(res, 100));
 
             const printWindow = window.open('', '_blank');
             if (!printWindow) {
-                showAlert('Não foi possível abrir a janela de impressão. Verifique se o seu navegador está bloqueando pop-ups.');
+                showAlert('Não foi possível abrir a aba de impressão. Verifique se o seu navegador está bloqueando pop-ups.');
+                if (printBtn) {
+                    printBtn.innerHTML = "Gerar e Imprimir";
+                    printBtn.disabled = false;
+                }
                 return;
             }
             
-            // To force page break natively, we inject perPage wrappers
-            // Just use Tailwind's screen columns unless they specify a strict limit
-            // Actually CSS column grid takes care of standard splits
-            
-            let gridStyles = '';
-            if (perPage === 1) gridStyles = 'grid-cols-1 gap-8 max-w-2xl mx-auto';
-            if (perPage === 2) gridStyles = 'grid-cols-1 gap-4 max-w-2xl mx-auto my-4';
-            if (perPage === 4) gridStyles = 'grid-cols-2 gap-2 max-w-5xl mx-auto my-4';
-            if (perPage === 6) gridStyles = 'grid-cols-2 gap-x-2 gap-y-1 mx-auto my-1';
+            printWindow.document.write('<html><head><title>Preparando...</title></head><body style="font-family: sans-serif; text-align: center; padding: 50px;"><h2>Gerando ' + quantity + ' cartelas...</h2></body></html>');
+            showAlert("Preparando PDF na nova aba. Aguarde...");
 
+            // Generating raw data
+            const resetSeriesInput = document.getElementById('card-reset-series') as HTMLInputElement | null;
+            const resetSeries = resetSeriesInput ? resetSeriesInput.checked : false;
+            
+            const { activeGameNumber, gamesData, appLabels } = appStore.state;
+            let prizesText = "";
+            let sidePrizesText = "";
+            if (activeGameNumber && gamesData[activeGameNumber]) {
+                const game = gamesData[activeGameNumber];
+                const parts = [];
+                if (game.prizes.prize1) parts.push(`<b>${appLabels.prize1Label}:</b> ${game.prizes.prize1}`);
+                if (game.prizes.prize2) parts.push(`<b>${appLabels.prize2Label}:</b> ${game.prizes.prize2}`);
+                if (game.prizes.prize3) parts.push(`<b>${appLabels.prize3Label}:</b> ${game.prizes.prize3}`);
+                if (parts.length > 0) {
+                    prizesText = `<div class="text-center font-bold text-sm bg-gray-100 border-2 border-black w-full p-2 mb-2 break-words">Prêmios: ${parts.join(' &nbsp;|&nbsp; ')}</div>`;
+                    
+                    const sideParts = [];
+                    if (game.prizes.prize1) sideParts.push(`<div class="mb-0.5"><span class="font-bold border-b border-black/20 block">${appLabels.prize1Label}</span>${game.prizes.prize1}</div>`);
+                    if (game.prizes.prize2) sideParts.push(`<div class="mb-0.5"><span class="font-bold border-b border-black/20 block">${appLabels.prize2Label}</span>${game.prizes.prize2}</div>`);
+                    if (game.prizes.prize3) sideParts.push(`<div><span class="font-bold border-b border-black/20 block">${appLabels.prize3Label}</span>${game.prizes.prize3}</div>`);
+                    sidePrizesText = `<div class="text-[5px] sm:text-[6px] leading-[1.1] text-center w-full mt-1 px-1 break-words">${sideParts.join('')}</div>`;
+                }
+            }
+            
+            if (resetSeries) {
+                appStore.state.cardsData = {};
+            }
+            const startSeries = resetSeries ? 1 : Object.keys(appStore.state.cardsData).length + 1;
+            const newCardsBatch: Record<string, any> = {};
+            const uuids = [];
+            for (let i = 0; i < quantity; i++) {
+                const uuid = generateUUID();
+                uuids.push(uuid);
+                const numbers = generateSingleBingoCardNumbers();
+                const cardData = {
+                    series: startSeries + i,
+                    numbers: numbers
+                };
+                appStore.state.cardsData[uuid] = cardData;
+                newCardsBatch[uuid] = cardData;
+            }
+            
+            try {
+                await saveCardsBatchToDB(newCardsBatch);
+            } catch (e) {
+                console.error("Erro ao salvar cartelas no banco local:", e);
+            }
+
+            // Sync to firebase in background if needed
+            if (appStore.state.appConfig.onlineSyncEnabled && eventId && firebaseUser) {
+                const syncToFirebase = async () => {
+                    try {
+                        let currentBatch = writeBatch(db);
+                        let docCount = 0;
+                        for (const [uuid, cardData] of Object.entries(newCardsBatch)) {
+                            currentBatch.set(doc(db, "cards", uuid), {
+                                hostId: firebaseUser.uid,
+                                eventId: eventId,
+                                series: cardData.series,
+                                numbersString: JSON.stringify(cardData.numbers)
+                            });
+                            docCount++;
+                            if (docCount === 500) {
+                                await currentBatch.commit();
+                                currentBatch = writeBatch(db);
+                                docCount = 0;
+                            }
+                        }
+                        if (docCount > 0) {
+                            await currentBatch.commit();
+                        }
+                    } catch (e) {
+                        console.error('Failed to sync generated cards to Firebase:', e);
+                    }
+                };
+                syncToFirebase();
+            }
+            
+            appStore.debouncedSave();
+
+            // Generation HTML
+            printWindow.document.open();
             printWindow.document.write(`
                 <html>
                     <head>
                         <title>${title}</title>
                         <script src="https://cdn.tailwindcss.com"></script>
                         <style>
-                            /* Minimal margins for 6 per page */
                             @media print {
                                 body { -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
-                                @page { size: A4 portrait; margin: ${perPage === 6 ? '5mm' : '10mm'}; }
-                                .print\\:break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
+                                @page { size: A4 portrait; margin: 5mm; }
                             }
-                            body { font-family: 'Helvetica', 'Arial', sans-serif; background: white; margin: 0; padding: ${perPage===6?'5px':'20px'}; }
+                            body { font-family: 'Helvetica', 'Arial', sans-serif; background: white; margin: 0; padding: 0; }
                         </style>
                     </head>
                     <body>
-                        <div class="grid ${gridStyles}">
-                            ${printHTML}
+                        <div class="w-full flex flex-col items-center">
+            `);
+
+            const logoData = appStore.state.appConfig.customLogoBase64 || '';
+            const useLogo = !!logoData;
+
+            // Split into pages of 6
+            for (let i = 0; i < uuids.length; i += 6) {
+                const batch = uuids.slice(i, i + 6);
+                const firstSeriesOfFolha = appStore.state.cardsData[batch[0]].series;
+                const folhaNumber = Math.floor((firstSeriesOfFolha - 1) / 6) + 1;
+
+                const batchPromises = batch.map(async (uuid, idx) => {
+                    const cardData = appStore.state.cardsData[uuid];
+                    if (!cardData) return "";
+                    const cardUrl = window.location.origin + window.location.pathname + "?card=" + uuid;
+                    let qrDataUrl = "";
+                    try {
+                        qrDataUrl = await QRCode.toDataURL(cardUrl, { width: 140, margin: 1 });
+                    } catch (e) {}
+                    
+                    const gameInfo = appStore.state.gamesData[idx + 1];
+                    let prizeLabel = `${idx + 1}º PRÊMIO`;
+                    let prizeDesc = "";
+                    
+                    if (gameInfo) {
+                       const mainPrize = gameInfo.prizes.prize1 || gameInfo.prizes.prize2 || gameInfo.prizes.prize3 || `Sorteio ${idx + 1}`;
+                       prizeDesc = mainPrize;
+                    } else {
+                       prizeDesc = `Sorteio ${idx + 1}`;
+                    }
+                    
+                    const cardThemeColor = gameInfo?.color || cardColor;
+                    const cardHeaderTextColor = isLightColor(cardThemeColor) ? '#000000' : '#ffffff';
+                    
+                    // Specific prizes below QR Code
+                    let gridSideParts = [];
+                    if (gameInfo) {
+                       if (gameInfo.prizes.prize1) gridSideParts.push(`<div class="mb-0.5"><span class="font-bold border-b border-black/20 block text-[5px]">1º</span>${gameInfo.prizes.prize1}</div>`);
+                       if (gameInfo.prizes.prize2) gridSideParts.push(`<div class="mb-0.5"><span class="font-bold border-b border-black/20 block text-[5px]">2º</span>${gameInfo.prizes.prize2}</div>`);
+                       if (gameInfo.prizes.prize3) gridSideParts.push(`<div class=""><span class="font-bold border-b border-black/20 block text-[5px]">3º</span>${gameInfo.prizes.prize3}</div>`);
+                    }
+                    const gridSideText = gridSideParts.length > 0 ? `<div class="text-[5px] sm:text-[6px] leading-[1.1] text-left w-full mt-1 px-0.5 break-words">${gridSideParts.join('')}</div>` : '';
+
+                    return `
+                        <div class="border-[2px] border-black flex flex-col bg-white overflow-hidden text-center h-full max-h-full break-inside-avoid" style="page-break-inside: avoid;">
+                            <!-- Grade Header -->
+                            <div class="border-b-[2px] border-black py-0.5" style="background-color: ${cardThemeColor}; color: ${cardHeaderTextColor};">
+                                <div class="font-bold text-[8px] uppercase leading-none mb-0.5 tracking-wider">${prizeLabel}</div>
+                                <div class="font-black text-[10px] uppercase leading-none truncate px-1">${prizeDesc}</div>
+                            </div>
+                            
+                            <!-- Split Layout -->
+                            <div class="flex flex-row flex-grow items-stretch align-middle w-full min-h-0">
+                                <!-- 5x5 GRID Layout (Left side) -->
+                                <div class="w-[72%] flex flex-col border-r-[2px] border-black">
+                                    <!-- BINGO Header -->
+                                    <div class="grid grid-cols-5 border-b-[2px] border-black bg-gray-100 flex-shrink-0">
+                                        ${['B', 'I', 'N', 'G', 'O'].map((letter, colIndex) => `
+                                            <div class="font-black text-[11px] uppercase flex items-center justify-center py-0.5 ${colIndex === 4 ? '' : 'border-r-[2px] border-black'}">${letter}</div>
+                                        `).join('')}
+                                    </div>
+                                    <!-- BINGO Numbers -->
+                                    <div class="flex-grow flex flex-col">
+                                        ${[0,1,2,3,4].map((rowIndex) => `
+                                            <div class="grid grid-cols-5 flex-grow ${rowIndex === 4 ? '' : 'border-b-[2px] border-black'}">
+                                                ${[0,1,2,3,4].map((colIndex) => {
+                                                    const num = cardData.numbers[colIndex][rowIndex];
+                                                    let cellContent = '';
+                                                    if (num === 0) cellContent = useLogo ? `<img src="${logoData}" class="w-full h-full object-contain p-0.5" />` : '★';
+                                                    else cellContent = num;
+                                                    return `<div class="flex items-center justify-center font-black text-[16px] leading-[1.1] ${colIndex === 4 ? '' : 'border-r-[2px] border-black'} ${num === 0 && !useLogo ? 'bg-gray-200' : ''}">${cellContent}</div>`;
+                                                }).join('')}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                        
+                                <!-- Info Column (Right side) -->
+                                <div class="w-[28%] flex flex-col items-center bg-white p-[2px] justify-between flex-shrink-0 min-h-0">
+                                    <div class="text-[7px] font-bold leading-tight uppercase mb-[1px] text-center px-1">Escaneie para<br>jogar</div>
+                                    <img src="${qrDataUrl}" alt="QR" class="w-20 h-20 border-[2px] border-black object-contain bg-white" />
+                                    <div class="text-[4px] text-gray-500 uppercase tracking-widest break-all font-mono mb-[2px]">ID: ${uuid.substring(0,8)}</div>
+                                    
+                                    <!-- Premiações abaixo do QR Code -->
+                                    <div class="flex-grow w-full border-t-[2px] border-black pt-0.5 px-0 flex flex-col gap-[1px] mt-auto bg-gray-50 overflow-hidden">
+                                        <div class="text-[5px] font-black uppercase text-center w-full leading-tight bg-gray-200 border border-black py-[1px]">Premiações</div>
+                                        ${gridSideText}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const resolvedBatchHTML = await Promise.all(batchPromises);
+                
+                printWindow.document.write(`
+                    <div class="bg-white border-[4px] border-black flex flex-col w-full h-[287mm] max-w-[210mm] mx-auto p-1 box-border print:p-0" style="page-break-after: always; overflow: hidden;">
+                        <!-- MASTER HEADER -->
+                        <div class="border-[2px] border-black mb-1 flex flex-col flex-shrink-0">
+                            <h1 class="text-center font-black text-3xl uppercase py-1.5 m-0 leading-none tracking-widest" style="background-color: ${cardColor}; color: ${headerTextColor};">
+                                ${title}
+                            </h1>
+                            <div class="flex border-t-[2px] border-black text-[9px] font-bold uppercase divide-x-[2px] divide-black">
+                                <div class="flex-1 px-1 py-1 flex items-center">ONDE:&nbsp;<span class="font-normal border-b border-black flex-grow ml-1 min-w-[20px] truncate">${locationVal}</span></div>
+                                <div class="w-32 px-1 py-1 flex items-center">DATA:&nbsp;<span class="font-normal border-b border-black flex-grow ml-1 min-w-[20px] truncate">${dateVal}</span></div>
+                                <div class="w-[85px] bg-gray-200 flex flex-col items-center justify-center leading-none p-[2px]">
+                                    <span class="text-[7px]">CARTELA Nº</span>
+                                    <span class="text-sm font-black">${String(folhaNumber).padStart(5, '0')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- MAIN GRIDS -->
+                        <div class="flex-grow grid grid-cols-2 grid-rows-3 gap-1 pb-1 relative min-h-0">
+                             ${resolvedBatchHTML.join('')}
+                        </div>
+                        
+                        <!-- MASTER BOTTOM STUB -->
+                        <div class="border-[2px] border-black mt-auto flex flex-col uppercase text-[9px] font-bold leading-none flex-shrink-0 bg-white">
+                            <div class="flex border-b-[2px] border-black divide-x-[2px] divide-black bg-gray-100">
+                                 <div class="flex-1 px-2 py-1 flex items-center justify-center"><span class="font-black text-sm tracking-widest truncate max-w-[250px]">${title}</span></div>
+                                 <div class="w-28 px-2 py-1 flex items-center">VALOR:&nbsp;<span class="font-black text-xs ml-auto min-w-[20px]">${priceVal}</span></div>
+                                 <div class="w-[85px] bg-gray-300 flex flex-col items-center justify-center py-0.5">
+                                      <span class="text-[6px]">CARTELA Nº</span>
+                                      <span class="text-sm font-black leading-none">${String(folhaNumber).padStart(5, '0')}</span>
+                                 </div>
+                            </div>
+                            <div class="flex border-b-[2px] border-black">
+                                 <div class="flex-1 px-2 py-1 flex items-end">NOME:&nbsp;<div class="border-b border-black flex-grow ml-1 h-3"></div></div>
+                            </div>
+                            <div class="flex border-b-[2px] border-black">
+                                 <div class="flex-1 px-2 py-1 flex items-end">ENDEREÇO:&nbsp;<div class="border-b border-black flex-grow ml-1 h-3"></div></div>
+                            </div>
+                            <div class="flex divide-x-[2px] divide-black">
+                                 <div class="flex-[3] px-2 py-1 flex items-end">CIDADE:&nbsp;<div class="border-b border-black flex-grow ml-1 h-3"></div></div>
+                                 <div class="flex-[1] px-2 py-1 flex items-end">UF:&nbsp;<div class="border-b border-black flex-grow ml-1 h-3"></div></div>
+                                 <div class="flex-[3] px-2 py-1 flex items-end">FONE:&nbsp;<div class="border-b border-black flex-grow ml-1 h-3"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                if (uuids.length > 200) await new Promise(res => setTimeout(res, 5));
+            }
+
+            printWindow.document.write(`
                         </div>
                         <script>
                             setTimeout(() => {
                                 window.print();
                                 window.close();
-                            }, 500);
+                            }, 1000);
                         </script>
                     </body>
                 </html>
             `);
             printWindow.document.close();
+            
+            // Auto close modal
+            DOMElements.cardGeneratorModal.classList.add('hidden');
         }
-        
+
         function showCardGeneratorModal() {
              DOMElements.cardGeneratorModal.innerHTML = getModalTemplates().cardGenerator;
              DOMElements.cardGeneratorModal.classList.remove('hidden');
-             
-             // Populate prizes
-             let prizesLines = [];
-             const gameKeys = Object.keys(appStore.state.gamesData).filter(key => parseInt(key) > 0).sort((a,b) => parseInt(a) - parseInt(b));
-             for (const key of gameKeys) {
-                 const game = appStore.state.gamesData[key];
-                 const p1 = game.prizes.prize1;
-                 const p2 = game.prizes.prize2;
-                 const p3 = game.prizes.prize3;
-                 
-                 let prizesList = [];
-                 if (p1) prizesList.push(`${appStore.state.appLabels.prize1Label}: ${p1}`);
-                 if (p2) prizesList.push(`${appStore.state.appLabels.prize2Label}: ${p2}`);
-                 if (p3) prizesList.push(`${appStore.state.appLabels.prize3Label}: ${p3}`);
-                 
-                 if (prizesList.length > 0) {
-                     prizesLines.push(game.name || `RODADA ${key}`);
-                     prizesLines.push(prizesList.join("\n"));
-                     prizesLines.push("");
+
+             const colorInput = document.getElementById('card-color') as HTMLInputElement;
+             const { activeGameNumber, gamesData, appConfig } = appStore.state;
+             if (colorInput) {
+                 if (activeGameNumber && gamesData[activeGameNumber]?.color) {
+                     colorInput.value = gamesData[activeGameNumber].color;
+                 } else if (appConfig.boardColor && appConfig.boardColor !== 'default') {
+                     colorInput.value = appConfig.boardColor;
+                 } else {
+                     colorInput.value = '#0ea5e9'; // fallback sky-500
                  }
              }
-             const prizesTextEl = document.getElementById('card-prizes-text') as HTMLTextAreaElement;
-             if (prizesTextEl && prizesLines.length > 0) {
-                 prizesTextEl.value = prizesLines.join("\n").trim();
-             }
 
-             // Populate menu
-             const menuTextEl = document.getElementById('card-menu-text') as HTMLTextAreaElement;
-             if (menuTextEl && appStore.state.menuItems.length > 0) {
-                 menuTextEl.value = appStore.state.menuItems.join("\n");
-             }
-
-             document.getElementById('generate-cards-btn')!.addEventListener('click', handleGenerateCards);
-             document.getElementById('print-cards-btn')!.addEventListener('click', handlePrintCards);
+             document.getElementById('generate-and-print-cards-btn')!.addEventListener('click', generateAndPrintCards);
              document.getElementById('close-card-generator-btn')!.addEventListener('click', () => {
                  DOMElements.cardGeneratorModal.classList.add('hidden');
              });
@@ -4135,11 +4438,22 @@ function showRoundEditModal(gameNumber: string) {
             }
         }
 
-        function verifyCardByQRCode(uuid: string) {
+        function verifyCardByQRCode(scannedData: string) {
+            let uuid = scannedData;
+            try {
+                const url = new URL(scannedData);
+                const cardParam = url.searchParams.get('card');
+                if (cardParam) {
+                    uuid = cardParam;
+                }
+            } catch (e) {
+                // Not a valid URL, assume it's already the UUID
+            }
+
             const cardData = appStore.state.cardsData[uuid];
             
             if (!cardData) {
-                showAlert(`Cartela não encontrada na base de dados (${uuid}).`);
+                showAlert(`Cartela não encontrada na base local (${uuid}).`);
                 return;
             }
             
@@ -4311,6 +4625,7 @@ function showRoundEditModal(gameNumber: string) {
                 document.getElementById('confirm-reset-btn')!.onclick = async () => {
                     localStorage.removeItem(LOCAL_STORAGE_KEY);
                     await clearAllSponsorImages();
+                    await clearCardsDB();
                     window.location.reload();
                 };
                 document.getElementById('cancel-reset-btn')!.onclick = () => DOMElements.resetConfirmModal.classList.add('hidden');
@@ -4745,14 +5060,339 @@ function showRoundEditModal(gameNumber: string) {
             }
         }
 
+        async function renderDigitalCardMode(uuid: string) {
+            let cardData = appStore.state.cardsData[uuid];
+            let cardEventId = '';
+            
+            // Loading UI
+            document.body.className = "bg-slate-900 text-slate-100 flex flex-col items-center justify-center min-h-screen p-4";
+            document.body.innerHTML = `
+                <div class="text-center">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-sky-500 border-t-transparent mb-4"></div>
+                    <p class="text-sky-300 font-bold animate-pulse">Carregando cartela online...</p>
+                </div>
+            `;
+            
+            if (!cardData) {
+                // Try fetching from Firebase
+                try {
+                    const docSnap = await getDoc(doc(db, "cards", uuid));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        cardData = {
+                            series: data.series,
+                            numbers: JSON.parse(data.numbersString)
+                        };
+                        cardEventId = data.eventId;
+                    } else {
+                        document.body.innerHTML = `<div class="text-slate-800 font-bold p-8 bg-white rounded-lg shadow-xl max-w-sm text-center">
+                            <h2 class="text-2xl text-red-600 mb-2">Cartela offline</h2>
+                            <p class="text-sm">O organizador do bingo ainda não ativou a <b>Nuvem</b> ou não enviou as cartelas para a internet.</p>
+                            <p class="text-xs text-slate-500 mt-2 mb-4">Se você for o organizador: vá no computador onde gerou as cartelas, abra as "Opções do Programa", marque "Sincronização Online" e clique em "Forçar Envio de Cartelas para a Nuvem".</p>
+                            <p class="text-sm mt-4 text-sky-700">Você ainda pode jogar com a sua cartela de papel!</p>
+                        </div>`;
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Firebase fetch error", e);
+                    document.body.innerHTML = `<div class="text-slate-800 font-bold p-8 bg-white rounded-lg shadow-xl max-w-sm text-center">
+                        <h2 class="text-2xl text-red-600 mb-2">Sem conexão</h2>
+                        <p class="text-sm">Não foi possível conectar à nuvem. Verifique sua internet.</p>
+                    </div>`;
+                    return;
+                }
+            } else {
+                // We have it locally but we need the eventId, let's use appStore event ID
+                cardEventId = appStore.state.appConfig.eventId;
+            }
+
+            // Clean up body and build a simple UI
+            document.body.className = "bg-slate-900 text-slate-100 flex flex-col items-center justify-start min-h-screen p-4";
+            document.body.innerHTML = `
+                <div class="fixed top-0 left-0 w-full p-4 bg-slate-800 shadow-md flex justify-between items-center z-10">
+                    <div class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-amber-300 to-yellow-500" id="digital-app-name">
+                        Bingo Show
+                    </div>
+                    <div class="text-sm text-slate-400">Cartela ${cardData.series}</div>
+                </div>
+                <!-- Realtime Status Line -->
+                <div id="realtime-status-banner" class="w-full max-w-md mt-16 p-2 text-center text-sm font-bold bg-slate-800 text-yellow-400 rounded shadow animate-pulse">
+                    Aguardando sincronização de sorteio...
+                </div>
+                
+                <div class="mt-4 w-full max-w-md bg-white rounded-xl shadow-2xl p-4 text-slate-900">
+                    <h2 class="text-center font-black text-2xl mb-4 text-sky-800 uppercase tracking-widest" id="digital-bingo-title">BINGO</h2>
+                    <div class="grid grid-cols-5 gap-1 mx-auto" id="digital-card-grid"></div>
+                </div>
+                <div class="mt-8 mb-24 text-center text-slate-500 text-xs max-w-md px-4">
+                    <p>Série: ${cardData.series.toString().padStart(5, '0')} | UUID: ${uuid}</p>
+                    <p class="mt-2 text-yellow-500 font-bold">As pedras serão marcadas automaticamente. Você também pode tocar para marcar manualmente.</p>
+                </div>
+                
+                <div class="fixed bottom-0 left-0 w-full p-4 bg-slate-900 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3)] z-20 flex justify-center border-t border-slate-700">
+                    <button id="shout-bingo-btn" class="w-full max-w-md py-4 px-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-black text-2xl uppercase tracking-widest rounded-full shadow-xl transform active:scale-95 transition-all">
+                        🔔 BATI BINGO!
+                    </button>
+                </div>
+            `;
+
+                        const grid = document.getElementById('digital-card-grid')!;
+
+            // Bingo Shout Logic
+            const shoutBtn = document.getElementById('shout-bingo-btn') as HTMLButtonElement;
+            if (shoutBtn) {
+                shoutBtn.addEventListener('click', async () => {
+                    if (!cardEventId || !(window as any).currentActiveGame) {
+                        alert("Sorteio não iniciado ou sem conexão!");
+                        return;
+                    }
+                    shoutBtn.disabled = true;
+                    shoutBtn.innerHTML = "🔔 ENVIANDO...";
+                    
+                    try {
+                        const activeGame = (window as any).currentActiveGame;
+                        const claimsRef = doc(db, `events/${cardEventId}/games/${activeGame}/bingoClaims`, uuid);
+                        await setDoc(claimsRef, {
+                            uuid,
+                            series: cardData.series,
+                            timestamp: Date.now(),
+                        });
+                        shoutBtn.innerHTML = "✅ BINGO ENVIADO!";
+                        shoutBtn.classList.remove('from-green-500', 'to-emerald-600');
+                        shoutBtn.classList.add('from-blue-500', 'to-sky-600');
+                        alert("Grito de BINGO enviado à banca! Aguarde a conferência oficial.");
+                        
+                        // Reset button after 10s
+                        setTimeout(() => {
+                           shoutBtn.innerHTML = "🔔 BATI BINGO!";
+                           shoutBtn.classList.add('from-green-500', 'to-emerald-600');
+                           shoutBtn.classList.remove('from-blue-500', 'to-sky-600');
+                           shoutBtn.disabled = false;
+                        }, 10000);
+                        
+                    } catch (e) {
+                         alert("Erro ao enviar: verifique sua internet.");
+                         shoutBtn.innerHTML = "🔔 BATI BINGO!";
+                         shoutBtn.disabled = false;
+                    }
+                });
+            }
+
+            const headers = ['B', 'I', 'N', 'G', 'O'];
+            
+            // Draw headers
+            headers.forEach(h => {
+                const headerCell = document.createElement('div');
+                headerCell.className = "font-bold text-center py-2 bg-sky-200 text-sky-900 rounded-t border border-sky-300";
+                headerCell.textContent = h;
+                grid.appendChild(headerCell);
+            });
+
+            const cellsByNumber: Record<number, HTMLElement> = {};
+
+            // Draw numbers (5 columns x 5 rows)
+            for (let row = 0; row < 5; row++) {
+                for (let col = 0; col < 5; col++) {
+                    const number = cardData.numbers[col][row];
+                    const cell = document.createElement('div');
+                    
+                    if (number === 0) {
+                        cell.className = "flex items-center justify-center font-bold h-12 sm:h-16 text-xs sm:text-sm bg-yellow-200 text-yellow-800 border border-yellow-400 p-1 text-center leading-none";
+                        cell.textContent = "BINGO";
+                        cell.onclick = () => {
+                            cell.classList.toggle('bg-yellow-200');
+                            cell.classList.toggle('text-yellow-800');
+                            cell.classList.toggle('bg-green-500');
+                            cell.classList.toggle('text-white');
+                        };
+                    } else {
+                        cell.className = "flex items-center justify-center font-black text-xl sm:text-2xl h-12 sm:h-16 bg-slate-50 text-slate-800 border border-slate-300 cursor-pointer transition-colors select-none";
+                        cell.textContent = number.toString();
+                        cellsByNumber[number] = cell; // store for auto-marking
+                        cell.onclick = () => {
+                            // Manual toggle
+                            if (cell.dataset.drawn !== 'true') {
+                                cell.classList.toggle('bg-slate-50');
+                                cell.classList.toggle('text-slate-800');
+                                cell.classList.toggle('bg-indigo-600');
+                                cell.classList.toggle('text-white');
+                            }
+                        };
+                    }
+                    grid.appendChild(cell);
+                }
+            }
+
+            // Realtime Sync Logic (Listen to Event and Games)
+            if (cardEventId) {
+                // Anonymous sign-in for players
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        try {
+                            await signInAnonymously(auth);
+                        } catch(e) {
+                            console.error("Auth falhou online", e);
+                        }
+                    } else {
+                        // Watch event
+                        onSnapshot(doc(db, "events", cardEventId), (docSnap) => {
+                           if (docSnap.exists()) {
+                               const eventData = docSnap.data();
+                               document.getElementById('digital-app-name')!.textContent = eventData.appName || "Bingo Show";
+                               if (eventData.bingoTitle) {
+                                   document.getElementById('digital-bingo-title')!.textContent = eventData.bingoTitle;
+                               }
+                               
+                               const activeGame = eventData.activeGameNumber;
+                               const statusBanner = document.getElementById('realtime-status-banner')!;
+                               if (activeGame) {
+                                   statusBanner.className = "w-full max-w-md mt-16 p-2 text-center text-sm font-bold bg-green-800 text-green-100 rounded shadow";
+                                   statusBanner.innerHTML = `🟢 Rodada Ativa! Carregando sincronização...`;
+                                   (window as any).currentActiveGame = activeGame;
+                                   
+                                   // Unsub previous game listeners
+                                   if ((window as any).currentGameUnsub) {
+                                       (window as any).currentGameUnsub();
+                                   }
+                                   
+                                   // Watch active game
+                                   (window as any).currentGameUnsub = onSnapshot(doc(db, `events/${cardEventId}/games`, activeGame), (gameSnap) => {
+                                       if (gameSnap.exists()) {
+                                            const gameData = gameSnap.data();
+                                            statusBanner.innerHTML = `🟢 Sorteio Online: <strong>${gameData.name || activeGame}</strong>`;
+                                            const calledNumbers: number[] = gameData.calledNumbers || [];
+                                            
+                                            // Process auto-marking
+                                            Object.keys(cellsByNumber).forEach(numStr => {
+                                                const num = parseInt(numStr);
+                                                const cell = cellsByNumber[num];
+                                                if (calledNumbers.includes(num)) {
+                                                    cell.dataset.drawn = 'true';
+                                                    cell.className = "flex items-center justify-center font-black text-xl sm:text-2xl h-12 sm:h-16 text-white cursor-pointer transition-colors select-none";
+                                                    cell.style.backgroundColor = gameData.color || '#3b82f6';
+                                                    cell.style.borderColor = gameData.color || '#3b82f6';
+                                                } else {
+                                                    cell.dataset.drawn = 'false';
+                                                    cell.className = "flex items-center justify-center font-black text-xl sm:text-2xl h-12 sm:h-16 bg-slate-50 text-slate-800 border border-slate-300 cursor-pointer transition-colors select-none";
+                                                    cell.style.backgroundColor = '';
+                                                    cell.style.borderColor = '';
+                                                }
+                                            });
+                                       }
+                                   });
+                                   
+                               } else {
+                                   statusBanner.className = "w-full max-w-md mt-16 p-2 text-center text-sm font-bold bg-slate-800 text-yellow-400 rounded shadow animate-pulse";
+                                   statusBanner.innerHTML = `⏳ Aguardando próximo sorteio...`;
+                                   // Clear boards
+                                   Object.values(cellsByNumber).forEach(cell => {
+                                      cell.dataset.drawn = 'false';
+                                      cell.className = "flex items-center justify-center font-black text-xl sm:text-2xl h-12 sm:h-16 bg-slate-50 text-slate-800 border border-slate-300 cursor-pointer transition-colors select-none";
+                                      cell.style.backgroundColor = '';
+                                      cell.style.borderColor = '';
+                                   });
+                               }
+                           }
+                        });
+                    }
+                });
+            }
+        }
+
         // --- Inicialização ---
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const cardToPlay = urlParams.get('card');
+
             appStore.loadInitialState().then(() => {
                 console.log("Estado inicial carregado.");
+
+                if (cardToPlay && !urlParams.get('host')) {
+                    // Start digital card mode right away
+                    document.body.innerHTML = '';
+                    renderDigitalCardMode(cardToPlay);
+                    return; // do not setup main UI events
+                }
+                
                 setupEventListeners();
                 setupGlobalKeydownListener();
+                
+                if (appStore.state.appConfig.onlineSyncEnabled) {
+                    initFirebaseSync();
+                }
             });
         });
+
+        // --- Firebase Sync Logic ---
+        function updateSyncStatusUI() {
+            const statusEl = document.getElementById('online-sync-status');
+            const forceSyncBtn = document.getElementById('force-sync-cards-btn');
+            const globalStatusEl = document.getElementById('global-connection-status');
+            
+            if (statusEl) {
+                statusEl.classList.remove('hidden');
+                if (eventId) {
+                    statusEl.classList.add('bg-green-100', 'text-green-800', 'border', 'border-green-300', 'dark:bg-green-900', 'dark:text-green-200');
+                    statusEl.innerHTML = `✅ Sincronizado. Jogadores online.<br/><strong>ID:</strong> ${eventId}`;
+                    if (forceSyncBtn && Object.keys(appStore.state.cardsData).length > 0) {
+                        forceSyncBtn.classList.remove('hidden');
+                    }
+                } else {
+                    statusEl.className = 'mt-2 text-sm text-center p-2 rounded max-w-sm ml-auto mr-auto break-all bg-yellow-100 text-yellow-800 border-yellow-300 dark:bg-yellow-900 dark:text-yellow-200';
+                    statusEl.innerHTML = `⏳ Conectando...`;
+                    if (forceSyncBtn) forceSyncBtn.classList.add('hidden');
+                }
+            }
+            
+            if (globalStatusEl) {
+                 if (appStore.state.appConfig.onlineSyncEnabled) {
+                     globalStatusEl.classList.remove('hidden');
+                     if (eventId) {
+                         globalStatusEl.className = 'flex items-center justify-center p-2 rounded-full shadow-lg bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-sm font-bold font-mono text-center px-6 border-2 border-green-400 dark:border-green-600';
+                         globalStatusEl.innerHTML = `✅ Nuvem Ativa (ID: ${eventId})`;
+                     } else {
+                         globalStatusEl.className = 'flex items-center justify-center p-2 rounded-full shadow-lg bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-sm font-bold font-mono text-center px-6 border-2 border-yellow-400 dark:border-yellow-600';
+                         globalStatusEl.innerHTML = `⏳ Conectando à Nuvem...`;
+                     }
+                 } else {
+                     globalStatusEl.classList.add('hidden');
+                 }
+            }
+        }
+
+        async function initFirebaseSync() {
+            if (!appStore.state.appConfig.onlineSyncEnabled) return;
+            
+            updateSyncStatusUI();
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    firebaseUser = user;
+                    if (!appStore.state.appConfig.eventId) {
+                        appStore.state.appConfig.eventId = 'event-' + Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+                        appStore.debouncedSave();
+                    }
+                    eventId = appStore.state.appConfig.eventId;
+                    updateSyncStatusUI();
+                    
+                    // Trigger a sync
+                    if (typeof (appStore as any).debouncedFirebaseSync === 'function') {
+                        (appStore as any).debouncedFirebaseSync();
+                    }
+                } else {
+                    try {
+                        await signInAnonymously(auth);
+                    } catch (e) {
+                         console.error("Firebase auth error:", e);
+                         const statusEl = document.getElementById('online-sync-status');
+                         if (statusEl) {
+                             statusEl.className = 'mt-2 text-sm text-center p-2 rounded max-w-sm ml-auto mr-auto break-all bg-red-100 text-red-800 border-red-300 dark:bg-red-900 dark:text-red-200';
+                             statusEl.innerHTML = `❌ Falha ao conectar: ${e}`;
+                         }
+                    }
+                }
+            });
+        }
 
         // --- PWA Auto Update Logic ---
         const updateSW = registerSW({

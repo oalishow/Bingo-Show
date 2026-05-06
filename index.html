@@ -389,6 +389,13 @@
                 <div id="main-title" class="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-none drop-shadow-lg transform hover:scale-105 transition-transform duration-300 uppercase focus:outline-none focus:ring-2 ring-amber-500 rounded-lg px-4 py-2 mt-4 text-center">
                     <!-- Será preenchido pelo JS -->
                 </div>
+                
+                <div id="global-connection-status-container" class="mt-2 w-full flex justify-center">
+                    <div id="global-connection-status" class="hidden flex items-center justify-center p-2 rounded-full shadow-lg bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 text-sm font-bold font-mono text-center px-6 border-2 border-yellow-400 dark:border-yellow-600">
+                        ⏳ Conectando à Nuvem...
+                    </div>
+                </div>
+
                 <button id="install-pwa-btn" class="hidden mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-3 px-8 rounded-full text-lg sm:text-xl shadow-[0_0_15px_rgba(79,70,229,0.5)] transform hover:scale-110 transition-all duration-300 border-2 border-blue-400">⬇️ INSTALAR APP (OFFLINE / WINDOWS) ⬇️</button>
             </div>
         </header>
@@ -409,7 +416,7 @@
                 <!-- 2. BOTÕES DE CONTROLE GERAIS -->
                 <div class="grid grid-cols-2 gap-2 mb-4 flex-shrink-0">
                     <button id="show-card-scanner-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🔎 Verificar Cartela</button>
-                    <button id="show-card-generator-btn" disabled class="bg-teal-500 opacity-60 cursor-not-allowed text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🖨️ Gerar Cartelas (Em breve)</button>
+                    <button id="show-card-generator-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg text-xs shadow-sm transition-all text-center">🖨️ Gerar Cartelas</button>
                 </div>
                 
                 <!-- AÇÕES EXTRAS -->
